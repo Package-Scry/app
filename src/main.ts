@@ -7,8 +7,9 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
-    show: false
-  });
+    show: false,
+  })
+  
   mainWindow.removeMenu()
   mainWindow.maximize()
   // and load the index.html of the app.
