@@ -6,7 +6,18 @@
     "build": "tsc",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
+    "lint-fix": "eslint --fix -c .eslintrc --ext .ts ./src",
     "start": "npm run build && electron ./dist/main.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix"
+    ]
   },
   "repository": "https://github.com/Package-Scry/app",
   "keywords": [
@@ -21,6 +32,8 @@
     "eslint": "^7.3.1",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.0",
+    "husky": "^4.3.6",
+    "lint-staged": "^10.5.3",
     "prettier": "^2.2.1",
     "typescript": "^3.9.5"
   },
