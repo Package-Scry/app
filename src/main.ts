@@ -2,7 +2,21 @@ import { app, BrowserWindow } from "electron"
 import * as path from "path"
 
 function createWindow() {
-  // Create the browser window.
+  const env = process.env.NODE_ENV || "development"
+
+  if (env === "development") {
+    try {
+      // eslint-disable-next-line
+      require("electron-reloader")(module, {
+        debug: true,
+        watchRenderer: true,
+      })
+    } catch (e) {
+      console.error("Electron-reloader error", e)
+    }
+  }
+
+  // Create the browser windows.
   const mainWindow = new BrowserWindow({
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
