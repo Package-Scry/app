@@ -4,6 +4,7 @@
   "description": ".",
   "scripts": {
     "build": "tsc",
+    "build-tw": "npx tailwindcss-cli@latest build -c ./tailwind.config.js -o ./src/tailwind.css",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "lint-fix": "eslint --fix -c .eslintrc --ext .ts ./src",
