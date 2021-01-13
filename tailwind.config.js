@@ -31,6 +31,9 @@ module.exports = {
           4: "#E2FAFF",
         },
       },
+      fontFamily: {
+        serif: ["Bitter", "serif"],
+      },
     },
   },
 }
