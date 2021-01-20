@@ -9,7 +9,7 @@ class Header extends HTMLElement {
     const size: "big" | "medium" | "small" = (this.getAttribute("size") ??
       "big") as "big" | "medium" | "small"
 
-    this.innerHTML = `<span class="text-black text-${this.sizes[size]} font-serif">${this.innerHTML}</span>`
+    this.innerHTML = `<span class="text-white text-${this.sizes[size]} font-serif">${this.innerHTML}</span>`
   }
 }
 
