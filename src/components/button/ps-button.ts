@@ -1,5 +1,11 @@
 class Button extends HTMLElement {
-  primary = `"cursor-pointer container w-36 m-4 p-2 bg-turquoise-4 hover:bg-gray-3 hover:shadow-inner rounded-md text-center"`
+  styles = {
+    common: `cursor-pointer select-none container w-36 m-4 p-2 rounded-md text-center`,
+    primary: `bg-turquoise-4 hover:bg-gray-3 hover:shadow-inner`,
+    secondary: `border-2 border-turquoise-5`,
+    loading: `bg-gray-6`,
+  }
+
   handleClick = () => {}
 
   constructor() {
@@ -10,7 +16,12 @@ class Button extends HTMLElement {
   }
 
   connectedCallback() {
-    this.innerHTML = `<div class=${this.primary}><ps-header size="medium">${this.innerHTML}</ps-header></div>`
+    const type: "primary" | "secondary" | "loading" = (this.getAttribute(
+      "type"
+    ) ?? "primary") as "primary" | "secondary" | "loading"
+
+    const style = `${this.styles.common} ${this.styles[type]}`
+    this.innerHTML = `<div class="${style}"><ps-header size="medium">${this.innerHTML}</ps-header></div>`
   }
 }
 
