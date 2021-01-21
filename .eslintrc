@@ -12,10 +12,6 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
-    "noEmptyFunction": {
-      "allow": [
-        "asyncFunctions"
-      ]
-    }
+    "@typescript-eslint/no-empty-function": 0
   }
 }
