@@ -1,6 +1,8 @@
+type ButtonTypes = "primary" | "secondary" | "loading"
+
 class Button extends HTMLElement {
   styles = {
-    common: `cursor-pointer select-none container w-36 m-4 p-2 rounded-md text-center`,
+    common: `cursor-pointer select-none p-2 rounded-md text-center`,
     primary: `bg-turquoise-4 hover:bg-gray-3 hover:shadow-inner`,
     secondary: `border-2 border-turquoise-5`,
     loading: `bg-gray-6`,
@@ -16,9 +18,8 @@ class Button extends HTMLElement {
   }
 
   connectedCallback() {
-    const type: "primary" | "secondary" | "loading" = (this.getAttribute(
-      "type"
-    ) ?? "primary") as "primary" | "secondary" | "loading"
+    const type: ButtonTypes = (this.getAttribute("type") ??
+      "primary") as ButtonTypes
 
     const style = `${this.styles.common} ${this.styles[type]}`
     this.innerHTML = `<div class="${style}"><ps-header size="medium">${this.innerHTML}</ps-header></div>`
