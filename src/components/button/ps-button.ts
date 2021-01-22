@@ -9,15 +9,6 @@ class Button extends HTMLElement {
     loading: `bg-gray-6`,
   }
 
-  handleClick = () => {}
-
-  constructor() {
-    super()
-
-    this.handleClick = this.handleClick.bind(this)
-    this.addEventListener("click", this.handleClick)
-  }
-
   connectedCallback() {
     const type: ButtonTypes = (this.getAttribute("type") ??
       "primary") as ButtonTypes
