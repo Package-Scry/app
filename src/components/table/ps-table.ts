@@ -1,16 +1,18 @@
+type Status = "up to date" | "outdated" | "updating"
+
 interface Data {
   name: string
   local: string
   stable: string
-  status: "up to date" | "outdated"
+  status: Status
 }
 
 const fakeData: Data[] = [
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "up to date" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "updating" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
 ]
 
@@ -22,12 +24,17 @@ const COLUMN_NAMES = [
   "Status",
   "Action",
 ]
+const BUTTON_STATE: {
+  [key: string]: { text: ButtonText; type: ButtonTypes }
+} = {
+  outdated: { text: "Update", type: "primary" },
+  "up to date": { text: "Up to date", type: "secondary" },
+  updating: { text: "Loading", type: "loading" },
+}
 
 class Table extends HTMLElement {
-  getButton = (
-    type: "primary" | "secondary" | "loading",
-    text: "Update" | "Loading" | "Up to date"
-  ) => `<ps-button type="${type}" class="ml-4">${text}</ps-button>`
+  getButton = (type: ButtonTypes, text: ButtonText) =>
+    `<ps-button type="${type}" class="ml-4">${text}</ps-button>`
 
   connectedCallback() {
     // const data: Data[] = (this.getAttribute("data") ?? []) as Data[]
@@ -40,6 +47,7 @@ class Table extends HTMLElement {
     ).join("")}</div>`
     const rows = data
       .map((item, i) => {
+        const state = BUTTON_STATE[item.status]
         const columns = COLUMN_KEYS.map(
           name =>
             `<div class="p-2 ${
@@ -49,7 +57,7 @@ class Table extends HTMLElement {
 
         return `<div class="grid grid-cols-table grid-flow-col mb-4">${columns.join(
           ""
-        )}${this.getButton("primary", "Update")}</div>`
+        )}${this.getButton(state.type, state.text)}</div>`
       })
       .join("")
 
