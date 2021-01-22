@@ -1,4 +1,5 @@
 type ButtonTypes = "primary" | "secondary" | "loading"
+type ButtonText = "Update" | "Loading" | "Up to date"
 
 class Button extends HTMLElement {
   styles = {
