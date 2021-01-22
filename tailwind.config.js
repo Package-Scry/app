@@ -37,6 +37,9 @@ module.exports = {
       fontFamily: {
         serif: ["Bitter", "serif"],
       },
+      gridTemplateColumns: {
+        table: "repeat(4, minmax(0, 1fr)) 12rem",
+      },
     },
   },
 }
