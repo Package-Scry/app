@@ -1,6 +1,6 @@
 class Base extends HTMLElement {
   connectedCallback() {
-    this.innerHTML = `<span class="text-black text-base font-serif">${this.innerHTML}</span>`
+    this.innerHTML = `<span class="text-lg font-serif">${this.innerHTML}</span>`
   }
 }
 
