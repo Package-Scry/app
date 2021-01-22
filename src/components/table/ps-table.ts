@@ -47,18 +47,18 @@ class Table extends HTMLElement {
     this.data = fakeData
     const header = `<ps-row type="header">${COLUMN_NAMES.map(
       (_, i) =>
-        `<div class="p-2${
-          i === COLUMN_NAMES.length - 1 ? " ml-4" : ""
-        }"><ps-header size="medium">${COLUMN_NAMES[i]}</ps-header></div>`
+        `<ps-column isOdd="true" shouldAddMargin="${
+          i === COLUMN_NAMES.length - 1
+        }"><ps-header size="medium">${COLUMN_NAMES[i]}</ps-header></ps-column>`
     ).join("")}</ps-row>`
     const rows = this.data
       .map((item, i) => {
         const state = BUTTON_STATE[item.status]
         const columns = COLUMN_KEYS.map(
           name =>
-            `<div class="p-2 ${
-              i % 2 === 0 ? "bg-gray-4" : "bg-turquoise-2"
-            }"><ps-base>${item[name]}</ps-base></div>`
+            `<ps-column isOdd="${i % 2 !== 0}"><ps-base>${
+              item[name]
+            }</ps-base></ps-column>`
         )
 
         return `<ps-row>${columns.join("")}${this.getButton(
