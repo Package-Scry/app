@@ -35,52 +35,64 @@ const BUTTON_STATE: {
 class Table extends HTMLElement {
   getButton = (type: ButtonTypes, text: ButtonText, i: number) =>
     `<ps-button type="${type}" class="ml-4" i="${i}">${text}</ps-button>`
+
   data: Data[] = []
-  handleClick = (name: string, i: number) => {
+
+  handleClick = (i: number) => {
     this.data[i].status = "updating"
-    console.log("here")
+
+    this.updateRow(i)
+
     // update package
+  }
+
+  getRow = (item: Data, i: number) => {
+    const state = BUTTON_STATE[item.status]
+    const columns = COLUMN_KEYS.map(
+      name =>
+        `<ps-column isOdd="${i % 2 !== 0}"><ps-base text="${item[name]}">${
+          item[name]
+        }</ps-base></ps-column>`
+    )
+
+    return `<ps-row>${columns.join("")}${this.getButton(
+      state.type,
+      state.text,
+      i
+    )}</ps-row>`
+  }
+
+  getHeader = () =>
+    `<ps-row type="header">${COLUMN_NAMES.map(
+      (name, i) =>
+        `<ps-column isOdd="true" shouldAddMargin="${
+          i === COLUMN_NAMES.length - 1
+        }"><ps-header size="medium">${name}</ps-header></ps-column>`
+    ).join("")}</ps-row>`
+
+  updateRow = (i: number) => {
+    const rowElement = document.querySelectorAll<HTMLElement>("ps-row")[i + 1]
+
+    rowElement.outerHTML = this.getRow(this.data[i], i)
   }
 
   connectedCallback() {
     // const data: Data[] = (this.getAttribute("data") ?? []) as Data[]
     this.data = fakeData
-    const header = `<ps-row type="header">${COLUMN_NAMES.map(
-      (_, i) =>
-        `<ps-column isOdd="true" shouldAddMargin="${
-          i === COLUMN_NAMES.length - 1
-        }"><ps-header size="medium">${COLUMN_NAMES[i]}</ps-header></ps-column>`
-    ).join("")}</ps-row>`
+    const header = this.getHeader()
     const rows = this.data
       .map((item, i) => {
-        const state = BUTTON_STATE[item.status]
-        const columns = COLUMN_KEYS.map(
-          name =>
-            `<ps-column isOdd="${i % 2 !== 0}"><ps-base>${
-              item[name]
-            }</ps-base></ps-column>`
-        )
-
-        return `<ps-row>${columns.join("")}${this.getButton(
-          state.type,
-          state.text,
-          i
-        )}</ps-row>`
+        return this.getRow(item, i)
       })
       .join("")
 
     this.innerHTML = `<div class="text-blue-4 text-center mx-12 my-6">${header}${rows}</div>`
     const buttons = document.querySelectorAll<HTMLElement>("ps-button")
     buttons.forEach((button, i) => {
-      button.addEventListener("click", () =>
-        this.handleClick(this.data[i].name, i)
-      )
+      if (this.data[i].status === "outdated")
+        button.addEventListener("click", () => this.handleClick(i))
     })
   }
-
-  // render() {
-
-  // }
 }
 
 window.customElements.define("ps-table", Table)
