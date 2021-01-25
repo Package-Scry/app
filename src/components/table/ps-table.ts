@@ -7,7 +7,7 @@ interface Data {
   status: Status
 }
 
-const fakeData: Data[] = [
+const getData = (): Data[] => [
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "up to date" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
@@ -78,7 +78,7 @@ class Table extends HTMLElement {
 
   connectedCallback() {
     // const data: Data[] = (this.getAttribute("data") ?? []) as Data[]
-    this.data = fakeData
+    this.data = getData()
     const header = this.getHeader()
     const rows = this.data
       .map((item, i) => {
