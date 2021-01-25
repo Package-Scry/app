@@ -14,6 +14,15 @@ const getData = (): Data[] => [
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "updating" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
 ]
 
 const COLUMN_KEYS: Array<keyof Data> = ["name", "local", "stable", "status"]
