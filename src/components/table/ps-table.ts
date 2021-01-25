@@ -23,6 +23,7 @@ const getData = (): Data[] => [
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
 ]
 
 const COLUMN_KEYS: Array<keyof Data> = ["name", "local", "stable", "status"]
@@ -74,9 +75,9 @@ class Table extends HTMLElement {
   getHeader = () =>
     `<ps-row type="header">${COLUMN_NAMES.map(
       (name, i) =>
-        `<ps-column isOdd="true" shouldAddMargin="${
+        `<ps-column type="header" shouldAddMargin="${
           i === COLUMN_NAMES.length - 1
-        }"><ps-header size="medium">${name}</ps-header></ps-column>`
+        }"><ps-header size="big">${name}</ps-header></ps-column>`
     ).join("")}</ps-row>`
 
   updateRow = (i: number) => {
