@@ -1,7 +1,4 @@
 class Column extends HTMLElement {
-  static get observedAttributes() {
-    return ["filter"]
-  }
   connectedCallback() {
     const isOdd: boolean = this.getAttribute("isOdd") === "true" ?? true
     const shouldAddMargin: boolean =
