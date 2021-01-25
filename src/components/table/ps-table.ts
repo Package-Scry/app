@@ -95,7 +95,7 @@ class Table extends HTMLElement {
       })
       .join("")
 
-    this.innerHTML = `<div class="text-blue-4 text-center mx-12 my-6">${header}${rows}</div>`
+    this.innerHTML = `<div class="text-center mx-12 my-6">${header}${rows}</div>`
     const buttons = document.querySelectorAll<HTMLElement>("ps-button")
     buttons.forEach((button, i) => {
       if (this.data[i].status === "outdated")
