@@ -4,7 +4,8 @@ module.exports = {
     extend: {
       boxShadow: {
         inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.25)",
-        inner2: "inset 0 5px 10px 0 rgba(0, 0, 0, 0.20)",
+        "inner-2": "inset 0 5px 10px 0 rgba(0, 0, 0, 0.20)",
+        DEFAULT: "0 4px 10px 0 rgba(0, 0, 0, 0.4)",
       },
       colors: {
         gray: {
