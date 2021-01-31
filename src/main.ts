@@ -1,5 +1,9 @@
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, ipcMain } from "electron"
 import * as path from "path"
+
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let win
 
 function createWindow() {
   const env = process.env.NODE_ENV || "development"
@@ -17,7 +21,7 @@ function createWindow() {
   }
 
   // Create the browser windows.
-  const mainWindow = new BrowserWindow({
+  win = new BrowserWindow({
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -25,13 +29,14 @@ function createWindow() {
     show: false,
   })
 
-  mainWindow.removeMenu()
-  mainWindow.maximize()
+  win.removeMenu()
+  win.maximize()
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, "../src/index.html"))
+  win.loadFile(path.join(__dirname, "../src/index.html"))
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  win.webContents.openDevTools()
+  // console.log(dialog.showOpenDialog({ properties: ["openDirectory"] }))
 }
 
 // This method will be called when Electron has finished
@@ -56,5 +61,6 @@ app.on("window-all-closed", () => {
   }
 })
 
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
+ipcMain.on("toMain", (event, args) => {
+  // win.webContents.send("fromMain", responseObj)
+})

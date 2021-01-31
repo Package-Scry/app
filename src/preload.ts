@@ -1,17 +1,26 @@
-// All of the Node.js APIs are available in the preload process.
-// It has the same sandbox as a Chrome extension.
-window.addEventListener("DOMContentLoaded", () => {
-  const replaceText = (selector: string, text: string) => {
-    const element = document.getElementById(selector)
-    if (element) {
-      element.innerText = text
-    }
-  }
+import { contextBridge, ipcRenderer } from "electron"
 
-  for (const type of ["chrome", "node", "electron"]) {
-    replaceText(
-      `${type}-version`,
-      process.versions[type as keyof NodeJS.ProcessVersions]
-    )
-  }
+type SendChannel = "workspace-folder" | "packages"
+type ReceiveChannel = "workspace-folder" | "packages"
+
+// https://github.com/reZach/secure-electron-template/blob/master/docs/newtoelectron.md
+// Expose protected methods that allow the renderer process to use
+// the ipcRenderer without exposing the entire object
+contextBridge.exposeInMainWorld("api", {
+  send: (channel: SendChannel, data: TSFixMe) => {
+    // whitelist channel
+    const validChannels: SendChannel[] = ["workspace-folder"]
+
+    if (validChannels.includes(channel)) {
+      ipcRenderer.send(channel, data)
+    }
+  },
+  receive: (channel: ReceiveChannel, func: TSFixMe) => {
+    const validChannels: ReceiveChannel[] = ["packages"]
+
+    if (validChannels.includes(channel)) {
+      // Deliberately strip event as it includes `sender`
+      ipcRenderer.on(channel, (event, ...args) => func(...args))
+    }
+  },
 })
