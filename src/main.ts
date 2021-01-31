@@ -1,9 +1,10 @@
-import { app, BrowserWindow, ipcMain } from "electron"
+import { app, BrowserWindow, ipcMain, dialog } from "electron"
 import * as path from "path"
+import { readFile } from "fs"
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win
+let win: BrowserWindow
 
 function createWindow() {
   const env = process.env.NODE_ENV || "development"
@@ -61,6 +62,19 @@ app.on("window-all-closed", () => {
   }
 })
 
-ipcMain.on("toMain", (event, args) => {
-  // win.webContents.send("fromMain", responseObj)
+ipcMain.on("workspaceFolder", async (event, args) => {
+  const dir = await dialog.showOpenDialog({ properties: ["openDirectory"] })
+
+  if (dir.canceled) win.webContents.send("packages", "canceled")
+
+  const filePath = dir.filePaths
+
+  readFile(`${filePath}/package.json`, "utf-8", (error, data) => {
+    if (error) {
+      console.error("error", error)
+      return win.webContents.send("packages", "error")
+    }
+
+    return win.webContents.send("packages", data)
+  })
 })
