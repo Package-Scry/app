@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron"
 
-type SendChannel = "workspace-folder" | "packages"
-type ReceiveChannel = "workspace-folder" | "packages"
+type SendChannel = "workspaceFolder"
+type ReceiveChannel = "packages"
 
 // https://github.com/reZach/secure-electron-template/blob/master/docs/newtoelectron.md
 // Expose protected methods that allow the renderer process to use
@@ -9,7 +9,7 @@ type ReceiveChannel = "workspace-folder" | "packages"
 contextBridge.exposeInMainWorld("api", {
   send: (channel: SendChannel, data: TSFixMe) => {
     // whitelist channel
-    const validChannels: SendChannel[] = ["workspace-folder"]
+    const validChannels: SendChannel[] = ["workspaceFolder"]
 
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data)
