@@ -6,11 +6,15 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*"]
+      "*": [
+        "node_modules/*"
+      ]
     },
     "target": "ES6"
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "custom.d.ts",
+    "index.d.ts"
   ]
 }
