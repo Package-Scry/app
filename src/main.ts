@@ -2,6 +2,16 @@ import { app, BrowserWindow, ipcMain, dialog } from "electron"
 import * as path from "path"
 import { readFile } from "fs"
 
+interface PackageJSON {
+  name?: string
+  dependencies?: {
+    [key in string]: string
+  }
+  devDependencies?: {
+    [key in string]: string
+  }
+}
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow
@@ -75,6 +85,21 @@ ipcMain.on("workspaceFolder", async (event, args) => {
       return win.webContents.send("packages", "error")
     }
 
-    return win.webContents.send("packages", data)
+    const parsedData: PackageJSON = JSON.parse(data)
+    const { dependencies, devDependencies, name } = parsedData
+    const allDependencies = { ...dependencies, ...devDependencies }
+    const packages = Object.keys(allDependencies).map(key => {
+      return {
+        name: key,
+        local: allDependencies[key],
+        stable: "17.0.1",
+        status: "outdated",
+      }
+    })
+
+    return win.webContents.send("packages", {
+      packages,
+      name,
+    })
   })
 })
