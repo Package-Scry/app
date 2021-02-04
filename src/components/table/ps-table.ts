@@ -7,7 +7,7 @@ interface Data {
   status: Status
 }
 
-const getData = (): Data[] => [
+const fakeData: Data[] = [
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "up to date" },
   { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
@@ -43,6 +43,28 @@ const BUTTON_STATE: {
 }
 
 class Table extends HTMLElement {
+  constructor() {
+    super()
+
+    window.api.receive("packages", (data: TSFixMe) => {
+      const { packages, name } = data
+
+      this.packages = packages
+
+      localStorage.setItem("activeTab", name)
+
+      this.render()
+    })
+  }
+
+  packages: Data[] | null = null
+
+  getData = (): Data[] => {
+    if (this.packages) return this.packages
+
+    return fakeData
+  }
+
   getButton = (type: ButtonTypes, text: ButtonText, i: number) =>
     `<ps-button type="${type}" class="ml-4" i="${i}">${text}</ps-button>`
 
@@ -87,19 +109,23 @@ class Table extends HTMLElement {
   }
 
   connectedCallback() {
-    // const data: Data[] = (this.getAttribute("data") ?? []) as Data[]
-    this.data = getData()
+    this.render()
+  }
+
+  render() {
     const header = this.getHeader()
-    const rows = this.data
+    const rows = this.getData()
       .map((item, i) => {
         return this.getRow(item, i)
       })
       .join("")
 
     this.innerHTML = `<div class="text-center mx-12 my-6">${header}${rows}</div>`
+
     const buttons = document.querySelectorAll<HTMLElement>("ps-button")
+
     buttons.forEach((button, i) => {
-      if (this.data[i].status === "outdated")
+      if (this.getData()[i].status === "outdated")
         button.addEventListener("click", () => this.handleClick(i))
     })
   }
