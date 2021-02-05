@@ -1,44 +1,142 @@
-type Status = "up to date" | "outdated" | "updating"
+type Status = "up to date" | "outdated" | "updating" | "updatable"
 
 interface Data {
   name: string
   local: string
-  stable: string
+  latest: string
   status: Status
+  wanted: string
 }
 
 const fakeData: Data[] = [
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "up to date" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "updating" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
-  { name: "react", local: "2.3.45", stable: "17.0.1", status: "outdated" },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "up to date",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "updating",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
+  {
+    name: "react",
+    local: "2.3.45",
+    wanted: "1.0.0",
+    latest: "17.0.1",
+    status: "outdated",
+  },
 ]
 
-const COLUMN_KEYS: Array<keyof Data> = ["name", "local", "stable", "status"]
-const COLUMN_NAMES = [
-  "Name",
-  "Version (local)",
-  "Version (stable)",
-  "Status",
-  "Action",
+const COLUMN_KEYS: Array<keyof Data> = [
+  "name",
+  "local",
+  "wanted",
+  "latest",
+  "status",
 ]
+const COLUMN_NAMES = ["Name", "Local", "Wanted", "Latest", "Status", "Action"]
 const BUTTON_STATE: {
   [key: string]: { text: ButtonText; type: ButtonTypes }
 } = {
   outdated: { text: "Update", type: "primary" },
   "up to date": { text: "Up to date", type: "secondary" },
+  updatable: { text: "Update", type: "primary" },
   updating: { text: "Loading", type: "loading" },
 }
 
@@ -58,6 +156,44 @@ class Table extends HTMLElement {
         this.render()
       }
     })
+
+    window.api.receive("packageInfo", (data: TSFixMe) => {
+      const { name, version } = data
+
+      this.packages = this.packages.map(npmPackage =>
+        npmPackage.name === name
+          ? { ...npmPackage, latest: version }
+          : npmPackage
+      )
+
+      this.render()
+    })
+
+    window.api.receive(
+      "outdated",
+      (data: { name: string; wanted: string; latest: string }[]) => {
+        this.packages = this.packages.map(npmPackage => {
+          const { name } = npmPackage
+          const selectedPackage = data.find(p => p.name === name)
+
+          if (selectedPackage) {
+            const { wanted, latest } = selectedPackage
+
+            return {
+              ...npmPackage,
+              wanted,
+              status: wanted === latest ? "updatable" : "outdated",
+            }
+          }
+          return {
+            ...npmPackage,
+            wanted: "-",
+          }
+        })
+
+        this.render()
+      }
+    )
   }
 
   packages: Data[] | null = null
