@@ -121,7 +121,7 @@ class Table extends HTMLElement {
       })
       .join("")
 
-    this.innerHTML = `<div class="text-center mx-12 my-6">${header}${rows}</div>`
+    this.innerHTML = `<div class="text-center mx-12 mt-6 mb-20">${header}${rows}</div>`
 
     const buttons = document.querySelectorAll<HTMLElement>("ps-button")
 
