@@ -5,6 +5,7 @@ module.exports = {
       boxShadow: {
         inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.25)",
         "inner-2": "inset 0 5px 10px 0 rgba(0, 0, 0, 0.20)",
+        drop: "0 4px 10px 0 rgba(0, 0, 0, 0.5)",
         DEFAULT: "0 4px 10px 0 rgba(0, 0, 0, 0.4)",
       },
       colors: {
@@ -20,6 +21,7 @@ module.exports = {
           8: "#E0E0E0",
           9: "#F2F2F2",
           10: "#E3EFF0",
+          11: "#718990",
         },
         turquoise: {
           1: "#0C4C5A",
