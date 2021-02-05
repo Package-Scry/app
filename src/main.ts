@@ -12,6 +12,10 @@ interface PackageJSON {
   }
 }
 
+interface EventWorkspace {
+  path: string | null
+}
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow
@@ -72,12 +76,17 @@ app.on("window-all-closed", () => {
   }
 })
 
-ipcMain.on("workspaceFolder", async (event, args) => {
+const getSelectedFolderPath = async () => {
   const dir = await dialog.showOpenDialog({ properties: ["openDirectory"] })
 
   if (dir.canceled) win.webContents.send("packages", "canceled")
 
-  const filePath = dir.filePaths
+  return dir.filePaths
+}
+
+ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
+  const { path } = args
+  const filePath = path ?? (await getSelectedFolderPath())
 
   readFile(`${filePath}/package.json`, "utf-8", (error, data) => {
     if (error) {
@@ -98,6 +107,7 @@ ipcMain.on("workspaceFolder", async (event, args) => {
     })
 
     return win.webContents.send("packages", {
+      filePath,
       packages,
       name,
     })

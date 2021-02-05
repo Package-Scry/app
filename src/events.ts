@@ -1,3 +1,4 @@
-const hasSelectedProject = (): boolean => !!localStorage.getItem("activeTab")
+const activeTab = localStorage.getItem("activeTab")
+const path = activeTab ? localStorage.getItem(`dirPath-${activeTab}`) : null
 
-if (!hasSelectedProject()) window.api.send("workspaceFolder", "value")
+window.api.send("workspaceFolder", { path })

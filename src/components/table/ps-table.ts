@@ -47,11 +47,12 @@ class Table extends HTMLElement {
     super()
 
     window.api.receive("packages", (data: TSFixMe) => {
-      const { packages, name } = data
+      const { filePath, name, packages } = data
 
       this.packages = packages
 
       localStorage.setItem("activeTab", name)
+      localStorage.setItem(`dirPath-${name}`, filePath)
 
       this.render()
     })
