@@ -81,12 +81,14 @@ const getSelectedFolderPath = async () => {
 
   if (dir.canceled) win.webContents.send("packages", "canceled")
 
-  return dir.filePaths
+  return dir.filePaths[0]
 }
 
 ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
   const { path } = args
   const filePath = path ?? (await getSelectedFolderPath())
+
+  // checkPackages(filePath)
 
   readFile(`${filePath}/package.json`, "utf-8", (error, data) => {
     if (error) {
