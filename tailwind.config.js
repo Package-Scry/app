@@ -42,7 +42,7 @@ module.exports = {
         serif: ["Bitter", "serif"],
       },
       gridTemplateColumns: {
-        table: "repeat(4, minmax(0, 1fr)) 12rem",
+        table: "repeat(5, minmax(0, 1fr)) 12rem",
       },
     },
   },
