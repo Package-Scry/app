@@ -207,6 +207,16 @@ class Table extends HTMLElement {
     )
   }
 
+  get shouldRerender() {
+    return this.getAttribute("shouldRerender")
+  }
+
+  set shouldRerender(_) {
+    this.packages = null
+    this.setAttribute("shouldRerender", "false")
+    this.render()
+  }
+
   packages: Data[] | null = null
 
   getData = (): Data[] => {
