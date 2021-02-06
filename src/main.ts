@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from "electron"
 import * as path from "path"
 import { readFile } from "fs"
-import { exec, execSync } from "child_process"
+import { checkPackages, getLatestVersion } from "./commands"
 
 interface PackageJSON {
   name?: string
@@ -28,7 +28,7 @@ function createWindow() {
     try {
       // eslint-disable-next-line
       require("electron-reloader")(module, {
-        debug: true,
+        debug: false,
         watchRenderer: true,
       })
     } catch (e) {
@@ -85,56 +85,13 @@ const getSelectedFolderPath = async () => {
   return dir.filePaths[0]
 }
 
-const checkPackages = (filePath: string) => {
-  exec("npm outdated", (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`)
-      return
-    }
-    if (stderr) {
-      console.log(`stderr: ${stderr}`)
-      return
-    }
-    const data = stdout
-      .split("\n")
-      .filter(a => a)
-      .map(data => {
-        const [name, _, wanted, latest] = data.split(" ").filter(d => d)
-
-        return { name, wanted, latest }
-      })
-      .slice(1)
-
-    win.webContents.send("outdated", data)
-  })
-}
-
-const getLatestVersion = (filePath: string, packageName: string) => {
-  exec(
-    `cd ${filePath} && npm v ${packageName} version`,
-    (error, stdout, stderr) => {
-      if (error) {
-        console.log(`error: ${error.message}`)
-        return ""
-      }
-      if (stderr) {
-        console.log(`stderr: ${stderr}`)
-        return ""
-      }
-
-      win.webContents.send("packageInfo", {
-        name: packageName,
-        version: stdout.replace("\n", ""),
-      })
-    }
-  )
-}
-
 ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
   const { path } = args
   const filePath = path ?? (await getSelectedFolderPath())
+  const send = (channel: string, args: TSFixMe[]) =>
+    win.webContents.send(channel, args)
 
-  checkPackages(filePath)
+  checkPackages(filePath, send)
 
   readFile(`${filePath}/package.json`, "utf-8", (error, data) => {
     if (error) {
@@ -146,7 +103,7 @@ ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
     const { dependencies, devDependencies, name } = parsedData
     const allDependencies = { ...dependencies, ...devDependencies }
     const packages = Object.keys(allDependencies).map(key => {
-      getLatestVersion(filePath, key)
+      getLatestVersion(filePath, key, send)
 
       return {
         name: key,
