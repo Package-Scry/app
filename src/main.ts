@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from "electron"
 import * as path from "path"
 import { readFile } from "fs"
-import { checkPackages, getLatestVersion } from "./commands"
+import { checkPackages, getLatestVersion, updatePackage } from "./commands"
 
 interface PackageJSON {
   name?: string
@@ -15,6 +15,12 @@ interface PackageJSON {
 
 interface EventWorkspace {
   path: string | null
+}
+
+interface EventPackageUpdate {
+  name: string
+  path: string
+  version: string
 }
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -120,4 +126,12 @@ ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
       name,
     })
   })
+})
+
+ipcMain.on("packageUpdate", async (event, args: EventPackageUpdate) => {
+  const { name, path, version } = args
+  const send = (channel: string, args: TSFixMe[]) =>
+    win.webContents.send(channel, args)
+
+  updatePackage(path, name, version, send)
 })
