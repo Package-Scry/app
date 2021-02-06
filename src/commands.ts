@@ -30,32 +30,6 @@ export const checkPackages = (
   })
 }
 
-export const getLatestVersion = (
-  filePath: string,
-  packageName: string,
-  send: BrowserWindow["webContents"]["send"]
-): void => {
-  exec(
-    `cd ${filePath} && npm v ${packageName} version`,
-    (error, stdout, stderr) => {
-      if (error) {
-        console.log(`error: ${error.message}`)
-        return ""
-      }
-
-      if (stderr) {
-        console.log(`stderr: ${stderr}`)
-        return ""
-      }
-
-      send("packageInfo", {
-        name: packageName,
-        version: stdout.replace("\n", ""),
-      })
-    }
-  )
-}
-
 export const updatePackage = (
   filePath: string,
   packageName: string,

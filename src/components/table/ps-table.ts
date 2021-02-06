@@ -134,6 +134,7 @@ const COLUMN_NAMES = ["Name", "Local", "Wanted", "Latest", "Status", "Action"]
 const BUTTON_STATE: {
   [key: string]: { text: ButtonText; type: ButtonTypes }
 } = {
+  loading: { text: "Loading", type: "loading" },
   outdated: { text: "Update", type: "primary" },
   "up to date": { text: "Up to date", type: "secondary" },
   updatable: { text: "Update", type: "primary" },
@@ -157,24 +158,11 @@ class Table extends HTMLElement {
       }
     })
 
-    window.api.receive("packageInfo", (data: TSFixMe) => {
-      const { name, version } = data
-      const packageIndex = this.getData().findIndex(p => p.name === name)
-
-      this.packages = this.packages.map(npmPackage =>
-        npmPackage.name === name
-          ? { ...npmPackage, latest: version }
-          : npmPackage
-      )
-
-      this.updateRow(packageIndex)
-    })
-
     window.api.receive(
       "outdated",
       (data: { name: string; wanted: string; latest: string }[]) => {
         this.packages = this.packages.map(npmPackage => {
-          const { name } = npmPackage
+          const { name, local } = npmPackage
           const selectedPackage = data.find(p => p.name === name)
 
           if (selectedPackage) {
@@ -183,12 +171,15 @@ class Table extends HTMLElement {
             return {
               ...npmPackage,
               wanted,
+              latest,
               status: wanted === latest ? "updatable" : "outdated",
             }
           }
           return {
             ...npmPackage,
+            latest: local,
             wanted: "-",
+            status: "up to date",
           }
         })
 
@@ -230,10 +221,12 @@ class Table extends HTMLElement {
   data: Data[] = []
 
   handleClick = (i: number) => {
+    if (!["outdated", "updatable"].includes(this.getData()[i].status)) return
     const activeTab = localStorage.getItem("activeTab")
     const path = localStorage.getItem(`dirPath-${activeTab}`)
-    const { name, wanted, latest, status } = this.getData()[i]
-    const version = status === "updatable" ? wanted : latest
+    const { name, local, wanted, latest } = this.getData()[i]
+    const version =
+      wanted !== latest && wanted !== local.replace("^", "") ? wanted : latest
 
     this.packages[i].status = "updating"
     this.updateRow(i)
@@ -268,6 +261,14 @@ class Table extends HTMLElement {
     const rowElement = document.querySelectorAll<HTMLElement>("ps-row")[i + 1]
 
     rowElement.outerHTML = this.getRow(this.getData()[i], i)
+    this.updateButton(i)
+  }
+
+  updateButton(i: number, elButton?: HTMLElement) {
+    const button =
+      elButton ?? document.querySelectorAll<HTMLElement>("ps-button")[i]
+
+    button.addEventListener("click", () => this.handleClick(i))
   }
 
   connectedCallback() {
@@ -286,10 +287,7 @@ class Table extends HTMLElement {
 
     const buttons = document.querySelectorAll<HTMLElement>("ps-button")
 
-    buttons.forEach((button, i) => {
-      if (["outdated", "updatable"].includes(this.getData()[i].status))
-        button.addEventListener("click", () => this.handleClick(i))
-    })
+    buttons.forEach((button, i) => this.updateButton(i, button))
   }
 }
 

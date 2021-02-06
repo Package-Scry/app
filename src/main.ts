@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from "electron"
 import * as path from "path"
 import { readFile } from "fs"
-import { checkPackages, getLatestVersion, updatePackage } from "./commands"
+import { checkPackages, updatePackage } from "./commands"
 
 interface PackageJSON {
   name?: string
@@ -58,7 +58,6 @@ function createWindow() {
 
   // Open the DevTools.
   win.webContents.openDevTools()
-  // console.log(dialog.showOpenDialog({ properties: ["openDirectory"] }))
 }
 
 // This method will be called when Electron has finished
@@ -108,17 +107,13 @@ ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
     const parsedData: PackageJSON = JSON.parse(data)
     const { dependencies, devDependencies, name } = parsedData
     const allDependencies = { ...dependencies, ...devDependencies }
-    const packages = Object.keys(allDependencies).map(key => {
-      getLatestVersion(filePath, key, send)
-
-      return {
-        name: key,
-        local: allDependencies[key],
-        latest: "loading",
-        wanted: "loading",
-        status: "up to date",
-      }
-    })
+    const packages = Object.keys(allDependencies).map(key => ({
+      name: key,
+      local: allDependencies[key],
+      latest: "loading",
+      wanted: "loading",
+      status: "loading",
+    }))
 
     return win.webContents.send("packages", {
       filePath,

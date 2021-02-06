@@ -1,11 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron"
 
-type SendChannel =
-  | "workspaceFolder"
-  | "packageInfo"
-  | "outdated"
-  | "packageUpdate"
-type ReceiveChannel = "packages" | "packageInfo" | "outdated" | "packageUpdated"
+type SendChannel = "workspaceFolder" | "outdated" | "packageUpdate"
+type ReceiveChannel = "packages" | "outdated" | "packageUpdated"
 
 // https://github.com/reZach/secure-electron-template/blob/master/docs/newtoelectron.md
 // Expose protected methods that allow the renderer process to use
@@ -15,7 +11,6 @@ contextBridge.exposeInMainWorld("api", {
     // whitelist channel
     const validChannels: SendChannel[] = [
       "workspaceFolder",
-      "packageInfo",
       "packageUpdate",
       "outdated",
     ]
@@ -27,7 +22,6 @@ contextBridge.exposeInMainWorld("api", {
   receive: (channel: ReceiveChannel, func: TSFixMe) => {
     const validChannels: ReceiveChannel[] = [
       "packages",
-      "packageInfo",
       "packageUpdated",
       "outdated",
     ]
