@@ -55,3 +55,30 @@ export const getLatestVersion = (
     }
   )
 }
+
+export const updatePackage = (
+  filePath: string,
+  packageName: string,
+  version: string,
+  send: BrowserWindow["webContents"]["send"]
+): void => {
+  exec(
+    `cd ${filePath} && npm i ${packageName}@${version}`,
+    (error, stdout, stderr) => {
+      if (error) {
+        console.log(`error: ${error.message}`)
+        return ""
+      }
+
+      if (stderr) {
+        console.log(`stderr: ${stderr}`)
+        return ""
+      }
+
+      send("packageUpdated", {
+        name: packageName,
+        version,
+      })
+    }
+  )
+}
