@@ -159,6 +159,7 @@ class Table extends HTMLElement {
 
     window.api.receive("packageInfo", (data: TSFixMe) => {
       const { name, version } = data
+      const packageIndex = this.getData().findIndex(p => p.name === name)
 
       this.packages = this.packages.map(npmPackage =>
         npmPackage.name === name
@@ -166,7 +167,7 @@ class Table extends HTMLElement {
           : npmPackage
       )
 
-      this.render()
+      this.updateRow(packageIndex)
     })
 
     window.api.receive(
@@ -194,6 +195,25 @@ class Table extends HTMLElement {
         this.render()
       }
     )
+
+    window.api.receive(
+      "packageUpdated",
+      (data: { name: string; version: string }) => {
+        const { name, version } = data
+        const packageIndex = this.getData().findIndex(p => p.name === name)
+        const updatedPacakge = this.packages[packageIndex]
+        const { wanted, latest } = updatedPacakge
+
+        this.packages[packageIndex] = {
+          ...updatedPacakge,
+          local: `^${version}`,
+          status: latest === version ? "up to date" : "outdated",
+          wanted: latest === version ? "-" : wanted,
+        }
+
+        this.updateRow(packageIndex)
+      }
+    )
   }
 
   packages: Data[] | null = null
@@ -210,11 +230,14 @@ class Table extends HTMLElement {
   data: Data[] = []
 
   handleClick = (i: number) => {
-    this.data[i].status = "updating"
+    const activeTab = localStorage.getItem("activeTab")
+    const path = localStorage.getItem(`dirPath-${activeTab}`)
+    const { name, wanted, latest, status } = this.getData()[i]
+    const version = status === "updatable" ? wanted : latest
 
+    this.packages[i].status = "updating"
     this.updateRow(i)
-
-    // update package
+    window.api.send("packageUpdate", { name, path, version })
   }
 
   getRow = (item: Data, i: number) => {
@@ -244,7 +267,7 @@ class Table extends HTMLElement {
   updateRow = (i: number) => {
     const rowElement = document.querySelectorAll<HTMLElement>("ps-row")[i + 1]
 
-    rowElement.outerHTML = this.getRow(this.data[i], i)
+    rowElement.outerHTML = this.getRow(this.getData()[i], i)
   }
 
   connectedCallback() {
@@ -264,7 +287,7 @@ class Table extends HTMLElement {
     const buttons = document.querySelectorAll<HTMLElement>("ps-button")
 
     buttons.forEach((button, i) => {
-      if (this.getData()[i].status === "outdated")
+      if (["outdated", "updatable"].includes(this.getData()[i].status))
         button.addEventListener("click", () => this.handleClick(i))
     })
   }
