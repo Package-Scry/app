@@ -33,6 +33,7 @@ module.exports = {
         black: {
           DEFAULT: "black",
           1: "#303740",
+          3: "#231E1B",
         },
         blue: {
           4: "#E2FAFF",
@@ -43,6 +44,10 @@ module.exports = {
       },
       gridTemplateColumns: {
         table: "repeat(5, minmax(0, 1fr)) 12rem",
+        button: "auto 1fr",
+      },
+      width: {
+        112: "28rem",
       },
     },
   },
