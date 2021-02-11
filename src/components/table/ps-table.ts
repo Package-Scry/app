@@ -151,7 +151,6 @@ class Table extends HTMLElement {
       if (filePath) {
         this.packages = packages
 
-        localStorage.setItem("activeTab", name)
         localStorage.setItem(`dirPath-${name}`, filePath)
 
         this.render()
