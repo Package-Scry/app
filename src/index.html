@@ -8,6 +8,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
   <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
   <link href="./tailwind.css" rel="stylesheet">
+  <link href="./base.css" rel="stylesheet">
   <script type="module" src="../dist/components/typography/ps-base.js"></script>
   <script type="module" src="../dist/components/typography/ps-header.js"></script>
   <script type="module" src="../dist/components/button/ps-button.js"></script>
@@ -15,15 +16,15 @@
   <script type="module" src="../dist/components/table/ps-row.js"></script>
   <script type="module" src="../dist/components/table/ps-table.js"></script>
   <script type="module" src="../dist/components/tab/ps-tab.js"></script>
+  <script type="module" src="../dist/components/tab/ps-tabs.js"></script>
+  <script type="module" src="../dist/components/modal/ps-modal.js"></script>
   <script type="module" src="../dist/events.js"></script>
 </head>
 
 <body class="bg-black-1">
-  <div class="flex flex-row bg-gray-4 w-full h-10 top-0 shadow">
-    <ps-tab>
-    </ps-tab>
-  </div>
+  <ps-tabs></ps-tabs>
   <ps-table></ps-table>
+  <!-- <ps-modal></ps-modal> -->
   <div class="flex flex-row-reverse bg-gray-4 fixed w-full h-12 bottom-0 shadow-inner-2">
     <span
       class="cursor-pointer bg-black-1 w-auto mx-5 py-1 px-8 rounded font-serif text-white text-xl self-center">1.0.0</span>

@@ -56,9 +56,16 @@ class Tabs extends HTMLElement {
   }
 
   render() {
+    this.setAttribute(
+      "class",
+      "flex flex-row bg-gray-4 w-full h-10 top-0 shadow"
+    )
+    const tabStyle =
+      "relative cursor-pointer bg-gray-11 w-auto h-8 mx-2 px-10 rounded-t font-serif text-white text-lg self-end shadow-drop"
     this.innerHTML = this.tabs
       .map(
-        tab => `<ps-tab activeTab="${this.activeTab}" name="${tab}"></ps-tab>`
+        tab =>
+          `<ps-tab class="${tabStyle}" activeTab="${this.activeTab}" name="${tab}"></ps-tab>`
       )
       .join("")
     const tabs = document.querySelectorAll<HTMLElement>("ps-tab")
