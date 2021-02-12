@@ -64,7 +64,7 @@ class Tabs extends HTMLElement {
     const plusStyle = `text-2xl text-white cursor-pointer font-serif font-semibold leading-normal pt-2 hover:text-3xl plus`
     const plus = `<div class="flex justify-center content-center w-7 h-full"><div class="${plusStyle}">+</div></div>`
     const tabStyle =
-      "relative cursor-pointer bg-gray-11 w-auto h-8 px-10 rounded-t font-serif text-white text-lg self-end shadow-drop mr-0.5 first:ml-2"
+      "relative cursor-pointer bg-gray-11 h-8 px-10 rounded-t font-serif text-white text-lg self-end shadow-drop mr-0.5 first:ml-2 hover:bg-gray-12"
 
     this.innerHTML = `${this.tabs
       .map(

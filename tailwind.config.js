@@ -22,6 +22,7 @@ module.exports = {
           9: "#F2F2F2",
           10: "#E3EFF0",
           11: "#718990",
+          12: "#8AA6AF",
         },
         turquoise: {
           1: "#0C4C5A",
