@@ -40,7 +40,7 @@ class Tabs extends HTMLElement {
 
     localStorage.setItem("tabs", replacedTabs)
 
-    this.tabs = replacedTabs ? replacedTabs.split(",") : []
+    this.tabs = replacedTabs ? replacedTabs.split(",").filter(tab => tab) : []
     this.activeTab = replacedTabs ? this.tabs[0] : ""
 
     localStorage.setItem("activeTab", this.activeTab)
