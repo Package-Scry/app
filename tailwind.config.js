@@ -5,7 +5,7 @@ module.exports = {
       boxShadow: {
         inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.25)",
         "inner-2": "inset 0 5px 10px 0 rgba(0, 0, 0, 0.20)",
-        drop: "0 4px 10px 0 rgba(0, 0, 0, 0.5)",
+        drop: "0 0 4px 0 rgba(0, 0, 0, 0.5)",
         DEFAULT: "0 4px 10px 0 rgba(0, 0, 0, 0.4)",
       },
       colors: {
@@ -54,6 +54,7 @@ module.exports = {
   variants: {
     extend: {
       fontSize: ["hover"],
+      margin: ["first"],
     },
   },
 }

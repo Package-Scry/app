@@ -63,15 +63,16 @@ class Tabs extends HTMLElement {
 
     const plusStyle = `text-2xl text-white cursor-pointer font-serif font-semibold leading-normal pt-2 hover:text-3xl plus`
     const plus = `<div class="flex justify-center content-center w-7 h-full"><div class="${plusStyle}">+</div></div>`
-
     const tabStyle =
-      "relative cursor-pointer bg-gray-11 w-auto h-8 mx-2 px-10 rounded-t font-serif text-white text-lg self-end shadow-drop"
+      "relative cursor-pointer bg-gray-11 w-auto h-8 px-10 rounded-t font-serif text-white text-lg self-end shadow-drop mr-0.5 first:ml-2"
+
     this.innerHTML = `${this.tabs
       .map(
         tab =>
           `<ps-tab class="${tabStyle}" activeTab="${this.activeTab}" name="${tab}"></ps-tab>`
       )
       .join("")}${plus}`
+
     const tabs = document.querySelectorAll<HTMLElement>("ps-tab")
     const closeButtons = document.querySelectorAll<HTMLElement>(".close")
     const elPlus = document.querySelector<HTMLElement>(".plus")
