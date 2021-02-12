@@ -51,4 +51,9 @@ module.exports = {
       },
     },
   },
+  variants: {
+    extend: {
+      fontSize: ["hover"],
+    },
+  },
 }

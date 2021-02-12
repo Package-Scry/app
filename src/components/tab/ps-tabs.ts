@@ -60,16 +60,21 @@ class Tabs extends HTMLElement {
       "class",
       "flex flex-row bg-gray-4 w-full h-10 top-0 shadow"
     )
+
+    const plusStyle = `text-2xl text-white cursor-pointer font-serif font-semibold leading-normal pt-2 hover:text-3xl plus`
+    const plus = `<div class="flex justify-center content-center w-7 h-full"><div class="${plusStyle}">+</div></div>`
+
     const tabStyle =
       "relative cursor-pointer bg-gray-11 w-auto h-8 mx-2 px-10 rounded-t font-serif text-white text-lg self-end shadow-drop"
-    this.innerHTML = this.tabs
+    this.innerHTML = `${this.tabs
       .map(
         tab =>
           `<ps-tab class="${tabStyle}" activeTab="${this.activeTab}" name="${tab}"></ps-tab>`
       )
-      .join("")
+      .join("")}${plus}`
     const tabs = document.querySelectorAll<HTMLElement>("ps-tab")
     const closeButtons = document.querySelectorAll<HTMLElement>(".close")
+    const elPlus = document.querySelector<HTMLElement>(".plus")
 
     closeButtons.forEach((button, i) =>
       button.addEventListener("click", e => {
@@ -77,12 +82,15 @@ class Tabs extends HTMLElement {
         this.close(this.tabs[i])
       })
     )
-    tabs.forEach(tab =>
+    tabs.forEach((tab, i) =>
       tab.addEventListener("click", () => {
-        const path = localStorage.getItem(`dirPath-${this.activeTab}`)
+        const path = localStorage.getItem(`dirPath-${this.tabs[i]}`)
 
         window.api.send("workspaceFolder", { path })
       })
+    )
+    elPlus.addEventListener("click", () =>
+      window.api.send("workspaceFolder", { path: null })
     )
   }
 
