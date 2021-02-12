@@ -3,7 +3,8 @@ class Tab extends HTMLElement {
     const activeTab: string = this.getAttribute("activeTab")
     const name: string = this.getAttribute("name")
     const style = ""
-    const xStyle = "close absolute -top-1 right-1.5"
+    const xStyle =
+      "close absolute -top-1 right-1 font-sans-serif text-base font-thin"
     this.innerHTML = `<span class="align-middle">${name}</span><span class="${xStyle}">x</span>`
   }
 }
