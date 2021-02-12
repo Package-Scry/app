@@ -56,20 +56,14 @@ class Tabs extends HTMLElement {
   }
 
   render() {
-    this.setAttribute(
-      "class",
-      "flex flex-row bg-gray-4 w-full h-10 top-0 shadow"
-    )
+    this.className = "flex flex-row bg-gray-4 w-full h-10 top-0"
 
     const plusStyle = `text-2xl text-white cursor-pointer font-serif font-semibold leading-normal pt-2 hover:text-3xl plus`
     const plus = `<div class="flex justify-center content-center w-7 h-full"><div class="${plusStyle}">+</div></div>`
-    const tabStyle =
-      "relative cursor-pointer bg-gray-11 h-8 px-10 rounded-t font-serif text-white text-lg self-end shadow-drop mr-0.5 first:ml-2 hover:bg-gray-12"
 
     this.innerHTML = `${this.tabs
       .map(
-        tab =>
-          `<ps-tab class="${tabStyle}" activeTab="${this.activeTab}" name="${tab}"></ps-tab>`
+        tab => `<ps-tab activeTab="${this.activeTab}" name="${tab}"></ps-tab>`
       )
       .join("")}${plus}`
 
