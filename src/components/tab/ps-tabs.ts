@@ -83,7 +83,8 @@ class Tabs extends HTMLElement {
       tab.addEventListener("click", () => {
         const path = localStorage.getItem(`dirPath-${this.tabs[i]}`)
 
-        window.api.send("workspaceFolder", { path })
+        if (this.tabs[i] !== this.activeTab)
+          window.api.send("workspaceFolder", { path })
       })
     )
     elPlus.addEventListener("click", () =>
