@@ -13,6 +13,10 @@ class Tabs extends HTMLElement {
           .filter(tab => tab)
       : []
 
+    window.api.receive("cancelled", () => {
+      if (!this.activeTab) window.api.send("workspaceFolder", { path: null })
+    })
+
     window.api.receive("packages", (data: { name: string }) => {
       this.activeTab = data.name
       localStorage.setItem("activeTab", this.activeTab)
@@ -39,19 +43,23 @@ class Tabs extends HTMLElement {
     const replacedTabs = localStorage.getItem("tabs").replace(`${tab},`, "")
 
     localStorage.setItem("tabs", replacedTabs)
+    localStorage.removeItem(`dirPath-${tab}`)
 
     this.tabs = replacedTabs ? replacedTabs.split(",").filter(tab => tab) : []
-    this.activeTab = replacedTabs ? this.tabs[0] : ""
 
-    localStorage.setItem("activeTab", this.activeTab)
+    if (this.activeTab === tab) {
+      this.activeTab = replacedTabs ? this.tabs[0] : ""
+      localStorage.setItem("activeTab", this.activeTab)
 
-    const path = this.activeTab
-      ? localStorage.getItem(`dirPath-${this.activeTab}`)
-      : null
+      const path = this.activeTab
+        ? localStorage.getItem(`dirPath-${this.activeTab}`)
+        : null
 
-    window.api.send("workspaceFolder", { path })
+      window.api.send("workspaceFolder", { path })
 
-    this.rerenderTable()
+      this.rerenderTable()
+    }
+
     this.render()
   }
 

@@ -85,7 +85,7 @@ app.on("window-all-closed", () => {
 const getSelectedFolderPath = async () => {
   const dir = await dialog.showOpenDialog({ properties: ["openDirectory"] })
 
-  if (dir.canceled) win.webContents.send("packages", "canceled")
+  if (dir.canceled) return false
 
   return dir.filePaths[0]
 }
@@ -95,6 +95,8 @@ ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
   const filePath = path ?? (await getSelectedFolderPath())
   const send = (channel: string, args: TSFixMe[]) =>
     win.webContents.send(channel, args)
+
+  if (filePath === false) return win.webContents.send("cancelled", {})
 
   checkPackages(filePath, send)
 
