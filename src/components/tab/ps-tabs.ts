@@ -65,7 +65,9 @@ class Tabs extends HTMLElement {
       .map(
         tab => `<ps-tab activeTab="${this.activeTab}" name="${tab}"></ps-tab>`
       )
-      .join("")}${plus}<ps-icon-logout class="ml-auto mt-1.5"></ps-icon-logout>`
+      .join(
+        ""
+      )}${plus}<ps-icon-logout class="ml-auto mt-1.5 mr-4"></ps-icon-logout>`
 
     const tabs = document.querySelectorAll<HTMLElement>("ps-tab")
     const closeButtons = document.querySelectorAll<HTMLElement>(".close")
