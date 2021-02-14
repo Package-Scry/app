@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog } from "electron"
+import { app, BrowserWindow, ipcMain, dialog, shell } from "electron"
 import * as path from "path"
 import { readFile } from "fs"
 import { checkPackages, updatePackage } from "./commands"
@@ -66,9 +66,9 @@ function createWindow() {
   const expressApp = express()
 
   expressApp.use(bodyParser.json())
-  expressApp.get("/profile", () =>
-    console.log("save profile/isAuthenticated here")
-  )
+  expressApp.get("/login/:state", (req, res) => {
+    const { state } = req.params
+  })
 
   const server = expressApp.listen(0, () => {
     const address = server.address()
@@ -107,8 +107,8 @@ const getSelectedFolderPath = async () => {
   return dir.filePaths[0]
 }
 
-ipcMain.on("authenticate", async (event, args) => {
-  // TODO: add authentication
+ipcMain.on("authenticate", () => {
+  shell.openExternal(`http://localhost:3000/auth/${port}`)
 })
 
 ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
