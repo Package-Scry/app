@@ -2,6 +2,8 @@ import { app, BrowserWindow, ipcMain, dialog } from "electron"
 import * as path from "path"
 import { readFile } from "fs"
 import { checkPackages, updatePackage } from "./commands"
+import * as express from "express"
+import * as bodyParser from "body-parser"
 
 interface PackageJSON {
   name?: string
@@ -23,6 +25,7 @@ interface EventPackageUpdate {
   version: string
 }
 
+let port: number | undefined
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow
@@ -58,6 +61,20 @@ function createWindow() {
 
   // Open the DevTools.
   win.webContents.openDevTools()
+
+  // Express app for authentication
+  const expressApp = express()
+
+  expressApp.use(bodyParser.json())
+  expressApp.get("/profile", () =>
+    console.log("save profile/isAuthenticated here")
+  )
+
+  const server = expressApp.listen(0, () => {
+    const address = server.address()
+    port = typeof address === "string" ? undefined : address.port
+    console.log(`App listening to ${port}....`)
+  })
 }
 
 // This method will be called when Electron has finished
@@ -89,6 +106,10 @@ const getSelectedFolderPath = async () => {
 
   return dir.filePaths[0]
 }
+
+ipcMain.on("authenticate", async (event, args) => {
+  // TODO: add authentication
+})
 
 ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
   const { path } = args
