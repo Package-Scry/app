@@ -1,7 +1,12 @@
 import { contextBridge, ipcRenderer } from "electron"
 
-type SendChannel = "workspaceFolder" | "outdated" | "packageUpdate"
-type ReceiveChannel = "packages" | "outdated" | "packageUpdated"
+type SendChannel =
+  | "workspaceFolder"
+  | "outdated"
+  | "packageUpdate"
+  | "cancelled"
+  | "authenticate"
+type ReceiveChannel = "packages" | "outdated" | "packageUpdated" | "cancelled"
 
 // https://github.com/reZach/secure-electron-template/blob/master/docs/newtoelectron.md
 // Expose protected methods that allow the renderer process to use
@@ -13,6 +18,8 @@ contextBridge.exposeInMainWorld("api", {
       "workspaceFolder",
       "packageUpdate",
       "outdated",
+      "cancelled",
+      "authenticate",
     ]
 
     if (validChannels.includes(channel)) {
@@ -24,6 +31,7 @@ contextBridge.exposeInMainWorld("api", {
       "packages",
       "packageUpdated",
       "outdated",
+      "cancelled",
     ]
 
     if (validChannels.includes(channel)) {
