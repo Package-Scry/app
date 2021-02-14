@@ -5,9 +5,15 @@ class Modal extends HTMLElement {
     const login = `<div class="text-white text-6xl text-center text-shadow">Login</div>`
     const button = `<span class="text-white text-3xl self-center text-center">Login with GitHub</span>`
     const containerStyle = `grid grid-flow-col grid-cols-button bg-black-3 py-2 px-3 mt-16 rounded-lg`
-    const buttonContainer = `<div class="${containerStyle}">${githubSVG}${button}</div>`
+    const buttonContainer = `<div class="${containerStyle} buttonContainer">${githubSVG}${button}</div>`
 
     this.innerHTML = `<div class="${wrapperStyle}"><div class="${style}">${login}${buttonContainer}</div></div>`
+
+    const elButtonContainer = document.querySelector(".buttonContainer")
+
+    elButtonContainer.addEventListener("click", () => {
+      window.api.send("authenticate", {})
+    })
   }
 }
 
