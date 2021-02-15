@@ -2,7 +2,7 @@ class Tab extends HTMLElement {
   connectedCallback() {
     const tabStyle =
       "relative cursor-pointer px-10 rounded-t font-serif text-white text-lg self-end shadow-drop mr-0.5 first:ml-2"
-    const activeStyle = "bg-black-2 h-9 leading-loose hover:bg-black-4"
+    const activeStyle = "bg-black-2 h-9 leading-loose hover:bg-black-6"
     const activeTab: string = this.getAttribute("activeTab")
     const name: string = this.getAttribute("name")
     const style =
