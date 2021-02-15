@@ -67,7 +67,7 @@ class Tabs extends HTMLElement {
     this.className = "flex flex-row bg-gray-4 w-full h-10 top-0"
 
     const plusStyle = `text-2xl text-white cursor-pointer font-serif font-semibold leading-normal pt-2 hover:text-3xl plus`
-    const plus = `<div class="flex justify-center content-center w-7 h-full"><div class="${plusStyle}">+</div></div>`
+    const plus = `<div class="flex justify-center content-center w-7 h-full ml-2"><div class="${plusStyle}">+</div></div>`
 
     this.innerHTML = `${this.tabs
       .map(
