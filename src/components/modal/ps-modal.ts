@@ -4,7 +4,7 @@ class Modal extends HTMLElement {
     const style = `w-112 h-72 bg-turquoise-1 px-8 py-10 self-center m-auto shadow rounded-lg`
     const login = `<div class="text-white text-6xl text-center text-shadow">Login</div>`
     const button = `<span class="text-white text-3xl self-center text-center">Login with GitHub</span>`
-    const containerStyle = `cursor-pointer grid grid-flow-col grid-cols-button bg-black-3 py-2 px-3 mt-16 rounded-lg hover:bg-black-2`
+    const containerStyle = `cursor-pointer grid grid-flow-col grid-cols-button bg-black-3 py-2 px-3 mt-16 rounded-lg hover:bg-black-5`
     const buttonContainer = `<div class="${containerStyle} buttonContainer">${githubSVG}${button}</div>`
 
     this.innerHTML = `<div class="${wrapperStyle}"><div class="${style}">${login}${buttonContainer}</div></div>`
