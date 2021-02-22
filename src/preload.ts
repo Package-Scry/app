@@ -8,12 +8,14 @@ type SendChannel =
   | "authenticate"
   | "isLoggedIn"
   | "token"
+  | "logout"
 type ReceiveChannel =
   | "packages"
   | "outdated"
   | "packageUpdated"
   | "cancelled"
   | "saveToken"
+  | "logout"
 
 // https://github.com/reZach/secure-electron-template/blob/master/docs/newtoelectron.md
 // Expose protected methods that allow the renderer process to use
@@ -29,6 +31,7 @@ contextBridge.exposeInMainWorld("api", {
       "authenticate",
       "isLoggedIn",
       "token",
+      "logout",
     ]
 
     if (validChannels.includes(channel)) {
@@ -42,6 +45,7 @@ contextBridge.exposeInMainWorld("api", {
       "outdated",
       "cancelled",
       "saveToken",
+      "logout",
     ]
 
     if (validChannels.includes(channel)) {

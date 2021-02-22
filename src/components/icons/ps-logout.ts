@@ -1,10 +1,25 @@
 class Logout extends HTMLElement {
   connectedCallback() {
     this.innerHTML = svg
+    const logout = document.querySelector("ps-icon-logout")
+
+    logout.addEventListener("click", () => {
+      localStorage.removeItem("token")
+
+      const elTabs = document.querySelector("ps-tabs")
+      const elTable = document.querySelector("ps-table")
+      const elModal = document.querySelector("ps-modal")
+
+      elTabs.className = `${elTabs.className} hidden`
+      elTable.className = `${elTable.className} hidden`
+      elModal.className = elModal.className.replace("hidden", "")
+
+      window.api.send("token", null)
+    })
   }
 }
 
-const svg = `<svg class="cursor-pointer fill-current text-black-2 hover:text-black-5" width="44" height="36" viewBox="0 0 44 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+const svg = `<svg class="logout cursor-pointer fill-current text-black-2 hover:text-black-5" width="44" height="36" viewBox="0 0 44 36" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_d)">
 <path d="M39.6702 15.3801C40.0412 15.0091 40.0412 14.4076 39.6702 14.0366L33.6244 7.99083C33.2534 7.61983 32.6519 7.61983 32.2809 7.99083C31.9099 8.36183 31.9099 8.96333 32.2809 9.33433L37.6549 14.7083L32.2809 20.0824C31.9099 20.4534 31.9099 21.0549 32.2809 21.4259C32.6519 21.7969 33.2534 21.7969 33.6244 21.4259L39.6702 15.3801ZM24.7656 15.6583H38.9984V13.7583H24.7656V15.6583Z" fill="currentColor"/>
 </g>
