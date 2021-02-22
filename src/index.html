@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <title>PackageScry</title>
   <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://package-scry.herokuapp.com/; script-src 'self'" />
   <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
   <link href="./tailwind.css" rel="stylesheet">
   <link href="./base.css" rel="stylesheet">
@@ -23,9 +23,9 @@
 </head>
 
 <body class="bg-black-1">
-  <ps-tabs></ps-tabs>
-  <ps-table></ps-table>
-  <!-- <ps-modal></ps-modal> -->
+  <ps-tabs class="hidden"></ps-tabs>
+  <ps-table class="hidden"></ps-table>
+  <ps-modal></ps-modal>
   <div class="flex flex-row-reverse bg-gray-4 fixed w-full h-12 bottom-0 shadow-inner-2">
     <span class="bg-black-1 w-auto mx-5 py-1 px-8 rounded font-serif text-white text-xl self-center">1.0.0</span>
     <span

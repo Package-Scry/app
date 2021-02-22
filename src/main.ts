@@ -2,8 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog, shell } from "electron"
 import * as path from "path"
 import { readFile } from "fs"
 import { checkPackages, updatePackage } from "./commands"
-import * as express from "express"
-import * as bodyParser from "body-parser"
+import { io, Socket } from "socket.io-client"
 
 interface PackageJSON {
   name?: string
@@ -25,10 +24,11 @@ interface EventPackageUpdate {
   version: string
 }
 
-let port: number | undefined
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow
+const HOST = "https://package-scry.herokuapp.com/"
+let socket: Socket
 
 function createWindow() {
   const env = process.env.NODE_ENV || "development"
@@ -61,20 +61,6 @@ function createWindow() {
 
   // Open the DevTools.
   win.webContents.openDevTools()
-
-  // Express app for authentication
-  const expressApp = express()
-
-  expressApp.use(bodyParser.json())
-  expressApp.get("/login/:state", (req, res) => {
-    const { state } = req.params
-  })
-
-  const server = expressApp.listen(0, () => {
-    const address = server.address()
-    port = typeof address === "string" ? undefined : address.port
-    console.log(`App listening to ${port}....`)
-  })
 }
 
 // This method will be called when Electron has finished
@@ -107,8 +93,25 @@ const getSelectedFolderPath = async () => {
   return dir.filePaths[0]
 }
 
-ipcMain.on("authenticate", () => {
-  shell.openExternal(`http://localhost:3000/auth/${port}`)
+ipcMain.on("token", (_, token: string) => {
+  socket = io(HOST, {
+    query: {
+      token: token ?? "",
+    },
+  })
+
+  socket.on("connect", () => {
+    console.log(`Socket ${socket.id} connected`)
+  })
+
+  socket.on(`authentication`, async (token: string) => {
+    win.webContents.send("saveToken", token)
+    socket.disconnect()
+  })
+
+  ipcMain.on("authenticate", () => {
+    shell.openExternal(`https://package-scry.herokuapp.com/auth/${socket.id}`)
+  })
 })
 
 ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
