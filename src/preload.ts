@@ -1,3 +1,4 @@
+import axios from "axios"
 import { contextBridge, ipcRenderer } from "electron"
 
 type SendChannel =
@@ -6,7 +7,14 @@ type SendChannel =
   | "packageUpdate"
   | "cancelled"
   | "authenticate"
-type ReceiveChannel = "packages" | "outdated" | "packageUpdated" | "cancelled"
+  | "isLoggedIn"
+  | "token"
+type ReceiveChannel =
+  | "packages"
+  | "outdated"
+  | "packageUpdated"
+  | "cancelled"
+  | "saveToken"
 
 // https://github.com/reZach/secure-electron-template/blob/master/docs/newtoelectron.md
 // Expose protected methods that allow the renderer process to use
@@ -20,6 +28,8 @@ contextBridge.exposeInMainWorld("api", {
       "outdated",
       "cancelled",
       "authenticate",
+      "isLoggedIn",
+      "token",
     ]
 
     if (validChannels.includes(channel)) {
@@ -32,6 +42,7 @@ contextBridge.exposeInMainWorld("api", {
       "packageUpdated",
       "outdated",
       "cancelled",
+      "saveToken",
     ]
 
     if (validChannels.includes(channel)) {
