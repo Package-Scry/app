@@ -1,4 +1,3 @@
-import axios from "axios"
 import { contextBridge, ipcRenderer } from "electron"
 
 type SendChannel =
