@@ -8,6 +8,7 @@
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "lint-fix": "eslint --fix -c .eslintrc --ext .ts ./src",
+    "postinstall": "electron-builder install-app-deps",
     "dev": "electron ./dist/main.js",
     "start": "npm run build && electron ./dist/main.js",
     "dist": "electron-builder -w"
@@ -19,7 +20,7 @@
     "directories": {
       "app": ".",
       "output": "out",
-      "buildResources": "src/build-res"
+      "buildResources": "src/build"
     },
     "files": [
         "package.json",
@@ -30,6 +31,14 @@
     ],
     "win": {
       "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.developer-tools",
+      "gatekeeperAssess": false,
+      "hardenedRuntime": true,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
     }
   },
   "husky": {
