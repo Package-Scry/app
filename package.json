@@ -31,19 +31,7 @@
     ],
     "win": {
       "target": "nsis"
-    },
-    "mac": {
-      "target": "dmg",
-      "category": "public.app-category.developer-tools",
-      "gatekeeperAssess": false,
-      "hardenedRuntime": true,
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
-    },
-    "dmg": {
-      "sign": false
-    },
-    "afterSign": "scripts/notarize.js"
+    }
   },
   "husky": {
     "hooks": {
