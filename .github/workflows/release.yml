@@ -24,6 +24,8 @@ jobs:
 
       - name: Build
         run: npm run dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload builds to release
         uses: softprops/action-gh-release@v1
