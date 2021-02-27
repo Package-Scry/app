@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm dist
+        run: npm run dist
 
       - name: Upload builds to release
         uses: softprops/action-gh-release@v1
