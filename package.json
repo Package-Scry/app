@@ -40,7 +40,8 @@
       "owner": "Package-Scry",
       "provider": "github",
       "private": true,
-      "vPrefixedTagName": false
+      "vPrefixedTagName": false,
+      "releaseType": "release"
     }
   },
   "husky": {
