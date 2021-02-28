@@ -69,7 +69,15 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
   createWindow()
-  autoUpdater.checkForUpdatesAndNotify()
+
+  alert("TEST")
+  try {
+    alert("checking for updated")
+    autoUpdater.checkForUpdatesAndNotify()
+  } catch (error) {
+    alert("errored!")
+    alert(error)
+  }
 
   app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the
