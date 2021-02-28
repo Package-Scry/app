@@ -38,7 +38,7 @@
     },
     "publish": {
       "owner": "Package-Scry",
-      "publisher": "github",
+      "provider": "github",
       "private": true,
       "vPrefixedTagName": false
     }
