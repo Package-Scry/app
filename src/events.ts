@@ -17,3 +17,7 @@ window.api.receive("saveToken", (token: string) => {
 
   window.api.send("workspaceFolder", { path })
 })
+window.api.receive("alert", (text: string) => {
+  console.log("|  ALERT  |")
+  console.log(text)
+})

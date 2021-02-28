@@ -9,6 +9,7 @@ type SendChannel =
   | "isLoggedIn"
   | "token"
   | "logout"
+  | "alert"
 type ReceiveChannel =
   | "packages"
   | "outdated"
@@ -16,6 +17,7 @@ type ReceiveChannel =
   | "cancelled"
   | "saveToken"
   | "logout"
+  | "alert"
 
 // https://github.com/reZach/secure-electron-template/blob/master/docs/newtoelectron.md
 // Expose protected methods that allow the renderer process to use

@@ -87,14 +87,23 @@ app.on("window-all-closed", () => {
   }
 })
 
+const alert = (text: string) => {
+  win.webContents.send("alert", text)
+}
+
 autoUpdater.on("update-downloaded", info => {
   const { version } = info
-  console.log(`Update downloaded v${version}`)
+  alert(`Update downloaded v${version}`)
 })
 
 autoUpdater.on("update-available", info => {
   const { version } = info
-  console.log(`Update available v${version}`)
+  alert(`Update available v${version}`)
+})
+
+autoUpdater.on("update-available", info => {
+  const { version } = info
+  alert(`Update available v${version}`)
 })
 
 const getSelectedFolderPath = async () => {
