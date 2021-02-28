@@ -30,12 +30,5 @@ jobs:
       - name: Set env
         run: echo "${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-      - name: Upload builds to release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: ${{ env.RELEASE_VERSION }}
-          tag_name: ${{ env.RELEASE_VERSION }}
-          files: out/*.*
-          draft: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish
+        run: npm run publish

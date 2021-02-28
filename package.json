@@ -34,7 +34,13 @@
     },
     "nsis": {
       "createDesktopShortcut": true,
-      "shortcutName": "Package Scry"
+      "shortcutName": "Package Scry",
+      "publish": {
+        "owner": "Package-Scry",
+        "publisher": "github",
+        "private": true,
+        "vPrefixedTagName": false
+      }
     }
   },
   "husky": {
