@@ -2,7 +2,7 @@ name: Build Package Scry
 on:
   release:
     types:
-      - published
+      - created
 
 jobs:
   build:
