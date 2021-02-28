@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld("api", {
       "isLoggedIn",
       "token",
       "logout",
+      "alert",
     ]
 
     if (validChannels.includes(channel)) {
@@ -48,6 +49,7 @@ contextBridge.exposeInMainWorld("api", {
       "cancelled",
       "saveToken",
       "logout",
+      "alert",
     ]
 
     if (validChannels.includes(channel)) {
