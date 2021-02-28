@@ -31,6 +31,10 @@
     ],
     "win": {
       "target": "nsis"
+    },
+    "nsis": {
+      "createDesktopShortcut": true,
+      "shortcutName": "Package Scry"
     }
   },
   "husky": {
