@@ -1,4 +1,5 @@
 import { app, BrowserWindow, ipcMain, dialog, shell } from "electron"
+import { autoUpdater } from "electron-updater"
 import * as path from "path"
 import { readFile } from "fs"
 import { checkPackages, updatePackage } from "./commands"
@@ -68,6 +69,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
   createWindow()
+  autoUpdater.checkForUpdatesAndNotify()
 
   app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the
@@ -83,6 +85,16 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit()
   }
+})
+
+autoUpdater.on("update-downloaded", info => {
+  const { version } = info
+  console.log(`Update downloaded v${version}`)
+})
+
+autoUpdater.on("update-available", info => {
+  const { version } = info
+  console.log(`Update available v${version}`)
 })
 
 const getSelectedFolderPath = async () => {
