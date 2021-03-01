@@ -70,15 +70,31 @@ function createWindow() {
 app.on("ready", () => {
   createWindow()
 
-  alert("TEST")
-  try {
-    alert("checking for updated")
-    autoUpdater.checkForUpdatesAndNotify()
-  } catch (error) {
-    alert("errored!")
-    alert(error)
-  }
+  win.webContents.on("did-finish-load", () => {
+    alert("TEST")
+    try {
+      alert("checking for updated")
+      autoUpdater.checkForUpdatesAndNotify()
+    } catch (error) {
+      alert("errored!")
+      alert(error)
+    }
 
+    autoUpdater.on("update-downloaded", info => {
+      const { version } = info
+      alert(`Update downloaded v${version}`)
+    })
+
+    autoUpdater.on("update-available", info => {
+      const { version } = info
+      alert(`Update available v${version}`)
+    })
+
+    autoUpdater.on("update-available", info => {
+      const { version } = info
+      alert(`Update available v${version}`)
+    })
+  })
   app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -99,21 +115,6 @@ const alert = (text: string) => {
   win.webContents.send("alert", text)
 }
 
-autoUpdater.on("update-downloaded", info => {
-  const { version } = info
-  alert(`Update downloaded v${version}`)
-})
-
-autoUpdater.on("update-available", info => {
-  const { version } = info
-  alert(`Update available v${version}`)
-})
-
-autoUpdater.on("update-available", info => {
-  const { version } = info
-  alert(`Update available v${version}`)
-})
-
 const getSelectedFolderPath = async () => {
   const dir = await dialog.showOpenDialog({ properties: ["openDirectory"] })
 
@@ -123,6 +124,7 @@ const getSelectedFolderPath = async () => {
 }
 
 ipcMain.on("token", (_, token: string) => {
+  alert("kkkkkk")
   socket = io(HOST, {
     query: {
       token: token ?? "",
