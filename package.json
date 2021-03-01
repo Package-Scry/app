@@ -1,6 +1,6 @@
 {
   "name": "package-scry",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": ".",
   "scripts": {
     "build": "tsc",
@@ -36,20 +36,12 @@
       "createDesktopShortcut": true,
       "shortcutName": "Package Scry"
     },
-    "publish": [{
+    "publish": {
       "provider": "spaces",
       "name": "package-scry",
       "region": "sfo3",
       "path": "/releases"
-    },
-    {
-      "owner": "Package-Scry",
-      "provider": "github",
-      "private": true,
-      "vPrefixedTagName": false,
-      "releaseType": "release",
-      "publishAutoUpdate": false
-    }]
+    }
   },
   "husky": {
     "hooks": {
