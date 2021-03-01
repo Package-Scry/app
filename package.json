@@ -1,6 +1,6 @@
 {
   "name": "package-scry",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": ".",
   "scripts": {
     "build": "tsc",
@@ -37,12 +37,10 @@
       "shortcutName": "Package Scry"
     },
     "publish": {
-      "owner": "Package-Scry",
-      "provider": "github",
-      "private": true,
-      "vPrefixedTagName": false,
-      "releaseType": "release",
-      "token": "7322e114e3bd7f40d14723b4187e50015f400f71"
+      "provider": "spaces",
+      "name": "package-scry",
+      "region": "sfo3",
+      "path": "/releases"
     }
   },
   "husky": {
