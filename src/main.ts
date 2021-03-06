@@ -71,7 +71,6 @@ app.on("ready", () => {
   createWindow()
 
   win.webContents.on("did-finish-load", () => {
-    alert("TEST")
     try {
       alert("checking for updated")
       autoUpdater.checkForUpdatesAndNotify()
