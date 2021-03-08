@@ -30,10 +30,9 @@ interface EventPackageUpdate {
 let win: BrowserWindow
 const HOST = "https://package-scry.herokuapp.com/"
 let socket: Socket
+const env = process.env.NODE_ENV || "development"
 
 function createWindow() {
-  const env = process.env.NODE_ENV || "development"
-
   if (env === "development") {
     try {
       // eslint-disable-next-line
@@ -71,6 +70,8 @@ app.on("ready", () => {
   createWindow()
 
   win.webContents.on("did-finish-load", () => {
+    if (env !== "production") return
+
     try {
       alert("checking for updated")
       autoUpdater.checkForUpdatesAndNotify()
@@ -88,12 +89,8 @@ app.on("ready", () => {
       const { version } = info
       alert(`Update available v${version}`)
     })
-
-    autoUpdater.on("update-available", info => {
-      const { version } = info
-      alert(`Update available v${version}`)
-    })
   })
+
   app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
