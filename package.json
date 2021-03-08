@@ -1,6 +1,6 @@
 {
   "name": "package-scry",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": ".",
   "scripts": {
     "build": "tsc",
@@ -10,8 +10,8 @@
     "lint-fix": "eslint --fix -c .eslintrc --ext .ts ./src",
     "postinstall": "electron-builder install-app-deps",
     "dev": "electron ./dist/main.js",
-    "start": "npm run build && electron ./dist/main.js",
-    "dist": "npm run build && electron-builder -w --publish always"
+    "start": "npm run build && electron -r dotenv/config ./dist/main.js",
+    "dist": "npm run build && electron-builder -w"
   },
   "main": "./dist/main.js",
   "build": {
@@ -30,17 +30,13 @@
       "node_modules"
     ],
     "win": {
-      "target": "nsis"
+      "target": "appx"
     },
-    "nsis": {
-      "createDesktopShortcut": true,
-      "shortcutName": "Package Scry"
-    },
-    "publish": {
-      "provider": "spaces",
-      "name": "package-scry",
-      "region": "sfo3",
-      "path": "/releases"
+    "appx": {
+      "applicationId": "PackageScry.PackageScry",
+      "identityName": "7240PackageScry.PackageScry",
+      "publisher": "CN=7CFC0598-38E9-4407-9742-FBBA6FA5BD6A",
+      "publisherDisplayName": "Package Scry"
     }
   },
   "husky": {
