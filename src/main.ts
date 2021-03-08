@@ -72,6 +72,8 @@ app.on("ready", () => {
   win.webContents.on("did-finish-load", () => {
     if (env !== "production") return
 
+    win.show()
+
     try {
       alert("checking for updated")
       autoUpdater.checkForUpdatesAndNotify()
