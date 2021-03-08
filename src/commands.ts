@@ -8,7 +8,9 @@ export const checkPackages = (
   exec(`cd "${filePath}" && npm outdated`, (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`)
-      return
+
+      // TODO: on mac `npm outdated` exits with `code 1` for some reason
+      if (process.platform !== "darwin" || error.code !== 1) return
     }
 
     if (stderr) {
