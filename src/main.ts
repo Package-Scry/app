@@ -122,7 +122,6 @@ const getSelectedFolderPath = async () => {
 }
 
 ipcMain.on("token", (_, token: string) => {
-  alert("kkkkkk")
   socket = io(HOST, {
     query: {
       token: token ?? "",
@@ -133,10 +132,13 @@ ipcMain.on("token", (_, token: string) => {
     console.log(`Socket ${socket.id} connected`)
   })
 
-  socket.on(`authentication`, async (token: string) => {
-    win.webContents.send("saveToken", token)
-    socket.disconnect()
-  })
+  socket.on(
+    `authentication`,
+    async ({ token, hasPro }: { token: string; hasPro: boolean }) => {
+      win.webContents.send("saveToken", { token, hasPro })
+      socket.disconnect()
+    }
+  )
 
   ipcMain.on("authenticate", () => {
     shell.openExternal(`https://package-scry.herokuapp.com/auth/${socket.id}`)
