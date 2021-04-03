@@ -141,6 +141,10 @@ ipcMain.on("token", (_, token: string) => {
   ipcMain.on("authenticate", () => {
     shell.openExternal(`https://package-scry.herokuapp.com/auth/${socket.id}`)
   })
+
+  ipcMain.on("upgrade", () => {
+    shell.openExternal(`https://packagescry.com/sign-up`)
+  })
 })
 
 ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
