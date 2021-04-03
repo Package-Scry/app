@@ -48,13 +48,13 @@ export const updatePackage = (
 
       if (stderr) {
         console.log(`stderr: ${stderr}`)
-        return ""
       }
 
-      send("packageUpdated", {
-        name: packageName,
-        version,
-      })
+      if (stdout)
+        send("packageUpdated", {
+          name: packageName,
+          version,
+        })
     }
   )
 }
