@@ -52,9 +52,11 @@ module.exports = {
       gridTemplateColumns: {
         table: "repeat(5, minmax(0, 1fr)) 12rem",
         button: "auto 1fr",
+        feature: "1rem auto",
       },
       width: {
         112: "28rem",
+        160: "40rem",
       },
     },
   },
