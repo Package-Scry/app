@@ -9,8 +9,8 @@
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "lint-fix": "eslint --fix -c .eslintrc --ext .ts ./src",
     "postinstall": "electron-builder install-app-deps",
-    "start": "npm run build && set NODE_ENV=production && electron -r dotenv/config ./dist/main.js",
-    "dev": "npm run build && set NODE_ENV=development && electron -r dotenv/config ./dist/main.js",
+    "start": "npm run build && set NODE_ENV=production&& electron -r dotenv/config ./dist/main.js",
+    "dev": "npm run build && set NODE_ENV=development&& electron -r dotenv/config ./dist/main.js",
     "dist": "npm run build && electron-builder -w --publish always"
   },
   "main": "./dist/main.js",
