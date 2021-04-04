@@ -9,6 +9,7 @@ type SendChannel =
   | "isLoggedIn"
   | "token"
   | "logout"
+  | "upgrade"
   | "alert"
 type ReceiveChannel =
   | "packages"
@@ -34,6 +35,7 @@ contextBridge.exposeInMainWorld("api", {
       "isLoggedIn",
       "token",
       "logout",
+      "upgrade",
       "alert",
     ]
 
