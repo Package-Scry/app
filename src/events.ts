@@ -11,7 +11,7 @@ window.api.receive(
     const elModal = document.querySelector("ps-modal")
     const elUpgradeModal = document.querySelector("#upgradeModal")
 
-    if (hasPro) {
+    if (!hasPro) {
       elUpgradeModal.className = elUpgradeModal.className.replace("hidden", "")
     }
 
