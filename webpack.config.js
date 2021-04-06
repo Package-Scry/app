@@ -7,15 +7,25 @@ module.exports = [
     module: {
       rules: [
         {
-          test: /\.ts$/,
-          include: /src/,
-          use: [{ loader: "ts-loader" }],
+          test: /\.tsx?$/,
+          use: "ts-loader",
+          exclude: /node_modules/,
         },
       ],
     },
+    resolve: {
+      extensions: [".tsx", ".ts", ".js"],
+    },
     output: {
       path: __dirname + "/dist",
-      filename: "electron.js",
+      filename: "main.js",
     },
+    externals: [
+      {
+        'utf-8-validate': 'commonjs utf-8-validate',
+        fsevents: 'commonjs fsevents',
+        bufferutil: 'commonjs bufferutil',
+      },
+    ],
   },
 ]
