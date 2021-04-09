@@ -33,17 +33,17 @@ let socket: Socket
 const env = process.env.NODE_ENV || "development"
 
 function createWindow() {
-  if (env === "development") {
-    try {
-      // eslint-disable-next-line
-      require("electron-reloader")(module, {
-        debug: false,
-        watchRenderer: true,
-      })
-    } catch (e) {
-      console.error("Electron-reloader error", e)
-    }
-  }
+  // if (env === "development") {
+  //   try {
+  //     // eslint-disable-next-line
+  //     require("electron-reloader")(module, {
+  //       debug: false,
+  //       watchRenderer: true,
+  //     })
+  //   } catch (e) {
+  //     console.error("Electron-reloader error", e)
+  //   }
+  // }
 
   // Create the browser windows.
   win = new BrowserWindow({
@@ -57,7 +57,7 @@ function createWindow() {
   win.removeMenu()
   win.maximize()
   // and load the index.html of the app.
-  win.loadFile(path.join(__dirname, "../src/index.html"))
+  win.loadFile(path.join(__dirname, "./index.html"))
 
   // Open the DevTools.
   win.webContents.openDevTools()
