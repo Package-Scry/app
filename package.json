@@ -3,14 +3,14 @@
   "version": "1.0.1",
   "description": ".",
   "scripts": {
-    "build": "webpack --config ./webpack.config.js",
-    "build:tailwind": "npx tailwindcss-cli@latest build -c ./tailwind.config.js -o ./src/css/tailwind.css",
+    "build": "webpack --node-env production --config ./webpack.prod.js",
+    "build:dev": "webpack --node-env development --config ./webpack.dev.js",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "lint-fix": "eslint --fix -c .eslintrc --ext .ts ./src",
     "postinstall": "electron-builder install-app-deps",
-    "start": "npm run build && set NODE_ENV=production&& electron -r dotenv/config ./dist/main.js",
-    "dev": "npm run build && set NODE_ENV=development&& electron -r dotenv/config ./dist/main.js",
+    "start": "npm run build && electron -r dotenv/config ./dist/main.js",
+    "dev": "npm run build:dev && electron -r dotenv/config ./dist/main.js",
     "dist": "npm run build && electron-builder -w --publish always"
   },
   "main": "./dist/main.js",

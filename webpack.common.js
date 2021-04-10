@@ -1,9 +1,9 @@
 /* eslint-disable */
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 
-module.exports = [
-  {
-    mode: "development",
+module.exports = isDev => {
+  const main = {
+    mode: isDev ? "development" : "production",
     entry: "./src/main.ts",
     target: "electron-main",
     module: {
@@ -29,9 +29,9 @@ module.exports = [
         bufferutil: "commonjs bufferutil",
       },
     ],
-  },
-  {
-    mode: "development",
+  }
+  const preload = {
+    mode: isDev ? "development" : "production",
     entry: "./src/preload.ts",
     target: "electron-preload",
     module: {
@@ -50,12 +50,11 @@ module.exports = [
       path: __dirname + "/dist",
       filename: "preload.js",
     },
-  },
-  {
-    mode: "production",
+  }
+  const renderer = {
+    mode: isDev ? "development" : "production",
     entry: "./src/index.ts",
     target: "electron-renderer",
-    devtool: 'source-map',
     module: {
       rules: [
         {
@@ -88,5 +87,6 @@ module.exports = [
         bufferutil: "commonjs bufferutil",
       },
     ],
-  },
-]
+  }
+  return [main, preload, renderer]
+}
