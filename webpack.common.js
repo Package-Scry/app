@@ -80,13 +80,6 @@ module.exports = isDev => {
       path: __dirname + "/dist",
       filename: "renderer.js",
     },
-    externals: [
-      {
-        "utf-8-validate": "commonjs utf-8-validate",
-        fsevents: "commonjs fsevents",
-        bufferutil: "commonjs bufferutil",
-      },
-    ],
   }
   return [main, preload, renderer]
 }
