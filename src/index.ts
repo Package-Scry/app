@@ -1,4 +1,7 @@
-import "./css/tailwind.css"
+// eslint-disable-next-line
+// @ts-ignore
+__webpack_nonce__ = "c29tZSBke29sIHN0cmluZyB3aWxsIHBvcCB5cCAxMjM"
+
 import "./css/base.css"
 import "./components/typography/ps-base"
 import "./components/typography/ps-header"

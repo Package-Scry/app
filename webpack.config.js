@@ -24,9 +24,9 @@ module.exports = [
     },
     externals: [
       {
-        'utf-8-validate': 'commonjs utf-8-validate',
-        fsevents: 'commonjs fsevents',
-        bufferutil: 'commonjs bufferutil',
+        "utf-8-validate": "commonjs utf-8-validate",
+        fsevents: "commonjs fsevents",
+        bufferutil: "commonjs bufferutil",
       },
     ],
   },
@@ -55,6 +55,7 @@ module.exports = [
     mode: "production",
     entry: "./src/index.ts",
     target: "electron-renderer",
+    devtool: 'source-map',
     module: {
       rules: [
         {
@@ -64,13 +65,13 @@ module.exports = [
         },
         {
           test: /\.css$/i,
-          use: ["css-loader"],
+          use: ["style-loader", "css-loader", "postcss-loader"],
         },
       ],
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: './src/index.html' 
+        template: "./src/index.html",
       }),
     ],
     resolve: {
@@ -82,9 +83,9 @@ module.exports = [
     },
     externals: [
       {
-        'utf-8-validate': 'commonjs utf-8-validate',
-        fsevents: 'commonjs fsevents',
-        bufferutil: 'commonjs bufferutil',
+        "utf-8-validate": "commonjs utf-8-validate",
+        fsevents: "commonjs fsevents",
+        bufferutil: "commonjs bufferutil",
       },
     ],
   },
