@@ -1,4 +1,5 @@
 enum ModalType {
+  PRO_FEATURE = "proFeature",
   GITHUB = "github",
   UPGRADE = "upgrade",
 }
@@ -18,6 +19,19 @@ type ModalData = {
 
 class Modal extends HTMLElement {
   modalData: ModalData = {
+    [ModalType.PRO_FEATURE]: {
+      headerText: "You've discovered a Pro featutre!",
+      descriptionText: ["With Pro you can enjoy Unlimited Workspaces."],
+      contentText: "",
+      buttonIcon: "",
+      buttonText: "Upgrade to Pro",
+      customFooter: `<div class="cursor-pointer text-base mt-3 hover:underline" id="proFeatureFooter">Skip upgrade for now</div>`,
+      onClick: () => {
+        window.api.send("upgrade", {})
+        const elModal = document.querySelector("#proFeatureModal")
+        elModal.className = `${elModal.className} hidden`
+      },
+    },
     [ModalType.GITHUB]: {
       headerText: "Login",
       descriptionText: [],
@@ -46,7 +60,7 @@ class Modal extends HTMLElement {
     </li>`,
       buttonIcon: "",
       buttonText: "Upgrade to Pro",
-      customFooter: `<div class="cursor-pointer text-base mt-3 hover:underline" id="upgradeFooter">Skip upgrade for now</div>`,
+      customFooter: `<div class="cursor-pointer text-xl mt-3 hover:underline" id="upgradeFooter">Skip upgrade for now</div>`,
       init: () => {
         const elModal = document.querySelector("#upgradeModal")
         elModal.className = `${elModal.className} hidden`
@@ -60,9 +74,9 @@ class Modal extends HTMLElement {
   }
 
   connectedCallback() {
-    const type: "github" | "upgrade" = this.getAttribute("type") as
-      | "github"
-      | "upgrade"
+    const type: "github" | "upgrade" | "proFeature" = this.getAttribute(
+      "type"
+    ) as "proFeature" | "github" | "upgrade"
     const {
       buttonIcon,
       buttonText,
@@ -73,16 +87,21 @@ class Modal extends HTMLElement {
       init,
       onClick,
     } = this.modalData[type]
-    const style = `w-160 min-h-72 bg-turquoise-1 px-8 py-10 self-center m-auto shadow rounded-lg text-white text-xl`
-    const wrapperStyle = `font-serif grid fixed top-0 left-0 w-full h-full bg-gray-1 text-center`
-    const descriptionStyle = `py-4`
+    const overlayStyle = "bg-opacity-50"
+    const style = `w-200 min-h-72 bg-turquoise-1 px-8 py-10 self-center m-auto shadow rounded-lg text-white text-xl`
+    const wrapperStyle = `font-serif grid fixed top-0 left-0 w-full h-full bg-gray-1 ${
+      type !== "github" ? overlayStyle : ""
+    } text-center`
+    const descriptionStyle = `mt-4 text-2xl`
     const contentStyle = `pt-6 grid text-left justify-center`
-    const buttonContainerStyle = `cursor-pointer inline-block bg-black-3 py-4 px-6 mt-16 rounded-lg hover:bg-black-5`
-    const header = `<div class="text-6xl text-center text-shadow mb-4">${headerText}</div>`
+    const buttonContainerStyle = `cursor-pointer inline-block bg-black-3 py-4 px-6 mt-18 rounded-lg hover:bg-black-5`
+    const header = `<div class="text-5xl text-center text-shadow mb-6">${headerText}</div>`
     const description = `<div class="${descriptionStyle}">${descriptionText.join(
       "<br />"
     )}</div>`
-    const content = `<ul class="${contentStyle}">${contentText}</ul>`
+    const content = contentText
+      ? `<ul class="${contentStyle}">${contentText}</ul>`
+      : ""
     const button = `<span class="text-3xl self-center text-center align-middle">${buttonText}</span>`
     const buttonContainer = `<div class="${buttonContainerStyle}" id="${type}ButtonContainer">${
       buttonIcon ?? buttonIcon
@@ -94,11 +113,11 @@ class Modal extends HTMLElement {
 
     const elButtonContainer = document.querySelector(`#${type}ButtonContainer`)
 
-    if (type === "upgrade") {
+    if (type === "upgrade" || type === "proFeature") {
       const elFooter = document.querySelector(`#${type}Footer`)
 
       elFooter.addEventListener("click", () => {
-        const elUpgradeModal = document.querySelector("#upgradeModal")
+        const elUpgradeModal = document.querySelector(`#${type}Modal`)
 
         elUpgradeModal.className = `${elUpgradeModal.className} hidden`
       })

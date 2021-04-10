@@ -61,6 +61,10 @@ module.exports = {
       width: {
         112: "28rem",
         160: "40rem",
+        200: "50rem",
+      },
+      margin: {
+        18: "4.5rem",
       },
     },
   },
