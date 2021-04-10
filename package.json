@@ -4,13 +4,13 @@
   "description": ".",
   "scripts": {
     "build": "webpack --node-env production --config ./webpack.prod.js",
-    "build:dev": "webpack --node-env development --config ./webpack.dev.js",
+    "build:dev": "webpack serve --node-env development --config ./webpack.dev.js",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "lint-fix": "eslint --fix -c .eslintrc --ext .ts ./src",
     "postinstall": "electron-builder install-app-deps",
     "start": "npm run build && electron -r dotenv/config ./dist/main.js",
-    "dev": "npm run build:dev && electron -r dotenv/config ./dist/main.js",
+    "dev": "electron -r dotenv/config ./dist/main.js",
     "dist": "npm run build && electron-builder -w --publish always"
   },
   "main": "./dist/main.js",
@@ -96,7 +96,8 @@
     "ts-loader": "^8.1.0",
     "typescript": "^3.9.5",
     "webpack": "^5.30.0",
-    "webpack-cli": "^4.6.0"
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
     "dotenv": "^8.2.0",

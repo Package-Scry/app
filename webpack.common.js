@@ -54,7 +54,7 @@ module.exports = isDev => {
   const renderer = {
     mode: isDev ? "development" : "production",
     entry: "./src/index.ts",
-    target: "electron-renderer",
+    target: "web",
     module: {
       rules: [
         {
@@ -70,7 +70,7 @@ module.exports = isDev => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: "./src/index.html",
+        template: `./src/index${isDev ? "-dev" : ""}.html`,
       }),
     ],
     resolve: {
