@@ -33,18 +33,6 @@ let socket: Socket
 const env = process.env.NODE_ENV || "development"
 
 function createWindow() {
-  // if (env === "development") {
-  //   try {
-  //     // eslint-disable-next-line
-  //     require("electron-reloader")(module, {
-  //       debug: false,
-  //       watchRenderer: true,
-  //     })
-  //   } catch (e) {
-  //     console.error("Electron-reloader error", e)
-  //   }
-  // }
-
   // Create the browser windows.
   win = new BrowserWindow({
     webPreferences: {
