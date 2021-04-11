@@ -25,7 +25,7 @@ class Modal extends HTMLElement {
       contentText: "",
       buttonIcon: "",
       buttonText: "Upgrade to Pro",
-      customFooter: `<div class="cursor-pointer text-base mt-3 hover:underline" id="proFeatureFooter">Skip upgrade for now</div>`,
+      customFooter: `<div class="cursor-pointer text-xl mt-3 hover:underline" id="proFeatureFooter">Skip upgrade for now</div>`,
       onClick: () => {
         window.api.send("upgrade", {})
         const elModal = document.querySelector("#proFeatureModal")
