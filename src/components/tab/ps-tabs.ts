@@ -87,6 +87,7 @@ class Tabs extends HTMLElement {
         this.close(this.tabs[i])
       })
     )
+
     tabs.forEach((tab, i) =>
       tab.addEventListener("click", () => {
         const path = localStorage.getItem(`dirPath-${this.tabs[i]}`)
@@ -95,9 +96,17 @@ class Tabs extends HTMLElement {
           window.api.send("workspaceFolder", { path })
       })
     )
-    elPlus.addEventListener("click", () =>
-      window.api.send("workspaceFolder", { path: null })
-    )
+
+    elPlus.addEventListener("click", () => {
+      const workspaceCount = localStorage.getItem("tabs")
+        ? localStorage
+            .getItem("tabs")
+            .split(",")
+            .filter(tab => tab).length
+        : 0
+
+      window.api.send("workspaceFolder", { path: null, workspaceCount })
+    })
   }
 
   connectedCallback() {

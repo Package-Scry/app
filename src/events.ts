@@ -8,10 +8,11 @@ window.api.receive(
 
     const elTabs = document.querySelector("ps-tabs")
     const elTable = document.querySelector("ps-table")
-    const elModal = document.querySelector("ps-modal")
+    const elModal = document.querySelector("#githubModal")
     const elUpgradeModal = document.querySelector("#upgradeModal")
+    const activeTab = localStorage.getItem("activeTab")
 
-    if (!hasPro) {
+    if (!hasPro && activeTab) {
       elUpgradeModal.className = elUpgradeModal.className.replace("hidden", "")
     }
 
@@ -19,12 +20,17 @@ window.api.receive(
     elTable.className = elTable.className.replace("hidden", "")
     elModal.className = `${elModal.className} hidden`
 
-    const activeTab = localStorage.getItem("activeTab")
     const path = activeTab ? localStorage.getItem(`dirPath-${activeTab}`) : null
 
     window.api.send("workspaceFolder", { path })
   }
 )
+window.api.receive("proFeature", () => {
+  const elModal = document.querySelector("#proFeatureModal")
+
+  elModal.className = elModal.className.replace("hidden", "")
+})
+
 window.api.receive("alert", (text: string) => {
   console.log("|  ALERT  |")
   console.log(text)

@@ -17,6 +17,7 @@ interface PackageJSON {
 
 interface EventWorkspace {
   path: string | null
+  workspaceCount: number
 }
 
 interface EventPackageUpdate {
@@ -28,8 +29,9 @@ interface EventPackageUpdate {
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow
-const HOST = "https://package-scry.herokuapp.com/"
 let socket: Socket
+let isProVersion = false
+const HOST = "https://package-scry.herokuapp.com/"
 const env = process.env.NODE_ENV || "development"
 
 function createWindow() {
@@ -123,6 +125,7 @@ ipcMain.on("token", (_, token: string) => {
   socket.on(
     `authentication`,
     async ({ token, hasPro }: { token: string; hasPro: boolean }) => {
+      isProVersion = hasPro
       win.webContents.send("saveToken", { token, hasPro })
       socket.disconnect()
     }
@@ -138,7 +141,11 @@ ipcMain.on("token", (_, token: string) => {
 })
 
 ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
-  const { path } = args
+  const { path, workspaceCount } = args
+
+  if (!isProVersion && !!workspaceCount && workspaceCount > 0)
+    return win.webContents.send("proFeature", {})
+
   const filePath = path ?? (await getSelectedFolderPath())
   const send = (channel: string, args: TSFixMe[]) =>
     win.webContents.send(channel, args)
