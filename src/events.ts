@@ -6,14 +6,18 @@ window.api.receive(
   ({ token, hasPro }: { token: string; hasPro: boolean }) => {
     localStorage.setItem("token", token)
 
-    const elTabs = document.querySelector("ps-tabs")
+    const elTabs = document.querySelector<
+      HTMLElement & { shouldRerender: string }
+    >("ps-tabs")
     const elTable = document.querySelector("ps-table")
     const elModal = document.querySelector("#githubModal")
     const elUpgradeModal = document.querySelector("#upgradeModal")
     const activeTab = localStorage.getItem("activeTab")
 
     if (!hasPro && activeTab) {
+      localStorage.setItem("tabs", `${activeTab},`)
       elUpgradeModal.className = elUpgradeModal.className.replace("hidden", "")
+      elTabs.shouldRerender = "true"
     }
 
     elTabs.className = elTabs.className.replace("hidden", "")

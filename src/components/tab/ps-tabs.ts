@@ -31,6 +31,21 @@ class Tabs extends HTMLElement {
     })
   }
 
+  get shouldRerender() {
+    return this.getAttribute("shouldRerender")
+  }
+
+  set shouldRerender(_) {
+    this.tabs = localStorage.getItem("tabs")
+      ? localStorage
+          .getItem("tabs")
+          .split(",")
+          .filter(tab => tab)
+      : []
+    this.setAttribute("shouldRerender", "false")
+    this.render()
+  }
+
   rerenderTable() {
     const table = document.querySelector<
       HTMLElement & { shouldRerender: string }
