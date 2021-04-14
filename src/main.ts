@@ -82,9 +82,6 @@ if (!gotTheLock) {
     ) {
       // Set the path of electron.exe and your app.
       // These two additional parameters are only available on windows.
-      console.log("ARG")
-      console.log(process.argv)
-      console.log(path.resolve(process.argv[3]))
       app.setAsDefaultProtocolClient("package-scry", process.execPath, [
         path.resolve(process.argv[3] ?? ""),
       ])
@@ -152,6 +149,10 @@ if (!gotTheLock) {
       },
     })
 
+    const openLogin = () => {
+      shell.openExternal(`https://package-scry.herokuapp.com/auth/${socket.id}`)
+    }
+
     socket.on("connect", () => {
       console.log(`Socket ${socket.id} connected`)
     })
@@ -162,12 +163,12 @@ if (!gotTheLock) {
         isProVersion = hasPro
         win.webContents.send("saveToken", { token, hasPro })
         socket.disconnect()
+
+        ipcMain.removeListener("authenticate", openLogin)
       }
     )
 
-    ipcMain.on("authenticate", () => {
-      shell.openExternal(`https://package-scry.herokuapp.com/auth/${socket.id}`)
-    })
+    ipcMain.on("authenticate", openLogin)
 
     ipcMain.on("upgrade", () => {
       shell.openExternal(`https://packagescry.com/sign-up`)
