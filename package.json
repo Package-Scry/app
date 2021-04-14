@@ -16,6 +16,10 @@
   "main": "./dist/main.js",
   "build": {
     "appId": "com.package-scry.package-scry",
+    "protocols": {
+      "name": "Pacakge Scry",
+      "schemes": ["pacakge-scry"]
+    },
     "productName": "Package Scry",
     "directories": {
       "app": ".",
