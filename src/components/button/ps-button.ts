@@ -3,7 +3,7 @@ type ButtonText = "Update" | "Loading" | "Up to date"
 
 class Button extends HTMLElement {
   styles = {
-    common: `cursor-pointer select-none p-2 rounded-md text-center`,
+    common: `cursor-pointer select-none rounded-md text-center h-full flex items-center justify-center`,
     primary: `bg-turquoise-4 hover:bg-gray-3 hover:shadow-inner`,
     secondary: `border-2 border-turquoise-5`,
     loading: `bg-gray-6`,

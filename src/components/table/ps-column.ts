@@ -12,7 +12,7 @@ class Column extends HTMLElement {
         : "bg-gray-4"
     }${shouldAddMargin ? "ml-4" : ""}`
 
-    this.innerHTML = `<span class="text-white"><div class="p-2 truncate ${style}">${this.innerHTML}</div></span>`
+    this.innerHTML = `<div class="px-2 truncate h-full flex items-center justify-center ${style}">${this.innerHTML}</div>`
   }
 }
 

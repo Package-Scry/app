@@ -58,6 +58,9 @@ module.exports = {
         button: "auto 1fr",
         feature: "1rem auto",
       },
+      gridTemplateRows: {
+        table: "3rem",
+      },
       width: {
         112: "28rem",
         160: "40rem",
