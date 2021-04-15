@@ -5,3 +5,12 @@
 .text-shadow {
   text-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
 }
+
+ps-tabs {
+  overflow: auto;
+  overflow-y: hidden;
+}
+ps-tabs::-webkit-scrollbar {
+  height: 0;
+  background: transparent;
+}

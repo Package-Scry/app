@@ -13,6 +13,20 @@ class Tabs extends HTMLElement {
           .filter(tab => tab)
       : []
 
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      const tabs = document.querySelector("ps-tabs")
+      const tabsScrollPosition = document.querySelector("ps-tabs").scrollLeft
+      tabs.scrollTo({
+        top: 0,
+        left: tabsScrollPosition + e.deltaY,
+        behavior: "smooth",
+      })
+    }
+
+    const tabs = document.querySelector("ps-tabs")
+    tabs.addEventListener("wheel", onWheel)
+
     window.api.receive("cancelled", () => {
       if (!this.activeTab) window.api.send("workspaceFolder", { path: null })
     })
@@ -88,9 +102,7 @@ class Tabs extends HTMLElement {
       .map(
         tab => `<ps-tab activeTab="${this.activeTab}" name="${tab}"></ps-tab>`
       )
-      .join(
-        ""
-      )}${plus}<ps-icon-logout class="ml-auto mt-1.5 mr-4"></ps-icon-logout>`
+      .join("")}${plus}`
 
     const tabs = document.querySelectorAll<HTMLElement>("ps-tab")
     const closeButtons = document.querySelectorAll<HTMLElement>(".close")
