@@ -126,6 +126,7 @@ if (!gotTheLock) {
   // explicitly with Cmd + Q.
   app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
+      socket.disconnect()
       app.quit()
     }
   })
