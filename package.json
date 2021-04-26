@@ -1,6 +1,6 @@
 {
   "name": "package-scry",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": ".",
   "scripts": {
     "build": "tsc",
@@ -11,7 +11,7 @@
     "postinstall": "electron-builder install-app-deps",
     "dev": "electron ./dist/main.js",
     "start": "npm run build && electron ./dist/main.js",
-    "dist": "npm run build && electron-builder -w --publish always"
+    "dist": "npm run build && electron-builder -mw --publish always"
   },
   "main": "./dist/main.js",
   "build": {
