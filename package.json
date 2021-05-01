@@ -47,6 +47,7 @@
       "category": "public.app-category.developer-tools",
       "gatekeeperAssess": false,
       "hardenedRuntime": true,
+      "extendInfo": "src/build/Info.plist",
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist"
     },
