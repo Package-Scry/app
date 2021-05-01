@@ -245,10 +245,10 @@ class Table extends HTMLElement {
   getRow = (item: Data, i: number) => {
     const state = BUTTON_STATE[item.status]
     const columns = COLUMN_KEYS.map(
-      name =>
-        `<ps-column isOdd="${i % 2 !== 0}"><ps-base text="${item[name]}">${
-          item[name]
-        }</ps-base></ps-column>`
+      (name, j) =>
+        `<ps-column shouldCenter="${j !== 0}" isOdd="${
+          i % 2 !== 0
+        }"><ps-base text="${item[name]}">${item[name]}</ps-base></ps-column>`
     )
 
     return `<ps-row>${columns.join("")}${this.getButton(

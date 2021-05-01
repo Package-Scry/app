@@ -2,6 +2,9 @@ class Column extends HTMLElement {
   connectedCallback() {
     const isOdd: boolean = this.getAttribute("isOdd") === "true" ?? true
     const type: RowTypes = (this.getAttribute("type") ?? "default") as RowTypes
+    const shouldCenter: boolean =
+      (this.getAttribute("shouldCenter") === "true" ?? true) ||
+      type === "header"
     const shouldAddMargin: boolean =
       this.getAttribute("shouldAddMargin") === "true" ?? true
     const style = `${
@@ -12,7 +15,9 @@ class Column extends HTMLElement {
         : "bg-gray-4"
     }${shouldAddMargin ? "ml-4" : ""}`
 
-    this.innerHTML = `<div class="px-2 truncate h-full flex items-center justify-center ${style}">${this.innerHTML}</div>`
+    this.innerHTML = `<div class="px-2 truncate h-full flex items-center ${
+      shouldCenter ? "justify-center" : ""
+    } ${style}">${this.innerHTML}</div>`
   }
 }
 
