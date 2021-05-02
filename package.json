@@ -53,8 +53,8 @@
       "gatekeeperAssess": false,
       "hardenedRuntime": true,
       "extendInfo": "src/build/Info.plist",
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
+      "entitlements": "src/build/entitlements.mac.plist",
+      "entitlementsInherit": "src/build/entitlements.mac.plist"
     },
     "dmg": {
       "sign": false
