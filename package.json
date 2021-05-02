@@ -18,7 +18,9 @@
     "appId": "com.package-scry.package-scry",
     "protocols": {
       "name": "Pacakge Scry",
-      "schemes": ["pacakge-scry"]
+      "schemes": [
+        "pacakge-scry"
+      ]
     },
     "productName": "Package Scry",
     "directories": {
@@ -43,7 +45,10 @@
       "publisherDisplayName": "Package Scry"
     },
     "mac": {
-      "target": ["dmg", "zip"],
+      "target": [
+        "dmg",
+        "zip"
+      ],
       "category": "public.app-category.developer-tools",
       "gatekeeperAssess": false,
       "hardenedRuntime": true,
@@ -106,6 +111,7 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "electron-updater": "^4.3.5",
+    "fix-path": "^3.0.0",
     "socket.io-client": "^3.1.1"
   }
 }

@@ -2,8 +2,9 @@ import { app, BrowserWindow, ipcMain, dialog, shell } from "electron"
 import { autoUpdater } from "electron-updater"
 import * as path from "path"
 import { readFile } from "fs"
-import { checkPackages, updatePackage } from "./commands"
 import { io, Socket } from "socket.io-client"
+import fixPath from "fix-path"
+import { checkPackages, updatePackage } from "./commands"
 
 interface PackageJSON {
   name?: string
@@ -33,6 +34,10 @@ let socket: Socket
 let isProVersion = false
 const HOST = "https://package-scry.herokuapp.com/"
 const env = process.env.NODE_ENV || "development"
+
+if (env !== "development") {
+  fixPath()
+}
 
 function createWindow() {
   // Create the browser windows.
