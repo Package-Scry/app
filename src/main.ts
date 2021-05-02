@@ -96,9 +96,9 @@ if (!gotTheLock) {
     createWindow()
 
     win.webContents.on("did-finish-load", () => {
-      if (env !== "production") return
-
       win.show()
+
+      if (env !== "production") return
 
       try {
         alert("checking for updated")
