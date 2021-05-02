@@ -6,7 +6,7 @@ export const checkPackages = (
   project: string,
   send: BrowserWindow["webContents"]["send"]
 ): void => {
-  exec(`cd ${filePath} && npm outdated`, (error, stdout, stderr) => {
+  exec(`cd "${filePath}" && npm outdated`, (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`)
 
@@ -41,7 +41,7 @@ export const updatePackage = (
   send: BrowserWindow["webContents"]["send"]
 ): void => {
   exec(
-    `cd ${filePath} && npm i ${packageName}@${version}`,
+    `cd "${filePath}" && npm i ${packageName}@${version}`,
     (error, stdout, stderr) => {
       if (error) {
         console.log(`error: ${error.message}`)
