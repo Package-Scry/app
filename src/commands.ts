@@ -55,6 +55,7 @@ export const updatePackage = (
         name: packageName,
         version,
         project,
+        wasSuccessful: !!stdout,
       })
     }
   )

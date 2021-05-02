@@ -204,6 +204,7 @@ if (!gotTheLock) {
       const { dependencies, devDependencies, name } = parsedData
 
       checkPackages(filePath, name, send)
+
       const allDependencies = { ...dependencies, ...devDependencies }
       const packages = Object.keys(allDependencies).map(key => ({
         name: key,

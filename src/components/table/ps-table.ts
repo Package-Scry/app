@@ -90,8 +90,13 @@ class Table extends HTMLElement {
 
     window.api.receive(
       "packageUpdated",
-      (data: { name: string; version: string; project: string }) => {
-        const { name, project, version } = data
+      (data: {
+        name: string
+        version: string
+        project: string
+        wasSuccessful: boolean
+      }) => {
+        const { name, project, version, wasSuccessful } = data
         const packageIndex = this.getData().findIndex(p => p.name === name)
         const updatedPacakge = this.packages[packageIndex]
         const { wanted, latest } = updatedPacakge
@@ -99,12 +104,18 @@ class Table extends HTMLElement {
 
         if (activeTab !== project) return
 
-        this.packages[packageIndex] = {
-          ...updatedPacakge,
-          local: `^${version}`,
-          status: latest === version ? "up to date" : "outdated",
-          wanted: latest === version ? "-" : wanted,
-        }
+        if (!wasSuccessful) {
+          this.packages[packageIndex] = {
+            ...updatedPacakge,
+            status: wanted === latest ? "updatable" : "outdated",
+          }
+        } else
+          this.packages[packageIndex] = {
+            ...updatedPacakge,
+            local: `^${version}`,
+            status: latest === version ? "up to date" : "outdated",
+            wanted: latest === version ? "-" : wanted,
+          }
 
         this.updateRow(packageIndex)
       }
@@ -148,6 +159,7 @@ class Table extends HTMLElement {
       name,
       path,
       version,
+      local,
       project: activeTab,
     })
   }
