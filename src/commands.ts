@@ -5,7 +5,7 @@ export const checkPackages = (
   filePath: string,
   send: BrowserWindow["webContents"]["send"]
 ): void => {
-  exec(`cd "${filePath}" && npm outdated`, (error, stdout, stderr) => {
+  exec(`cd ${filePath} && npm outdated`, (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`)
 
