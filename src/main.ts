@@ -18,7 +18,6 @@ interface PackageJSON {
 
 interface EventWorkspace {
   path: string | null
-  project?: string | null
   workspaceCount: number
 }
 
@@ -184,7 +183,7 @@ if (!gotTheLock) {
   })
 
   ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
-    const { path, project, workspaceCount } = args
+    const { path, workspaceCount } = args
 
     if (!isProVersion && !!workspaceCount && workspaceCount > 0)
       return win.webContents.send("proFeature", {})
