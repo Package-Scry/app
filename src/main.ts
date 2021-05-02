@@ -18,12 +18,14 @@ interface PackageJSON {
 
 interface EventWorkspace {
   path: string | null
+  project?: string | null
   workspaceCount: number
 }
 
 interface EventPackageUpdate {
   name: string
   path: string
+  project: string
   version: string
 }
 
@@ -182,7 +184,7 @@ if (!gotTheLock) {
   })
 
   ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
-    const { path, workspaceCount } = args
+    const { path, project, workspaceCount } = args
 
     if (!isProVersion && !!workspaceCount && workspaceCount > 0)
       return win.webContents.send("proFeature", {})
@@ -193,8 +195,6 @@ if (!gotTheLock) {
 
     if (filePath === false) return win.webContents.send("cancelled", {})
 
-    checkPackages(filePath, send)
-
     readFile(`${filePath}/package.json`, "utf-8", (error, data) => {
       if (error) {
         console.error("error", error)
@@ -203,6 +203,8 @@ if (!gotTheLock) {
 
       const parsedData: PackageJSON = JSON.parse(data)
       const { dependencies, devDependencies, name } = parsedData
+
+      checkPackages(filePath, name, send)
       const allDependencies = { ...dependencies, ...devDependencies }
       const packages = Object.keys(allDependencies).map(key => ({
         name: key,
@@ -221,10 +223,10 @@ if (!gotTheLock) {
   })
 
   ipcMain.on("packageUpdate", async (event, args: EventPackageUpdate) => {
-    const { name, path, version } = args
+    const { name, path, project, version } = args
     const send = (channel: string, args: TSFixMe[]) =>
       win.webContents.send(channel, args)
 
-    updatePackage(path, name, version, send)
+    updatePackage(path, name, version, project, send)
   })
 }

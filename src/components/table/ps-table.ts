@@ -8,6 +8,11 @@ interface Data {
   wanted: string
 }
 
+interface OutdatedEvent {
+  packages: { name: string; wanted: string; latest: string }[]
+  project: string
+}
+
 const fakeData: Data[] = [
   {
     name: "react",
@@ -157,42 +162,47 @@ class Table extends HTMLElement {
       }
     })
 
-    window.api.receive(
-      "outdated",
-      (data: { name: string; wanted: string; latest: string }[]) => {
-        this.packages = this.packages.map(npmPackage => {
-          const { name, local } = npmPackage
-          const selectedPackage = data.find(p => p.name === name)
+    window.api.receive("outdated", (data: OutdatedEvent) => {
+      const { packages, project } = data
+      const activeTab = localStorage.getItem("activeTab")
 
-          if (selectedPackage) {
-            const { wanted, latest } = selectedPackage
+      if (activeTab !== project) return
 
-            return {
-              ...npmPackage,
-              wanted,
-              latest,
-              status: wanted === latest ? "updatable" : "outdated",
-            }
-          }
+      this.packages = this.packages.map(npmPackage => {
+        const { name, local } = npmPackage
+        const selectedPackage = packages.find(p => p.name === name)
+
+        if (selectedPackage) {
+          const { wanted, latest } = selectedPackage
+
           return {
             ...npmPackage,
-            latest: local,
-            wanted: "-",
-            status: "up to date",
+            wanted,
+            latest,
+            status: wanted === latest ? "updatable" : "outdated",
           }
-        })
+        }
+        return {
+          ...npmPackage,
+          latest: local.replace("^", ""),
+          wanted: "-",
+          status: "up to date",
+        }
+      })
 
-        this.render()
-      }
-    )
+      this.render()
+    })
 
     window.api.receive(
       "packageUpdated",
-      (data: { name: string; version: string }) => {
-        const { name, version } = data
+      (data: { name: string; version: string; project: string }) => {
+        const { name, project, version } = data
         const packageIndex = this.getData().findIndex(p => p.name === name)
         const updatedPacakge = this.packages[packageIndex]
         const { wanted, latest } = updatedPacakge
+        const activeTab = localStorage.getItem("activeTab")
+
+        if (activeTab !== project) return
 
         this.packages[packageIndex] = {
           ...updatedPacakge,
@@ -239,7 +249,12 @@ class Table extends HTMLElement {
 
     this.packages[i].status = "updating"
     this.updateRow(i)
-    window.api.send("packageUpdate", { name, path, version })
+    window.api.send("packageUpdate", {
+      name,
+      path,
+      version,
+      project: activeTab,
+    })
   }
 
   getRow = (item: Data, i: number) => {

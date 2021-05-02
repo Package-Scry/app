@@ -26,7 +26,7 @@ window.api.receive(
 
     const path = activeTab ? localStorage.getItem(`dirPath-${activeTab}`) : null
 
-    window.api.send("workspaceFolder", { path })
+    window.api.send("workspaceFolder", { path, project: activeTab })
   }
 )
 window.api.receive("proFeature", () => {

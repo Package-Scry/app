@@ -3,6 +3,7 @@ import { BrowserWindow } from "electron"
 
 export const checkPackages = (
   filePath: string,
+  project: string,
   send: BrowserWindow["webContents"]["send"]
 ): void => {
   exec(`cd ${filePath} && npm outdated`, (error, stdout, stderr) => {
@@ -18,7 +19,7 @@ export const checkPackages = (
       return
     }
 
-    const data = stdout
+    const packages = stdout
       .split("\n")
       .filter(a => a)
       .map(data => {
@@ -28,7 +29,7 @@ export const checkPackages = (
       })
       .slice(1)
 
-    send("outdated", data)
+    send("outdated", { packages, project })
   })
 }
 
@@ -36,6 +37,7 @@ export const updatePackage = (
   filePath: string,
   packageName: string,
   version: string,
+  project: string,
   send: BrowserWindow["webContents"]["send"]
 ): void => {
   exec(
@@ -43,18 +45,17 @@ export const updatePackage = (
     (error, stdout, stderr) => {
       if (error) {
         console.log(`error: ${error.message}`)
-        return ""
       }
 
       if (stderr) {
         console.log(`stderr: ${stderr}`)
       }
 
-      if (stdout)
-        send("packageUpdated", {
-          name: packageName,
-          version,
-        })
+      send("packageUpdated", {
+        name: packageName,
+        version,
+        project,
+      })
     }
   )
 }

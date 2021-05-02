@@ -84,7 +84,7 @@ class Tabs extends HTMLElement {
         ? localStorage.getItem(`dirPath-${this.activeTab}`)
         : null
 
-      window.api.send("workspaceFolder", { path })
+      window.api.send("workspaceFolder", { path, project: this.activeTab })
 
       this.rerenderTable()
     }
@@ -120,7 +120,7 @@ class Tabs extends HTMLElement {
         const path = localStorage.getItem(`dirPath-${this.tabs[i]}`)
 
         if (this.tabs[i] !== this.activeTab)
-          window.api.send("workspaceFolder", { path })
+          window.api.send("workspaceFolder", { path, project: this.tabs[i] })
       })
     )
 
