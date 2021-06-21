@@ -60,6 +60,7 @@ contextBridge.exposeInMainWorld("api", {
 
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return
       ipcRenderer.on(channel, (event, ...args) => func(...args))
     }
   },

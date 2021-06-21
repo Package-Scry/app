@@ -40,7 +40,7 @@ if (env !== "development") {
   fixPath()
 }
 
-function createWindow() {
+async function createWindow() {
   // Create the browser windows.
   win = new BrowserWindow({
     webPreferences: {
@@ -53,7 +53,7 @@ function createWindow() {
   win.removeMenu()
   win.maximize()
   // and load the index.html of the app.
-  win.loadFile(path.join(__dirname, "./index.html"))
+  await win.loadFile(path.join(__dirname, "./index.html"))
 
   // Open the DevTools.
   win.webContents.openDevTools()
@@ -166,7 +166,7 @@ if (!gotTheLock) {
 
     socket.on(
       `authentication`,
-      async ({ token, hasPro }: { token: string; hasPro: boolean }) => {
+      ({ token, hasPro }: { token: string; hasPro: boolean }) => {
         isProVersion = hasPro
         win.webContents.send("saveToken", { token, hasPro })
         socket.disconnect()
@@ -222,7 +222,7 @@ if (!gotTheLock) {
     })
   })
 
-  ipcMain.on("packageUpdate", async (event, args: EventPackageUpdate) => {
+  ipcMain.on("packageUpdate", (event, args: EventPackageUpdate) => {
     const { name, path, project, version } = args
     const send = (channel: string, args: TSFixMe[]) =>
       win.webContents.send(channel, args)

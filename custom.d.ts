@@ -2,6 +2,9 @@ export {}
 
 declare global {
   interface Window {
-    api: TSFixMe
+    api: {
+      send: (channel: string, data: TSFixMe) => void
+      receive: (channel: string, data: TSFixMe) => void
+    }
   }
 }
