@@ -1,31 +1,42 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Package Scry</title>
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' ws://localhost:8080/ http://localhost:8080/ https://package-scry.herokuapp.com/; script-src 'self'; style-src-elem 'self'; style-src 'nonce-c29tZSBke29sIHN0cmluZyB3aWxsIHBvcCB5cCAxMjM'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self' ; script-src 'self'"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <title>Package Scry</title>
-  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' ws://localhost:8080/ http://localhost:8080/ https://package-scry.herokuapp.com/; script-src 'self'; style-src 'nonce-c29tZSBke29sIHN0cmluZyB3aWxsIHBvcCB5cCAxMjM'" />
-  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self' ; script-src 'self'" />
-</head>
-
-<body class="bg-black-1">
-  <div class="flex bg-gray-4 w-full items-end">
-    <ps-tabs></ps-tabs>
-    <ps-icon-logout class="mt-1.5 mx-3.5"></ps-icon-logout>
-  </div>
-  <ps-table class="hidden"></ps-table>
-  <ps-modal type="github" id="githubModal"></ps-modal>
-  <ps-modal type="proFeature" id="proFeatureModal" class="hidden"></ps-modal>
-  <ps-modal type="upgrade" id="upgradeModal"></ps-modal>
-  <div class="flex flex-row-reverse bg-gray-4 fixed w-full h-13 bottom-0 shadow-inner-2">
-    <span class="bg-black-1 w-auto mx-5 py-1 px-8 rounded font-serif text-white text-xl self-center">1.0.1</span>
-    <span
-      class="cursor-pointer bg-black-1 w-auto mx-2 py-1 px-6 rounded font-serif text-white text-lg self-center hover:bg-black-5">
-      Feedback
-    </span>
-    <ps-upgrade></ps-upgrade>
-  </div>
+  <body class="bg-black-1">
+    <div class="" id="root"></div>
+    <div class="flex bg-gray-4 w-full items-end">
+      <ps-tabs></ps-tabs>
+      <ps-icon-logout class="mt-1.5 mx-3.5"></ps-icon-logout>
+    </div>
+    <ps-table class="hidden"></ps-table>
+    <ps-modal type="github" id="githubModal"></ps-modal>
+    <ps-modal type="proFeature" id="proFeatureModal" class="hidden"></ps-modal>
+    <ps-modal type="upgrade" id="upgradeModal"></ps-modal>
+    <div
+      class="flex flex-row-reverse bg-gray-4 fixed w-full h-13 bottom-0 shadow-inner-2"
+    >
+      <span
+        class="bg-black-1 w-auto mx-5 py-1 px-8 rounded font-serif text-white text-xl self-center"
+        >1.0.1</span
+      >
+      <span
+        class="cursor-pointer bg-black-1 w-auto mx-2 py-1 px-6 rounded font-serif text-white text-lg self-center hover:bg-black-5"
+      >
+        Feedback
+      </span>
+      <ps-upgrade></ps-upgrade>
+    </div>
   </body>
-  
-  </html>
+</html>

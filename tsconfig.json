@@ -1,11 +1,9 @@
 {
+  "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "noImplicitAny": true,
-    "sourceMap": true,
-    "outDir": "dist",
-    "target": "es6",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["node", "svelte"],
+    "isolatedModules": false
   },
   "include": [
     "src/**/*",

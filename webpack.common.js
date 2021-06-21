@@ -1,5 +1,7 @@
 /* eslint-disable */
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const path = require("path")
 
 module.exports = isDev => {
   const main = {
@@ -53,10 +55,21 @@ module.exports = isDev => {
   }
   const renderer = {
     mode: isDev ? "development" : "production",
-    entry: "./src/index.ts",
+    entry: "./src/app/index.ts",
     target: "web",
     module: {
       rules: [
+        {
+          test: /\.svelte$/,
+          use: "svelte-loader",
+        },
+        {
+          // required to prevent errors from Svelte on Webpack 5+, omit on Webpack 4
+          test: /node_modules\/svelte\/.*\.mjs$/,
+          resolve: {
+            fullySpecified: false,
+          },
+        },
         {
           test: /\.tsx?$/,
           use: "ts-loader",
@@ -64,7 +77,7 @@ module.exports = isDev => {
         },
         {
           test: /\.css$/i,
-          use: ["style-loader", "css-loader", "postcss-loader"],
+          use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
         },
       ],
     },
@@ -72,9 +85,14 @@ module.exports = isDev => {
       new HtmlWebpackPlugin({
         template: `./src/index${isDev ? "-dev" : ""}.html`,
       }),
+      new MiniCssExtractPlugin()
     ],
     resolve: {
-      extensions: [".tsx", ".ts", ".js"],
+      alias: {
+        svelte: path.resolve("node_modules", "svelte"),
+      },
+      extensions: [".tsx", ".ts", ".js", ".mjs", ".svelte"],
+      mainFields: ["svelte", "browser", "module", "main"],
     },
     output: {
       path: __dirname + "/dist",
