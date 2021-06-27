@@ -2,6 +2,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const path = require("path")
+const sveltePreprocess = require("svelte-preprocess")
 
 module.exports = isDev => {
   const main = {
@@ -61,7 +62,10 @@ module.exports = isDev => {
       rules: [
         {
           test: /\.svelte$/,
-          use: "svelte-loader",
+          use: {
+            loader: "svelte-loader",
+            options: { preprocess: sveltePreprocess({}) },
+          },
         },
         {
           // required to prevent errors from Svelte on Webpack 5+, omit on Webpack 4
@@ -85,13 +89,13 @@ module.exports = isDev => {
       new HtmlWebpackPlugin({
         template: `./src/index${isDev ? "-dev" : ""}.html`,
       }),
-      new MiniCssExtractPlugin()
+      new MiniCssExtractPlugin(),
     ],
     resolve: {
       alias: {
         svelte: path.resolve("node_modules", "svelte"),
       },
-      extensions: [".tsx", ".ts", ".js", ".mjs", ".svelte"],
+      extensions: [".svelte", ".tsx", ".ts", ".js", ".mjs"],
       mainFields: ["svelte", "browser", "module", "main"],
     },
     output: {
