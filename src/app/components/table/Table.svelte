@@ -5,18 +5,25 @@
 
   export let data: Data
   export let columns: ColumnType[]
+  export let headers: string[]
 </script>
 
 <div class="text-center mx-12 mt-6 mb-20">
+  <Row>
+    {#each headers as header}
+      <Column style="bg-turquoise-1 justify-center">{header}</Column>
+    {/each}
+  </Row>
   <ul>
-    <slot />
     {#each data as rowData, i (rowData.name)}
       <Row>
-        {#each columns as column}
+        {#each columns as column, j}
           <Column
             {rowData}
             {...column}
-            style={i % 2 === 0 ? "bg-gray-4" : undefined}
+            style={`${i % 2 === 0 ? "bg-gray-4" : "bg-turquoise-2"} ${
+              j !== 0 ? "justify-center" : ""
+            }`}
           />
         {/each}
       </Row>
