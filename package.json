@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": ".",
   "scripts": {
-    "build": "webpack --node-env production --config ./webpack.prod.js",
     "build:dev": "webpack serve --node-env development --config ./webpack.dev.js",
-    "start": "npm run build && electron -r dotenv/config ./dist/main.js",
     "dev": "electron -r dotenv/config ./dist/main.js",
+    "build": "webpack --node-env production --config ./webpack.prod.js",
+    "start": "npm run build && electron -r dotenv/config ./dist/main.js",
     "format": "prettier --write ./src/**/*.{js,svelte,html,ts}",
     "lint": "eslint './src/**/*.{js,ts,svelte}'",
     "lint:fix": "eslint --fix './src/**/*.{js,ts,svelte}'",
