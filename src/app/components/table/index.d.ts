@@ -1,4 +1,4 @@
-import type { SvelteComponent } from "svelte"
+import type { SvelteComponentDev } from "svelte"
 
 export type Data = Row[]
 export interface Row {
@@ -6,6 +6,6 @@ export interface Row {
 }
 export interface Column {
   dataKey?: string
-  render?: SvelteComponent
+  render?: SvelteComponentDev
   onClick?: (e: Event) => void
 }
