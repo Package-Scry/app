@@ -54,7 +54,7 @@ module.exports = {
         "sans-serif": ["Nunito", "sans-serif"],
       },
       gridTemplateColumns: {
-        table: "repeat(5, minmax(0, 1fr)) 12rem",
+        table: "2fr repeat(4, minmax(0, 1fr)) 12rem",
         button: "auto 1fr",
         feature: "1rem auto",
       },

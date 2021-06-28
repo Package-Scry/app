@@ -5,13 +5,12 @@
   "scripts": {
     "build": "webpack --node-env production --config ./webpack.prod.js",
     "build:dev": "webpack serve --node-env development --config ./webpack.dev.js",
-    "watch": "tsc -w",
+    "start": "npm run build && electron -r dotenv/config ./dist/main.js",
+    "dev": "electron -r dotenv/config ./dist/main.js",
     "format": "prettier --write ./src/**/*.{js,svelte,html,ts}",
     "lint": "eslint './src/**/*.{js,ts,svelte}'",
     "lint:fix": "eslint --fix './src/**/*.{js,ts,svelte}'",
     "postinstall": "electron-builder install-app-deps",
-    "start": "npm run build && electron -r dotenv/config ./dist/main.js",
-    "dev": "electron -r dotenv/config ./dist/main.js",
     "dist": "npm run build && electron-builder -w"
   },
   "main": "./dist/main.js",

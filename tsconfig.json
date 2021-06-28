@@ -5,6 +5,12 @@
     "types": ["node", "svelte"],
     "isolatedModules": false
   },
-  "include": ["src/**/*", "custom.d.ts", "index.d.ts", "**/webpack*.js"],
+  "include": [
+    "src/**/*",
+    "custom.d.ts",
+    "index.d.ts",
+    "**/webpack*.js",
+    "**/*.config.js"
+  ],
   "exclude": ["node_modules"]
 }
