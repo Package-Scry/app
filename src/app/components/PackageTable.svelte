@@ -1,6 +1,6 @@
 <script lang="ts">
   import Table from "./Table/Table.svelte"
-  import Test from "./Test.svelte"
+  import Button from "./ActionButton.svelte"
   import { packages, Package } from "./store"
 
   enum COLUMN_KEYS {
@@ -24,7 +24,7 @@
     { dataKey: COLUMN_KEYS.Wanted },
     { dataKey: COLUMN_KEYS.Latest },
     { dataKey: COLUMN_KEYS.Status },
-    { render: Test },
+    { render: Button },
   ]
 </script>
 
