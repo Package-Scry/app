@@ -8,10 +8,15 @@
   export let rowData: Row
 </script>
 
-<div class="px-2 truncate h-full flex items-center {style}" on:click={onClick}>
+<div
+  class="px-2 truncate h-full flex items-center text-white text-xl font-serif {style}"
+  on:click={onClick}
+>
   {#if !!dataKey}
     <span>{rowData[dataKey]}</span>
   {:else if !!render}
     <svelte:component this={render} {rowData} />
+  {:else}
+    <slot />
   {/if}
 </div>
