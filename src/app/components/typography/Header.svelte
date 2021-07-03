@@ -12,7 +12,7 @@
   const defaultStyle = `block text-white text-${SIZES[size]} font-serif${
     hasShadow ? " text-shadow" : ""
   }`
-  const finalStyle = `${defaultStyle}${style ?? ""}`
+  const finalStyle = `${defaultStyle} ${style ?? ""}`
 </script>
 
 <span class={finalStyle}><slot /></span>
