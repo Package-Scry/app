@@ -38,8 +38,6 @@ export const updatePackage = (name: string, version: string): void => {
   const activeTab = localStorage.getItem("activeTab")
   const path = localStorage.getItem(`dirPath-${activeTab}`)
 
-  console.log(name, version)
-
   window.api.send("packageUpdate", {
     name,
     path,
