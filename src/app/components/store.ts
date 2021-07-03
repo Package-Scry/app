@@ -24,15 +24,7 @@ interface UpdatedEvent {
   wasSuccessful: boolean
 }
 
-export const packages = writable<Package[]>([
-  {
-    name: "asd",
-    local: "loading",
-    wanted: "loading",
-    latest: "loading",
-    status: "outdated",
-  },
-])
+export const packages = writable<Package[]>([])
 
 export const updatePackage = (name: string, version: string): void => {
   const activeTab = localStorage.getItem("activeTab")
