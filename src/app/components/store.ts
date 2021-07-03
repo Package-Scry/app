@@ -34,6 +34,36 @@ export const packages = writable<Package[]>([
   },
 ])
 
+export const updatePackage = (name: string, version: string): void => {
+  const activeTab = localStorage.getItem("activeTab")
+  const path = localStorage.getItem(`dirPath-${activeTab}`)
+
+  console.log(name, version)
+
+  window.api.send("packageUpdate", {
+    name,
+    path,
+    version,
+    project: activeTab,
+  })
+
+  packages.update(oldPackages => {
+    const packageIndex = oldPackages.findIndex(
+      npmPackage => npmPackage.name === name
+    )
+    const updatedPackage = oldPackages[packageIndex]
+
+    return [
+      ...oldPackages.slice(0, packageIndex),
+      {
+        ...updatedPackage,
+        status: "loading",
+      },
+      ...oldPackages.slice(packageIndex + 1),
+    ]
+  })
+}
+
 window.api.receive("packages", (data: PackagesEvent) => {
   const { filePath, name, packages: eventPackages } = data
 
@@ -91,7 +121,7 @@ window.api.receive("packageUpdated", (data: UpdatedEvent) => {
 
     if (!wasSuccessful) {
       return [
-        ...oldPackages.slice(packageIndex),
+        ...oldPackages.slice(0, packageIndex),
         {
           ...updatedPackage,
           status: wanted === latest ? "updatable" : "outdated",
@@ -100,7 +130,7 @@ window.api.receive("packageUpdated", (data: UpdatedEvent) => {
       ]
     } else
       return [
-        ...oldPackages.slice(packageIndex),
+        ...oldPackages.slice(0, packageIndex),
         {
           ...updatedPackage,
           local: `^${version}`,
