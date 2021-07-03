@@ -42,4 +42,4 @@
   const onClick = () => updatePackage(packageName, targetVersion)
 </script>
 
-<Button {text} {type} {onClick} {isDisabled} />
+<Button {type} {onClick} {isDisabled}>{text}</Button>

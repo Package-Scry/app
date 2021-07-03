@@ -3,7 +3,6 @@
 
   type Type = "primary" | "secondary" | "loading"
 
-  export let text: string
   export let type: Type = "primary"
   export let onClick: () => void
   export let isDisabled: boolean
@@ -21,5 +20,5 @@
 </script>
 
 <div class={style} on:click={isDisabled ? () => {} : onClick}>
-  <Header size="medium">{text}</Header>
+  <Header size="medium"><slot /></Header>
 </div>
