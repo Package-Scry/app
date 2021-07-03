@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Header } from "../typography"
+
   type Type = "primary" | "secondary" | "loading"
 
   export let text: string
@@ -19,5 +21,5 @@
 </script>
 
 <div class={style} on:click={isDisabled ? () => {} : onClick}>
-  <span>{text}</span>
+  <Header size="medium">{text}</Header>
 </div>
