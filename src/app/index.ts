@@ -12,7 +12,6 @@ import "../components/button/ps-upgrade"
 import "../components/icons/ps-logout"
 import "../components/tab/ps-tab"
 import "../components/tab/ps-tabs"
-import "../components/modal/ps-modal"
 import initEvents from "../events"
 
 initEvents()
