@@ -1,5 +1,7 @@
 <script lang="ts">
-  const style = `text-white text-xl font-serif`
+  export let style: string = undefined
+  const defaultStyle = `text-white text-xl font-serif`
+  const finalStyle = `${defaultStyle}${style ?? ""}`
 </script>
 
-<span class={style}><slot /></span>
+<span class={finalStyle}><slot /></span>
