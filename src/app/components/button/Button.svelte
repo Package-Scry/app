@@ -12,7 +12,7 @@
     primary: `bg-turquoise-4 hover:bg-gray-3 hover:shadow-inner`,
     secondary: `border-2 border-turquoise-5`,
     loading: `bg-gray-6`,
-    modal: `cursor-pointer inline-block bg-black-3 py-4 px-10 mt-18 rounded-lg hover:bg-black-5`,
+    modal: `cursor-pointer inline-block bg-black-3 py-4 px-10 mt-14 rounded-lg hover:bg-black-5`,
   }
 
   $: style = `${type === "modal" ? "" : styles.common} ${styles[type]}${
