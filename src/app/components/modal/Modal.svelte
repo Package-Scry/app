@@ -7,6 +7,7 @@
   export let headerText: string
   export let footerRender: SvelteComponentDev = undefined
   export let buttonText: string = undefined
+  export let buttonIcon: string = undefined
   export let cancelText: string = undefined
   export let onCancel: () => void
   export let onClick: () => void
@@ -22,7 +23,7 @@
       <Header style="text-center mb-6" size="xl">{headerText}</Header>
       <slot name="content" />
       {#if !footerRender}
-        <Button type="modal" {onClick}>{buttonText}</Button>
+        <Button type="modal" icon={buttonIcon} {onClick}>{buttonText}</Button>
         {#if cancelText}
           <div
             class="cursor-pointer text-xl mt-3 hover:underline"
