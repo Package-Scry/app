@@ -2,6 +2,7 @@
   import Column from "./Column.svelte"
   import Row from "./Row.svelte"
   import type { Column as ColumnType, Data } from "./index"
+  import Header from "../typography/Header.svelte"
 
   export let data: Data
   export let columns: ColumnType[]
@@ -11,7 +12,9 @@
 <div class="text-center mx-12 mt-6 mb-20">
   <Row>
     {#each headers as header}
-      <Column style="bg-turquoise-1 justify-center">{header}</Column>
+      <Column style="bg-turquoise-1 justify-center">
+        <Header>{header}</Header>
+      </Column>
     {/each}
   </Row>
   <ul>
