@@ -37,6 +37,8 @@ module.exports = {
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-unsafe-assignment": 0,
+    "@typescript-eslint/no-unsafe-member-access": 0,
+    "@typescript-eslint/no-unsafe-call": 0,
     "@typescript-eslint/no-floating-promises": 0,
     "@typescript-eslint/restrict-template-expressions": 0,
     "@typescript-eslint/no-misused-promises": 0,

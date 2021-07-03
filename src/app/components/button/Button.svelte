@@ -16,5 +16,5 @@
 </script>
 
 <div class={style} on:click={onClick}>
-  <ps-header size="medium">{text}</ps-header>
+  <span>{text}</span>
 </div>
