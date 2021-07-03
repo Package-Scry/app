@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Base from "../typography/Base.svelte"
   import type { Column, Row } from "./index"
 
   export let render: Column["render"] = undefined
@@ -15,7 +16,7 @@
   on:click={onClick}
 >
   {#if !!dataKey}
-    <span>{rowData[dataKey]}</span>
+    <Base>{rowData[dataKey]}</Base>
   {:else if !!render}
     <svelte:component this={render} {rowData} />
   {:else}
