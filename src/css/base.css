@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Bitter";
+  src: url(../fonts/Bitter-VariableFont_wght.ttf);
+}
 .text-shadow {
   text-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
 }
