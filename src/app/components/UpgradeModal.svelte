@@ -1,10 +1,8 @@
 <script lang="ts">
-  import Modal from "./components/modal/Modal.svelte"
-  import Base from "./components/typography/Base.svelte"
-  import Item from "./components/list/Item.svelte"
-
-  // TODO: get this from store
-  export let isVisible = false
+  import Modal from "./modal/Modal.svelte"
+  import Base from "./typography/Base.svelte"
+  import Item from "./list/Item.svelte"
+  import { isUpgradeModalOpen, closeUpgradeModal } from "./stores/ui"
 </script>
 
 <Modal
@@ -12,14 +10,14 @@
   buttonText="Upgrade to Pro"
   cancelText="Skip upgrade for now"
   onCancel={() => {
-    isVisible = false
+    closeUpgradeModal()
   }}
   onClick={() => {
     window.api.send("upgrade", {})
 
-    isVisible = false
+    closeUpgradeModal()
   }}
-  {isVisible}
+  isVisible={$isUpgradeModalOpen}
 >
   <div slot="content">
     <Base style="block mt-4 text-xl">Your free trial has just ended.</Base>

@@ -1,9 +1,7 @@
 <script lang="ts">
-  import Modal from "./components/modal/Modal.svelte"
-  import Base from "./components/typography/Base.svelte"
-
-  // TODO: get this from store
-  export let isVisible = false
+  import Modal from "./modal/Modal.svelte"
+  import Base from "./typography/Base.svelte"
+  import { closeProModal, isProModalOpen } from "./stores/ui"
 </script>
 
 <Modal
@@ -11,13 +9,14 @@
   buttonText="Upgrade to Pro"
   cancelText="Skip upgrade for now"
   onCancel={() => {
-    isVisible = false
+    closeProModal()
   }}
   onClick={() => {
     window.api.send("upgrade", {})
-    isVisible = false
+
+    closeProModal()
   }}
-  {isVisible}
+  isVisible={$isProModalOpen}
 >
   <div slot="content">
     <Base style="mt-4 text-xl">

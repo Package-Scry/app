@@ -1,8 +1,6 @@
 <script lang="ts">
-  import Modal from "./components/modal/Modal.svelte"
-
-  // TODO: get this from store
-  export let isVisible = false
+  import Modal from "./modal/Modal.svelte"
+  import { isLoggedIn } from "./stores/user"
 </script>
 
 <Modal
@@ -11,8 +9,7 @@
   buttonIcon="github"
   onClick={() => {
     window.api.send("authenticate", {})
-
-    isVisible = false
   }}
-  {isVisible}
+  onCancel={() => {}}
+  isVisible={$isLoggedIn}
 />
