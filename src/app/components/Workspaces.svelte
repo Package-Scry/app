@@ -31,17 +31,20 @@
   }
 </script>
 
-<Tabs
-  onTabClose={close}
-  {onTabClick}
-  tabs={$workspaces}
-  activeTab={$activeTab}
-/>
-<div class="flex justify-center content-center w-7 h-full ml-2">
-  <div
-    class="text-2xl text-white cursor-pointer font-serif font-semibold leading-normal pt-2 hover:text-3xl plus"
-    on:click={addNewTab}
-  >
-    +
+<div class="flex bg-gray-4 w-full items-end">
+  <Tabs
+    onTabClose={close}
+    {onTabClick}
+    tabs={$workspaces}
+    activeTab={$activeTab}
+  />
+  <div class="flex justify-center content-center w-7 h-full ml-2">
+    <div
+      class="text-2xl text-white cursor-pointer font-serif font-semibold leading-normal pt-2 hover:text-3xl plus"
+      on:click={addNewTab}
+    >
+      +
+    </div>
   </div>
+  <ps-icon-logout class="mt-1.5 mx-3.5" />
 </div>
