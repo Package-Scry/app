@@ -23,7 +23,7 @@ export const changeActive = (
     workspaces.update(value => {
       const newWorkspaces = [...value, newActiveTab]
 
-      localStorage.setItem("tabs", `${currentWorkspaces.join(",")},`)
+      localStorage.setItem("tabs", `${newWorkspaces.join(",")},`)
 
       return newWorkspaces
     })
