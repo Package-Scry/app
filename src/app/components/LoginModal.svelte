@@ -11,5 +11,5 @@
     window.api.send("authenticate", {})
   }}
   onCancel={() => {}}
-  isVisible={$isLoggedIn}
+  isVisible={!$isLoggedIn}
 />
