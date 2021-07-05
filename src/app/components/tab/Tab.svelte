@@ -16,7 +16,11 @@
     : `${tabStyle} bg-gray-11 h-8 hover:bg-gray-12`
 </script>
 
-<span class={style} on:click={() => onClick(name, isActive)}>
+<span
+  class={style}
+  on:click={() => onClick(name, isActive)}
+  style="min-width: fit-content"
+>
   {name}
   <span
     class="close absolute -top-1 right-1 font-sans-serif text-base font-thin"
