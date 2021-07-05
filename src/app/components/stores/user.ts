@@ -12,7 +12,7 @@ const saveToken = (token: string): void => {
 
 export const login = (
   token: string,
-  hasPro: boolean,
+  hasUserPro: boolean,
   activeTab: string
 ): void => {
   saveToken(token)
@@ -24,5 +24,6 @@ export const login = (
     openUpgradeModal()
   }
 
+  hasPro.set(hasUserPro)
   isLoggedIn.set(true)
 }
