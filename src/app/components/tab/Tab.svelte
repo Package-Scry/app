@@ -16,10 +16,12 @@
     : `${tabStyle} bg-gray-11 h-8 hover:bg-gray-12`
 </script>
 
-<span class={style} on:click={() => onClick(name, isActive)}>{name}</span>
-<span
-  class="close absolute -top-1 right-1 font-sans-serif text-base font-thin"
-  on:click={() => onClose(name, isActive)}
->
-  x
+<span class={style} on:click={() => onClick(name, isActive)}>
+  {name}
+  <span
+    class="close absolute -top-1 right-1 font-sans-serif text-base font-thin"
+    on:click={() => onClose(name, isActive)}
+  >
+    x
+  </span>
 </span>
