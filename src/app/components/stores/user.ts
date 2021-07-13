@@ -1,6 +1,7 @@
 import { writable } from "svelte/store"
 import { openUpgradeModal } from "./ui"
 import { workspaces } from "./workspace"
+import { closeProModal, closeUpgradeModal } from "./ui"
 
 export const isLoggedIn = writable(false)
 export const hasPro = writable(false)
@@ -26,4 +27,16 @@ export const login = (
 
   hasPro.set(hasUserPro)
   isLoggedIn.set(true)
+}
+
+export const logout = (): void => {
+  closeProModal()
+  closeUpgradeModal()
+  hasPro.set(false)
+  isLoggedIn.set(false)
+  token.set(null)
+
+  localStorage.removeItem("token")
+
+  window.api.send("token", null)
 }
