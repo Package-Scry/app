@@ -1,7 +1,7 @@
 <script lang="ts">
   import Table from "./Table/Table.svelte"
   import Button from "./ActionButton.svelte"
-  import { packages, updatePackage } from "./store"
+  import { packages, updatePackage, Package } from "./store"
 
   enum COLUMN_KEYS {
     Name = "name",
@@ -11,12 +11,28 @@
     Status = "status",
   }
 
+  interface PackagesEvent {
+    packages: Package[]
+    filePath: string
+    name: string
+  }
+
   interface UpdatedEvent {
     name: string
     version: string
     project: string
     wasSuccessful: boolean
   }
+
+  window.api.receive("packages", (data: PackagesEvent) => {
+    const { filePath, name, packages: eventPackages } = data
+
+    if (filePath) {
+      packages.set(eventPackages)
+
+      localStorage.setItem(`dirPath-${name}`, filePath)
+    }
+  })
 
   window.api.receive("packageUpdated", (data: UpdatedEvent) => {
     const { name, project, version, wasSuccessful } = data

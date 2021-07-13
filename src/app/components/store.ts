@@ -19,17 +19,6 @@ interface OutdatedEvent {
   packages: Package[]
   project: string
 }
-interface PackagesEvent {
-  packages: Package[]
-  filePath: string
-  name: string
-}
-interface UpdatedEvent {
-  name: string
-  version: string
-  project: string
-  wasSuccessful: boolean
-}
 
 export const packages = writable<Package[]>([])
 
@@ -60,17 +49,6 @@ export const requestUpdatePackage = (name: string, version: string): void => {
     ]
   })
 }
-
-window.api.receive("packages", (data: PackagesEvent) => {
-  const { filePath, name, packages: eventPackages } = data
-
-  if (filePath) {
-    packages.set(eventPackages)
-
-    localStorage.setItem(`dirPath-${name}`, filePath)
-  }
-})
-
 window.api.receive("outdated", (data: OutdatedEvent) => {
   const { packages: newPackages, project } = data
   const activeTab = localStorage.getItem("activeTab")
