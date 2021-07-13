@@ -1,7 +1,7 @@
 <script lang="ts">
   import Table from "./Table/Table.svelte"
   import Button from "./ActionButton.svelte"
-  import { packages, Package } from "./store"
+  import { packages, updatePackage } from "./store"
 
   enum COLUMN_KEYS {
     Name = "name",
@@ -11,10 +11,43 @@
     Status = "status",
   }
 
-  let packages_value: Package[]
+  interface UpdatedEvent {
+    name: string
+    version: string
+    project: string
+    wasSuccessful: boolean
+  }
 
-  packages.subscribe(value => {
-    packages_value = value
+  window.api.receive("packageUpdated", (data: UpdatedEvent) => {
+    const { name, project, version, wasSuccessful } = data
+    const activeTab = localStorage.getItem("activeTab")
+
+    if (activeTab !== project) return
+
+    const currentPackage = $packages.find(
+      npmPackage => npmPackage.name === name
+    )
+    const { latest, local, wanted } = currentPackage
+
+    const status = !wasSuccessful
+      ? wanted === latest
+        ? "updatable"
+        : "outdated"
+      : latest === version
+      ? "up to date"
+      : "outdated"
+    const updatedWanted = wasSuccessful
+      ? latest === version
+        ? { wanted: "-" }
+        : { wanted }
+      : {}
+
+    updatePackage({
+      name,
+      status,
+      local: wasSuccessful ? `^${version}` : local,
+      ...updatedWanted,
+    })
   })
 
   const COLUMN_NAMES = ["Name", "Local", "Wanted", "Latest", "Status", "Action"]
@@ -28,4 +61,4 @@
   ]
 </script>
 
-<Table data={packages_value} {columns} headers={COLUMN_NAMES} />
+<Table data={$packages} {columns} headers={COLUMN_NAMES} />
