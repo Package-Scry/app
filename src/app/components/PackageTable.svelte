@@ -1,7 +1,12 @@
 <script lang="ts">
   import Table from "./Table/Table.svelte"
   import Button from "./ActionButton.svelte"
-  import { packages, updatePackage, Package, updatePackages } from "./store"
+  import {
+    packages,
+    updatePackage,
+    Package,
+    updatePackages,
+  } from "./stores/package"
 
   enum COLUMN_KEYS {
     Name = "name",
