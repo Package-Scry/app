@@ -15,11 +15,6 @@ export interface PackageData {
   status?: string
 }
 
-interface OutdatedEvent {
-  packages: Package[]
-  project: string
-}
-
 export const packages = writable<Package[]>([])
 
 export const requestUpdatePackage = (name: string, version: string): void => {
@@ -49,12 +44,8 @@ export const requestUpdatePackage = (name: string, version: string): void => {
     ]
   })
 }
-window.api.receive("outdated", (data: OutdatedEvent) => {
-  const { packages: newPackages, project } = data
-  const activeTab = localStorage.getItem("activeTab")
 
-  if (activeTab !== project) return
-
+export const updatePackages = (newPackages: Package[]): void => {
   packages.update(oldPackages =>
     oldPackages.map(oldPackage => {
       const { name, local } = oldPackage
@@ -81,7 +72,7 @@ window.api.receive("outdated", (data: OutdatedEvent) => {
       }
     })
   )
-})
+}
 
 export const updatePackage = (data: PackageData): void => {
   const { name } = data

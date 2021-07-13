@@ -1,7 +1,7 @@
 <script lang="ts">
   import Table from "./Table/Table.svelte"
   import Button from "./ActionButton.svelte"
-  import { packages, updatePackage, Package } from "./store"
+  import { packages, updatePackage, Package, updatePackages } from "./store"
 
   enum COLUMN_KEYS {
     Name = "name",
@@ -9,6 +9,11 @@
     Wanted = "wanted",
     Latest = "latest",
     Status = "status",
+  }
+
+  interface OutdatedEvent {
+    packages: Package[]
+    project: string
   }
 
   interface PackagesEvent {
@@ -23,6 +28,15 @@
     project: string
     wasSuccessful: boolean
   }
+
+  window.api.receive("outdated", (data: OutdatedEvent) => {
+    const { packages: newPackages, project } = data
+    const activeTab = localStorage.getItem("activeTab")
+
+    if (activeTab !== project) return
+
+    updatePackages(newPackages)
+  })
 
   window.api.receive("packages", (data: PackagesEvent) => {
     const { filePath, name, packages: eventPackages } = data
