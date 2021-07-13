@@ -26,7 +26,7 @@ interface UpdatedEvent {
 
 export const packages = writable<Package[]>([])
 
-export const updatePackage = (name: string, version: string): void => {
+export const requestUpdatePackage = (name: string, version: string): void => {
   const activeTab = localStorage.getItem("activeTab")
   const path = localStorage.getItem(`dirPath-${activeTab}`)
 
