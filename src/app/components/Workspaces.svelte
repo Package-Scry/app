@@ -6,6 +6,7 @@
     changeActive,
     workspaces,
   } from "./stores/workspace"
+  import LogoutButton from "./LogoutButton.svelte"
 
   window.api.receive("cancelled", () => {
     if (!$activeTab) window.api.send("workspaceFolder", { path: null })
@@ -46,5 +47,5 @@
       +
     </div>
   </div>
-  <ps-icon-logout class="mt-1.5 mx-3.5" />
+  <LogoutButton />
 </div>
