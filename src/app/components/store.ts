@@ -7,6 +7,13 @@ export interface Package {
   latest: string
   status: string
 }
+export interface PackageData {
+  name: string
+  local?: string
+  wanted?: string
+  latest?: string
+  status?: string
+}
 
 interface OutdatedEvent {
   packages: Package[]
@@ -98,36 +105,22 @@ window.api.receive("outdated", (data: OutdatedEvent) => {
   )
 })
 
-window.api.receive("packageUpdated", (data: UpdatedEvent) => {
-  const { name, project, version, wasSuccessful } = data
-  const activeTab = localStorage.getItem("activeTab")
-
-  if (activeTab !== project) return
+export const updatePackage = (data: PackageData): void => {
+  const { name } = data
 
   packages.update(oldPackages => {
-    const packageIndex = oldPackages.findIndex(p => p.name === name)
+    const packageIndex = oldPackages.findIndex(
+      npmPackage => npmPackage.name === name
+    )
     const updatedPackage = oldPackages[packageIndex]
-    const { wanted, latest } = updatedPackage
 
-    if (!wasSuccessful) {
-      return [
-        ...oldPackages.slice(0, packageIndex),
-        {
-          ...updatedPackage,
-          status: wanted === latest ? "updatable" : "outdated",
-        },
-        ...oldPackages.slice(packageIndex + 1),
-      ]
-    } else
-      return [
-        ...oldPackages.slice(0, packageIndex),
-        {
-          ...updatedPackage,
-          local: `^${version}`,
-          status: latest === version ? "up to date" : "outdated",
-          wanted: latest === version ? "-" : wanted,
-        },
-        ...oldPackages.slice(packageIndex + 1),
-      ]
+    return [
+      ...oldPackages.slice(0, packageIndex),
+      {
+        ...updatedPackage,
+        ...data,
+      },
+      ...oldPackages.slice(packageIndex + 1),
+    ]
   })
-})
+}
