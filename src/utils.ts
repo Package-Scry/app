@@ -20,7 +20,7 @@ export const getErrorFromCli = (error: string): Error => {
 
     return jsonError
   } catch (error) {
-    console.log("error while parsing", e)
+    console.log("error while parsing", error)
 
     return {
       error: {
