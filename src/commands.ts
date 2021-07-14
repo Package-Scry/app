@@ -1,5 +1,6 @@
 import { exec } from "child_process"
 import type { BrowserWindow } from "electron"
+import { getErrorFromCli, parseJSONFromCli } from "./utils"
 
 export const checkPackages = (
   filePath: string,
@@ -59,4 +60,31 @@ export const updatePackage = (
       })
     }
   )
+}
+
+export const updateAllToWanted = (
+  filePath: string,
+  project: string,
+  send: BrowserWindow["webContents"]["send"]
+): void => {
+  exec(`cd "${filePath}" && npm update --json`, (error, stdout, stderr) => {
+    const jsonError =
+      error?.toString() || stderr
+        ? getErrorFromCli(error?.toString() ?? stderr)
+        : null
+
+    if (jsonError) {
+      console.log("---------")
+      console.log("error", JSON.stringify(jsonError, null, 2))
+    }
+
+    const response = parseJSONFromCli<TSFixMe>(stdout)
+    console.log("---------")
+    console.log(response)
+
+    send("updatedAllToWanted", {
+      project,
+      wasSuccessful: !!stdout,
+    })
+  })
 }
