@@ -6,7 +6,7 @@ import { io, Socket } from "socket.io-client"
 import fixPath from "fix-path"
 import { checkPackages, updatePackage } from "./commands"
 
-interface PackageJSON {
+export interface PackageJSON {
   name?: string
   dependencies?: {
     [key in string]: string

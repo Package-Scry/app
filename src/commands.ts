@@ -1,28 +1,29 @@
 import { exec } from "child_process"
 import type { BrowserWindow } from "electron"
 import { getErrorFromCli, parseJSONFromCli } from "./utils"
+import { readFile } from "fs"
+import type { PackageJSON } from "./main"
+import util from "util"
 
-export const checkPackages = (
+const pExec = util.promisify(exec)
+
+interface Packages {
+  name: string
+  wanted: string
+  latest: string
+}
+
+export const checkPackages = async (
   filePath: string,
   project: string,
-  send: BrowserWindow["webContents"]["send"]
-): void => {
-  exec(`cd "${filePath}" && npm outdated`, (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`)
-
-      // TODO: on mac `npm outdated` exits with `code 1` for some reason
-      if (process.platform !== "darwin" || error.code !== 1) return
-    }
-
-    if (stderr) {
-      console.log(`stderr: ${stderr}`)
-      return
-    }
-
-    const packages = stdout
+  send?: BrowserWindow["webContents"]["send"]
+): Promise<{
+  packages: Packages[]
+}> => {
+  const parsePackages = (text: string): Packages[] => {
+    const packages = text
       .split("\n")
-      .filter(a => a)
+      .filter(p => p)
       .map(data => {
         const [name, _, wanted, latest] = data.split(" ").filter(d => d)
 
@@ -30,8 +31,26 @@ export const checkPackages = (
       })
       .slice(1)
 
-    send("outdated", { packages, project })
-  })
+    send?.("outdated", { packages, project })
+
+    return packages
+  }
+
+  try {
+    const { stdout, stderr } = await pExec(`cd "${filePath}" && npm outdated`)
+
+    if (stderr) console.log(`stderr: ${stderr}`)
+
+    return { packages: parsePackages(stdout) }
+  } catch (error) {
+    const { stdout } = error
+
+    console.log(`error: ${error.message}`)
+
+    // TODO: on mac `npm outdated` exits with `code 1` for some reason
+    if (process.platform !== "darwin" || error.code !== 1) return
+    else if (stdout) return { packages: parsePackages(stdout) }
+  }
 }
 
 export const updatePackage = (
