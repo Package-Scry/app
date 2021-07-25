@@ -1,11 +1,9 @@
 <script lang="ts">
+  import { Types } from "."
   import GitHub from "../icon/GitHub.svelte"
-
   import { Header } from "../typography"
 
-  type Type = "primary" | "secondary" | "loading" | "modal"
-
-  export let type: Type = "primary"
+  export let type: Types = Types.Primary
   export let icon: string = undefined
   export let onClick: () => void
   export let isDisabled = false
