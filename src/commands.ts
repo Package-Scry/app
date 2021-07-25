@@ -16,7 +16,7 @@ interface Packages {
 
 export const checkPackages = async (
   filePath: string,
-  project: string,
+  project?: string,
   send?: BrowserWindow["webContents"]["send"]
 ): Promise<{
   packages: Packages[]
@@ -107,6 +107,63 @@ export const updateAllToWanted = (
       wasSuccessful: !!stdout,
     })
   })
+}
+
+export const updateAllToLatest = async (
+  filePath: string,
+  project: string,
+  send: BrowserWindow["webContents"]["send"]
+): Promise<{ packages: { [name: string]: string } }> => {
+  try {
+    const data = readFileSync(`${filePath}/package.json`, { encoding: "utf8" })
+    const parsedData: PackageJSON = JSON.parse(data)
+    const { dependencies, devDependencies } = parsedData
+    const { packages: outdatedPackages } = await checkPackages(filePath)
+
+    const updatedDependencies = Object.keys(dependencies).reduce<
+      PackageJSON["dependencies"]
+    >((allPackages, packageName) => {
+      const outdatedPackage = outdatedPackages.find(p => p.name === packageName)
+
+      return outdatedPackage
+        ? { ...allPackages, [packageName]: `^${outdatedPackage.latest}` }
+        : allPackages
+    }, {})
+
+    const updatedDevDependencies = Object.keys(devDependencies).reduce<
+      PackageJSON["devDependencies"]
+    >((allPackages, packageName) => {
+      const outdatedPackage = outdatedPackages.find(p => p.name === packageName)
+
+      return outdatedPackage
+        ? { ...allPackages, [packageName]: `^${outdatedPackage.latest}` }
+        : allPackages
+    }, {})
+
+    const newPackageJSON = {
+      ...parsedData,
+      dependencies: { ...dependencies, ...updatedDependencies },
+      devDependencies: { ...devDependencies, ...updatedDevDependencies },
+    }
+
+    writeFileSync(
+      `${filePath}/package.json`,
+      JSON.stringify(newPackageJSON, null, 2)
+    )
+
+    const wasSuccessful = await install(filePath)
+
+    // TODO: send an event
+
+    return { packages: { ...updatedDependencies, ...updatedDevDependencies } }
+  } catch (error) {
+    console.log("error reading or writing the file", error)
+
+    send("updatedAllToLatest", {
+      project,
+      wasSuccessful: false,
+    })
+  }
 }
 
 const install = async (filePath: string): Promise<boolean> => {
