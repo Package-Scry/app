@@ -3,20 +3,22 @@
   import Row from "./Row.svelte"
   import type { Column as ColumnType, Data } from "./index"
   import Header from "../typography/Header.svelte"
+  import type { SvelteComponentDev } from "svelte/internal"
 
   export let data: Data
   export let columns: ColumnType[]
-  export let headers: string[]
+  export let headers: { text?: string; render?: SvelteComponentDev }[]
 </script>
 
 <div class="text-center mx-12 mt-6 mb-20">
   <Row>
     {#each headers as header}
-      <Column style="bg-turquoise-1 justify-center">
-        <Header>{header}</Header>
+      <Column style="bg-turquoise-1 justify-center" {...header}>
+        <Header>{header.text}</Header>
       </Column>
     {/each}
   </Row>
+
   <ul>
     {#each data as rowData, i (rowData.name)}
       <Row>
