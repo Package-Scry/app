@@ -7,7 +7,7 @@
 
   export let data: Data
   export let columns: ColumnType[]
-  export let headers: { text?: string; render?: SvelteComponentDev }[]
+  export let headers: { text?: string; render?: typeof SvelteComponentDev }[]
 </script>
 
 <div class="text-center mx-12 mt-6 mb-20">
