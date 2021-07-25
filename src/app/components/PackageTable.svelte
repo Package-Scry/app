@@ -1,6 +1,7 @@
 <script lang="ts">
   import Table from "./Table/Table.svelte"
   import Button from "./ActionButton.svelte"
+  import HeaderButton from "./HeaderButton.svelte"
   import {
     packages,
     updatePackage,
@@ -85,7 +86,14 @@
     })
   })
 
-  const COLUMN_NAMES = ["Name", "Local", "Wanted", "Latest", "Status", "Action"]
+  const COLUMN_NAMES = [
+    { text: "Name" },
+    { text: "Local" },
+    { text: "Wanted" },
+    { text: "Latest" },
+    { text: "Status" },
+    { render: HeaderButton },
+  ]
   const columns = [
     { dataKey: COLUMN_KEYS.Name },
     { dataKey: COLUMN_KEYS.Local },
