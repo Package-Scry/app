@@ -16,6 +16,7 @@ export interface PackageData {
 }
 
 export const packages = writable<Package[]>([])
+export const isUpdatingAll = writable<boolean>(false)
 
 export const requestUpdatePackage = (name: string, version: string): void => {
   const activeTab = localStorage.getItem("activeTab")
@@ -91,5 +92,17 @@ export const updatePackage = (data: PackageData): void => {
       },
       ...oldPackages.slice(packageIndex + 1),
     ]
+  })
+}
+
+export const requestUpdateAllPackage = (type: "Wanted" | "Latest"): void => {
+  const activeTab = localStorage.getItem("activeTab")
+  const path = localStorage.getItem(`dirPath-${activeTab}`)
+
+  isUpdatingAll.set(true)
+
+  window.api.send(`updateAllTo${type}`, {
+    path,
+    project: activeTab,
   })
 }
