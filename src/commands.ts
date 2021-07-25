@@ -1,9 +1,10 @@
 import { exec } from "child_process"
 import type { BrowserWindow } from "electron"
 import { getErrorFromCli, parseJSONFromCli } from "./utils"
-import { readFile } from "fs"
+import { readFileSync } from "fs"
 import type { PackageJSON } from "./main"
 import util from "util"
+import { writeFileSync } from "original-fs"
 
 const pExec = util.promisify(exec)
 
@@ -106,4 +107,28 @@ export const updateAllToWanted = (
       wasSuccessful: !!stdout,
     })
   })
+}
+
+const install = async (filePath: string): Promise<boolean> => {
+  try {
+    const { stdout, stderr } = await pExec(`cd "${filePath}" && npm i --json`)
+    const jsonError = stderr ? getErrorFromCli(stderr?.toString()) : null
+
+    if (jsonError) {
+      console.log("---------")
+      console.log("error", JSON.stringify(jsonError, null, 2))
+    }
+
+    return !!stdout
+  } catch (error) {
+    const { stdout, message } = error
+    const jsonError = message ? getErrorFromCli(message.toString()) : null
+
+    if (jsonError) {
+      console.log("---------")
+      console.log("error", JSON.stringify(jsonError, null, 2))
+    }
+
+    return !!stdout
+  }
 }
