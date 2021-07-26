@@ -4,7 +4,8 @@ import * as path from "path"
 import { readFile } from "fs"
 import { io, Socket } from "socket.io-client"
 import fixPath from "fix-path"
-import { checkPackages, updatePackage } from "./commands"
+import { checkPackages, updateAllToLatest, updatePackage } from "./commands"
+import initRoutes from "./routes"
 
 export interface PackageJSON {
   name?: string
@@ -148,6 +149,10 @@ if (!gotTheLock) {
 
     return dir.filePaths[0]
   }
+
+  initRoutes((channel: string, args: TSFixMe[]) =>
+    win.webContents.send(channel, args)
+  )
 
   ipcMain.on("token", (_, token: string) => {
     socket = io(HOST, {
