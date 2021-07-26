@@ -46,8 +46,6 @@
     const activeTab = localStorage.getItem("activeTab")
 
     if (workspace === activeTab) {
-      isUpdatingAll.set(false)
-
       if (wasSuccessful) {
         const path = localStorage.getItem(`dirPath-${workspace}`)
 
