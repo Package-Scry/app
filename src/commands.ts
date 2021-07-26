@@ -138,10 +138,7 @@ const runCommand = async (
 
 export const updateAllToLatest = async (
   filePath: string
-): Promise<{
-  wasSuccessful: boolean
-  packages?: { [name: string]: string }
-}> => {
+): Promise<{ wasSuccessful: boolean }> => {
   try {
     const data = readFileSync(`${filePath}/package.json`, { encoding: "utf8" })
     const parsedData: PackageJSON = JSON.parse(data)
@@ -183,10 +180,7 @@ export const updateAllToLatest = async (
       `cd "${filePath}" && npm i --json`
     )
 
-    return {
-      wasSuccessful,
-      packages: { ...updatedDependencies, ...updatedDevDependencies },
-    }
+    return { wasSuccessful }
   } catch (error) {
     console.log("error reading or writing the file", error)
 
