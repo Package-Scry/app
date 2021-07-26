@@ -110,6 +110,32 @@ export const updateAllToWanted = async (
   }
 }
 
+const runCommand = async (
+  command: string
+): Promise<{ wasSuccessful: boolean; error?: Error; response: string }> => {
+  try {
+    const { stdout, stderr } = await pExec(command)
+    const jsonError = stderr ? getErrorFromCli(stderr?.toString()) : null
+
+    if (jsonError) {
+      console.log("---------")
+      console.log("error", JSON.stringify(jsonError, null, 2))
+    }
+
+    return { wasSuccessful: !!stdout, response: stdout }
+  } catch (error) {
+    const { stdout, message } = error
+    const jsonError = message ? getErrorFromCli(message.toString()) : null
+
+    if (jsonError) {
+      console.log("---------")
+      console.log("error", JSON.stringify(jsonError, null, 2))
+    }
+
+    return { wasSuccessful: !!stdout, error: jsonError, response: stdout }
+  }
+}
+
 export const updateAllToLatest = async (
   filePath: string,
   project: string,
