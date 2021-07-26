@@ -1,4 +1,4 @@
-interface Error {
+export interface Error {
   error: {
     code: string
     summary: string
@@ -25,6 +25,7 @@ export const parseJSONFromCli = <T>(error: string): T => {
     return null
   }
 }
+
 export const getErrorFromCli = (error: string): Error => {
   const jsonError = parseJSONFromCli<Error>(error)
 
