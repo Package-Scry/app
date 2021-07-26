@@ -7,6 +7,7 @@
     workspaces,
   } from "./stores/workspace"
   import LogoutButton from "./LogoutButton.svelte"
+  import { isUpdatingAll } from "./stores/package"
 
   window.api.receive("cancelled", () => {
     if (!$activeTab) window.api.send("workspaceFolder", { path: null })
@@ -16,6 +17,8 @@
     const newActiveTab = data.name
 
     changeActive(newActiveTab, $workspaces)
+
+    isUpdatingAll.set(false)
   })
 
   const onTabClick = (workspace: string, isTabActive: boolean) => {
