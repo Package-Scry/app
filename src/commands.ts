@@ -1,6 +1,6 @@
 import { exec } from "child_process"
 import type { BrowserWindow } from "electron"
-import { getErrorFromCli, parseJSONFromCli } from "./utils"
+import { getErrorFromCli, Error } from "./utils"
 import { readFileSync } from "fs"
 import type { PackageJSON } from "./main"
 import util from "util"
@@ -82,31 +82,32 @@ export const updatePackage = (
   )
 }
 
-export const updateAllToWanted = (
-  filePath: string,
-  project: string,
-  send: BrowserWindow["webContents"]["send"]
-): void => {
-  exec(`cd "${filePath}" && npm update --json`, (error, stdout, stderr) => {
-    const jsonError =
-      error?.toString() || stderr
-        ? getErrorFromCli(error?.toString() ?? stderr)
-        : null
+export const updateAllToWanted = async (
+  filePath: string
+): Promise<{ wasSuccessful: boolean; error?: Error }> => {
+  try {
+    const { stdout, stderr } = await pExec(
+      `cd "${filePath}" && npm update --json`
+    )
+    const jsonError = stderr ? getErrorFromCli(stderr?.toString()) : null
 
     if (jsonError) {
       console.log("---------")
       console.log("error", JSON.stringify(jsonError, null, 2))
     }
 
-    const response = parseJSONFromCli<TSFixMe>(stdout)
-    console.log("---------")
-    console.log(response)
+    return { wasSuccessful: !!stdout }
+  } catch (error) {
+    const { stdout, message } = error
+    const jsonError = message ? getErrorFromCli(message.toString()) : null
 
-    send("updatedAllToWanted", {
-      project,
-      wasSuccessful: !!stdout,
-    })
-  })
+    if (jsonError) {
+      console.log("---------")
+      console.log("error", JSON.stringify(jsonError, null, 2))
+    }
+
+    return { wasSuccessful: !!stdout, error: jsonError }
+  }
 }
 
 export const updateAllToLatest = async (
