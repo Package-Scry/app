@@ -18,6 +18,11 @@
     Status = "status",
   }
 
+  interface UpdateAllToWantedEvent {
+    wasSuccessful: boolean
+    workspace: string
+  }
+
   interface OutdatedEvent {
     packages: Package[]
     project: string
@@ -35,6 +40,21 @@
     project: string
     wasSuccessful: boolean
   }
+
+  window.api.receive("updatedAllToWanted", (data: UpdateAllToWantedEvent) => {
+    const { wasSuccessful, workspace } = data
+    const activeTab = localStorage.getItem("activeTab")
+
+    if (workspace === activeTab) {
+      isUpdatingAll.set(false)
+
+      if (wasSuccessful) {
+        const path = localStorage.getItem(`dirPath-${workspace}`)
+
+        window.api.send("workspaceFolder", { path })
+      }
+    }
+  })
 
   window.api.receive("outdated", (data: OutdatedEvent) => {
     const { packages: newPackages, project } = data
