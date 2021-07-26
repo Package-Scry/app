@@ -1,20 +1,22 @@
 <script lang="ts">
   import { Types } from "./types"
   import GitHub from "../icon/GitHub.svelte"
+  import Update from "../icon/Update.svelte"
   import { Header } from "../typography"
 
   export let type: Types = Types.Primary
   export let icon: string = undefined
   export let onClick: () => void
   export let isDisabled = false
+  export let iconStyle = ""
 
   const icons = {
     github: GitHub,
-    updateAll: GitHub,
+    updateAll: Update,
   }
 
   const styles = {
-    common: `select-none rounded-md text-center w-full h-full flex items-center justify-center`,
+    common: `select-none rounded-md text-center w-full h-full flex items-center justify-center relative`,
     primary: `bg-turquoise-4 hover:bg-gray-3 hover:shadow-inner`,
     secondary: `border-2 border-turquoise-5`,
     loading: `bg-gray-6`,
@@ -29,6 +31,6 @@
 </script>
 
 <div class={style} on:click={isDisabled ? () => {} : onClick}>
-  <svelte:component this={icons[icon]} class="inline-block" />
+  <svelte:component this={icons[icon]} style={iconStyle ?? "inline-block"} />
   <Header size="medium" style="inline-block"><slot /></Header>
 </div>
