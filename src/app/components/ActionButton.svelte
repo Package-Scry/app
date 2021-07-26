@@ -42,4 +42,10 @@
   const onClick = () => requestUpdatePackage(packageName, targetVersion)
 </script>
 
-<Button {type} {onClick} {isDisabled}>{text}</Button>
+<Button
+  {type}
+  icon="updateAll"
+  iconStyle="absolute left-2"
+  {onClick}
+  {isDisabled}>{text}</Button
+>
