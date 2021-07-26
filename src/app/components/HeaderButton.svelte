@@ -30,6 +30,12 @@
     : Types.Secondary
 </script>
 
-<Button {type} icon="updateAll" {onClick} {isDisabled}>
+<Button
+  {type}
+  icon="updateAll"
+  iconStyle="absolute left-2"
+  {onClick}
+  {isDisabled}
+>
   {buttonText}
 </Button>
