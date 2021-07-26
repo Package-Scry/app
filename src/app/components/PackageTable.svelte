@@ -18,7 +18,7 @@
     Status = "status",
   }
 
-  interface UpdateAllToWantedEvent {
+  interface UpdateAllToEvent {
     wasSuccessful: boolean
     workspace: string
   }
@@ -41,7 +41,7 @@
     wasSuccessful: boolean
   }
 
-  window.api.receive("updatedAllToWanted", (data: UpdateAllToWantedEvent) => {
+  window.api.receive("updatedAll", (data: UpdateAllToEvent) => {
     const { wasSuccessful, workspace } = data
     const activeTab = localStorage.getItem("activeTab")
 

@@ -1,4 +1,5 @@
-import { BrowserWindow, ipcMain } from "electron"
+import { ipcMain } from "electron"
+import type { ReceiveChannel } from "../custom"
 import { updateAllToLatest, updateAllToWanted } from "./commands"
 
 interface EventUpdateAll {
@@ -6,20 +7,22 @@ interface EventUpdateAll {
   workspace: string
 }
 
-export default (send: BrowserWindow["webContents"]["send"]): void => {
+type Send = (channel: ReceiveChannel, ...args: TSFixMe[]) => void
+
+export default (send: Send): void => {
   ipcMain.on("updateAllToWanted", async (event, args: EventUpdateAll) => {
     const { path, workspace } = args
 
     const { wasSuccessful } = await updateAllToWanted(path)
 
-    send("updatedAllToWanted", { workspace, wasSuccessful })
+    send("updatedAll", { workspace, wasSuccessful })
   })
 
   ipcMain.on("updateAllToLatest", async (event, args: EventUpdateAll) => {
     const { path, workspace } = args
 
-    const { wasSuccessful, packages } = await updateAllToLatest(path)
+    const { wasSuccessful } = await updateAllToLatest(path)
 
-    send("updatedAllToLatest", { workspace, wasSuccessful, packages })
+    send("updatedAll", { workspace, wasSuccessful })
   })
 }
