@@ -8,22 +8,19 @@
     requestUpdateAllPackage,
   } from "./stores/package"
 
-  const hasOutdated = !!$packages.find(
-    p => p.latest !== p.local.replace("^", "")
-  )
-  const hasUpdatable = !!$packages.find(
+  $: hasOutdated = !!$packages.find(p => p.latest !== p.local.replace("^", ""))
+  $: hasUpdatable = !!$packages.find(
     p => p.wanted !== "-" && p.wanted !== p.local.replace("^", "")
   )
-  const onClick = () =>
-    requestUpdateAllPackage(hasUpdatable ? "Wanted" : "Latest")
-  const isDisabled = $isUpdatingAll || (!hasOutdated && !hasUpdatable)
+  $: onClick = () => requestUpdateAllPackage(hasUpdatable ? "Wanted" : "Latest")
+  $: isDisabled = $isUpdatingAll || (!hasOutdated && !hasUpdatable)
 
   $: buttonText = $isUpdatingAll
     ? "Loading"
     : hasUpdatable
-    ? "Update all to Wanted"
+    ? "Update all"
     : hasOutdated
-    ? "Update all to Latest"
+    ? "Update all"
     : "Up to date"
 
   $: type = $isUpdatingAll
