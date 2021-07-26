@@ -115,7 +115,7 @@ const runCommand = async (
 ): Promise<{ wasSuccessful: boolean; error?: Error; response: string }> => {
   try {
     const { stdout, stderr } = await pExec(command)
-    const jsonError = stderr ? getErrorFromCli(stderr?.toString()) : null
+    const jsonError = stderr ? getErrorFromCli(stderr.toString()) : null
 
     if (jsonError) {
       console.log("---------")
@@ -137,10 +137,11 @@ const runCommand = async (
 }
 
 export const updateAllToLatest = async (
-  filePath: string,
-  project: string,
-  send: BrowserWindow["webContents"]["send"]
-): Promise<{ packages: { [name: string]: string } }> => {
+  filePath: string
+): Promise<{
+  wasSuccessful: boolean
+  packages?: { [name: string]: string }
+}> => {
   try {
     const data = readFileSync(`${filePath}/package.json`, { encoding: "utf8" })
     const parsedData: PackageJSON = JSON.parse(data)
@@ -178,41 +179,17 @@ export const updateAllToLatest = async (
       JSON.stringify(newPackageJSON, null, 2)
     )
 
-    const wasSuccessful = await install(filePath)
+    const { wasSuccessful } = await runCommand(
+      `cd "${filePath}" && npm i --json`
+    )
 
-    // TODO: send an event
-
-    return { packages: { ...updatedDependencies, ...updatedDevDependencies } }
+    return {
+      wasSuccessful,
+      packages: { ...updatedDependencies, ...updatedDevDependencies },
+    }
   } catch (error) {
     console.log("error reading or writing the file", error)
 
-    send("updatedAllToLatest", {
-      project,
-      wasSuccessful: false,
-    })
-  }
-}
-
-const install = async (filePath: string): Promise<boolean> => {
-  try {
-    const { stdout, stderr } = await pExec(`cd "${filePath}" && npm i --json`)
-    const jsonError = stderr ? getErrorFromCli(stderr?.toString()) : null
-
-    if (jsonError) {
-      console.log("---------")
-      console.log("error", JSON.stringify(jsonError, null, 2))
-    }
-
-    return !!stdout
-  } catch (error) {
-    const { stdout, message } = error
-    const jsonError = message ? getErrorFromCli(message.toString()) : null
-
-    if (jsonError) {
-      console.log("---------")
-      console.log("error", JSON.stringify(jsonError, null, 2))
-    }
-
-    return !!stdout
+    return { wasSuccessful: false }
   }
 }
