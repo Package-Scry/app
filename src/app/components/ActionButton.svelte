@@ -4,7 +4,6 @@
   import { requestUpdatePackage } from "./stores/package"
 
   type ButtonText = "Update" | "Loading" | "Up to date"
-  type ButtonTypes = "primary" | "secondary" | "loading"
   type Status = "loading" | "up to date" | "updatable"
 
   export let rowData: {
@@ -48,5 +47,7 @@
   icon="updateAll"
   iconStyle="absolute left-2"
   {onClick}
-  {isDisabled}>{text}</Button
+  {isDisabled}
 >
+  {text}
+</Button>
