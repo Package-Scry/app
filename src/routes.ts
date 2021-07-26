@@ -3,23 +3,23 @@ import { updateAllToLatest, updateAllToWanted } from "./commands"
 
 interface EventUpdateAll {
   path: string
-  project: string
+  workspace: string
 }
 
 export default (send: BrowserWindow["webContents"]["send"]): void => {
   ipcMain.on("updateAllToWanted", async (event, args: EventUpdateAll) => {
-    const { path, project } = args
+    const { path, workspace } = args
 
     const { wasSuccessful } = await updateAllToWanted(path)
 
-    send("updatedAllToWanted", { project, wasSuccessful })
+    send("updatedAllToWanted", { workspace, wasSuccessful })
   })
 
   ipcMain.on("updateAllToLatest", async (event, args: EventUpdateAll) => {
-    const { path, project } = args
+    const { path, workspace } = args
 
     const { wasSuccessful, packages } = await updateAllToLatest(path)
 
-    send("updatedAllToLatest", { project, wasSuccessful, packages })
+    send("updatedAllToLatest", { workspace, wasSuccessful, packages })
   })
 }
