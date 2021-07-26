@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "./button/Button.svelte"
+  import { Types } from "./button/types"
   import { requestUpdatePackage } from "./stores/package"
 
   type ButtonText = "Update" | "Loading" | "Up to date"
@@ -27,10 +28,10 @@
       : latestVersion
   $: type =
     status === "loading"
-      ? "loading"
+      ? Types.Loading
       : status === "up to date"
-      ? "secondary"
-      : ("primary" as ButtonTypes)
+      ? Types.Secondary
+      : Types.Primary
   $: text =
     status === "loading"
       ? "Loading"
