@@ -1,29 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron"
-
-type SendChannel =
-  | "workspaceFolder"
-  | "outdated"
-  | "packageUpdate"
-  | "cancelled"
-  | "authenticate"
-  | "isLoggedIn"
-  | "token"
-  | "logout"
-  | "upgrade"
-  | "alert"
-  | "proFeature"
-  | "installAll"
-  | "updateAllToWanted"
-type ReceiveChannel =
-  | "packages"
-  | "outdated"
-  | "packageUpdated"
-  | "cancelled"
-  | "saveToken"
-  | "logout"
-  | "alert"
-  | "proFeature"
-  | "updatedAllToWanted"
+import type { ReceiveChannel, SendChannel } from "../custom"
 
 // https://github.com/reZach/secure-electron-template/blob/master/docs/newtoelectron.md
 // Expose protected methods that allow the renderer process to use
@@ -43,8 +19,8 @@ contextBridge.exposeInMainWorld("api", {
       "upgrade",
       "alert",
       "proFeature",
-      "installAll",
       "updateAllToWanted",
+      "updateAllToLatest",
     ]
 
     if (validChannels.includes(channel)) {
@@ -61,7 +37,7 @@ contextBridge.exposeInMainWorld("api", {
       "logout",
       "alert",
       "proFeature",
-      "updatedAllToWanted",
+      "updatedAll",
     ]
 
     if (validChannels.includes(channel)) {

@@ -6,6 +6,7 @@ import { io, Socket } from "socket.io-client"
 import fixPath from "fix-path"
 import { checkPackages, updateAllToLatest, updatePackage } from "./commands"
 import initRoutes from "./routes"
+import type { ReceiveChannel, SendChannel } from "../custom"
 
 export interface PackageJSON {
   name?: string
@@ -150,7 +151,7 @@ if (!gotTheLock) {
     return dir.filePaths[0]
   }
 
-  initRoutes((channel: string, args: TSFixMe[]) =>
+  initRoutes((channel: ReceiveChannel, args: TSFixMe[]) =>
     win.webContents.send(channel, args)
   )
 
