@@ -105,6 +105,6 @@ export const requestUpdateAllPackage = (type: "Wanted" | "Latest"): void => {
 
   window.api.send(`updateAllTo${type}`, {
     path,
-    project: activeTab,
+    workspace: activeTab,
   })
 }
