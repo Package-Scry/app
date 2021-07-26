@@ -1,5 +1,5 @@
 import { BrowserWindow, ipcMain } from "electron"
-import { updateAllToWanted } from "./commands"
+import { updateAllToLatest, updateAllToWanted } from "./commands"
 
 interface EventUpdateAll {
   path: string
@@ -13,5 +13,13 @@ export default (send: BrowserWindow["webContents"]["send"]): void => {
     const { wasSuccessful } = await updateAllToWanted(path)
 
     send("updatedAllToWanted", { project, wasSuccessful })
+  })
+
+  ipcMain.on("updateAllToLatest", async (event, args: EventUpdateAll) => {
+    const { path, project } = args
+
+    const { wasSuccessful, packages } = await updateAllToLatest(path)
+
+    send("updatedAllToLatest", { project, wasSuccessful, packages })
   })
 }
