@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Types } from "."
+  import { Types } from "./types"
   import GitHub from "../icon/GitHub.svelte"
   import { Header } from "../typography"
 
@@ -10,6 +10,7 @@
 
   const icons = {
     github: GitHub,
+    updateAll: GitHub,
   }
 
   const styles = {

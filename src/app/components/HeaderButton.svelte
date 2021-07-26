@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Types } from "./button"
+  import { Types } from "./button/types"
 
   import Button from "./button/Button.svelte"
   import {
