@@ -7,6 +7,7 @@
     updatePackage,
     Package,
     updatePackages,
+    isUpdatingAll,
   } from "./stores/package"
 
   enum COLUMN_KEYS {
@@ -41,11 +42,15 @@
 
     if (activeTab !== project) return
 
+    isUpdatingAll.set(false)
+
     updatePackages(newPackages)
   })
 
   window.api.receive("packages", (data: PackagesEvent) => {
     const { filePath, name, packages: eventPackages } = data
+
+    isUpdatingAll.set(true)
 
     if (filePath) {
       packages.set(eventPackages)
@@ -59,6 +64,8 @@
     const activeTab = localStorage.getItem("activeTab")
 
     if (activeTab !== project) return
+
+    isUpdatingAll.set(false)
 
     const currentPackage = $packages.find(
       npmPackage => npmPackage.name === name
