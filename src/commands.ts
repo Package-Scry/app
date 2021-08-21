@@ -82,32 +82,6 @@ export const updatePackage = (
   )
 }
 
-export const updateAllToWanted = async (
-  filePath: string
-): Promise<{ wasSuccessful: boolean; error?: Error }> => {
-  try {
-    const { stdout, stderr } = await pExec()
-    const jsonError = stderr ? getErrorFromCli(stderr?.toString()) : null
-
-    if (jsonError) {
-      console.log("---------")
-      console.log("error", JSON.stringify(jsonError, null, 2))
-    }
-
-    return { wasSuccessful: !!stdout }
-  } catch (error) {
-    const { stdout, message } = error
-    const jsonError = message ? getErrorFromCli(message.toString()) : null
-
-    if (jsonError) {
-      console.log("---------")
-      console.log("error", JSON.stringify(jsonError, null, 2))
-    }
-
-    return { wasSuccessful: !!stdout, error: jsonError }
-  }
-}
-
 const runCommand = async (
   command: string
 ): Promise<{ wasSuccessful: boolean; error?: Error; response: string }> => {
