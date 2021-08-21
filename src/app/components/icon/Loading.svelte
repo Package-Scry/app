@@ -1,0 +1,67 @@
+<script lang="ts">
+  export let style = ""
+</script>
+
+<svg
+  width="32px"
+  height="32px"
+  viewBox="0 0 32 32"
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  class={style}
+>
+  <g
+    class="bars"
+    stroke="none"
+    stroke-width="1"
+    fill="none"
+    fill-rule="evenodd"
+  >
+    <rect
+      id="icon-loading-bar0"
+      class="icon-loading-rect"
+      fill="#003366"
+      x="0"
+      y="25%"
+      width="5"
+      height="50%"
+    />
+    <rect
+      id="icon-loading-bar1"
+      class="icon-loading-rect"
+      fill="#003366"
+      x="6"
+      y="25%"
+      width="5"
+      height="50%"
+    />
+    <rect
+      id="icon-loading-bar2"
+      class="icon-loading-rect"
+      fill="#003366"
+      x="12"
+      y="25%"
+      width="5"
+      height="50%"
+    />
+    <rect
+      id="icon-loading-bar3"
+      class="icon-loading-rect"
+      fill="#003366"
+      x="18"
+      y="25%"
+      width="5"
+      height="50%"
+    />
+    <rect
+      id="icon-loading-bar4"
+      class="icon-loading-rect"
+      fill="#003366"
+      x="24"
+      y="25%"
+      width="5"
+      height="50%"
+    />
+  </g>
+</svg>

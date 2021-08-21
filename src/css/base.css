@@ -18,3 +18,37 @@ ps-tabs::-webkit-scrollbar {
   height: 0;
   background: transparent;
 }
+
+.icon-loading-rect {
+  transform: scaleY(1);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: 0.75s grow linear forwards;
+  animation-iteration-count: infinite;
+}
+
+#icon-loading-bar1 {
+  animation-delay: 0.15s;
+}
+#icon-loading-bar2 {
+  animation-delay: 0.3s;
+}
+#icon-loading-bar3 {
+  animation-delay: 0.45s;
+}
+#icon-loading-bar4 {
+  animation-delay: 0.6s;
+}
+
+@keyframes grow {
+  100% {
+    transform: scaleY(1);
+  }
+  20% {
+    transform: scaleY(1);
+  }
+  10% {
+    transform: scaleY(2);
+    y: 25%;
+  }
+}
