@@ -86,9 +86,7 @@ export const updateAllToWanted = async (
   filePath: string
 ): Promise<{ wasSuccessful: boolean; error?: Error }> => {
   try {
-    const { stdout, stderr } = await pExec(
-      `cd "${filePath}" && npm update --json`
-    )
+    const { stdout, stderr } = await pExec()
     const jsonError = stderr ? getErrorFromCli(stderr?.toString()) : null
 
     if (jsonError) {
@@ -136,8 +134,9 @@ const runCommand = async (
   }
 }
 
-export const updateAllToLatest = async (
-  filePath: string
+export const updateAllTo = async (
+  filePath: string,
+  type: "wanted" | "latest"
 ): Promise<{ wasSuccessful: boolean }> => {
   try {
     const data = readFileSync(`${filePath}/package.json`, { encoding: "utf8" })
@@ -151,17 +150,16 @@ export const updateAllToLatest = async (
       const outdatedPackage = outdatedPackages.find(p => p.name === packageName)
 
       return outdatedPackage
-        ? { ...allPackages, [packageName]: `^${outdatedPackage.latest}` }
+        ? { ...allPackages, [packageName]: `^${outdatedPackage[type]}` }
         : allPackages
     }, {})
-
     const updatedDevDependencies = Object.keys(devDependencies).reduce<
       PackageJSON["devDependencies"]
     >((allPackages, packageName) => {
       const outdatedPackage = outdatedPackages.find(p => p.name === packageName)
 
       return outdatedPackage
-        ? { ...allPackages, [packageName]: `^${outdatedPackage.latest}` }
+        ? { ...allPackages, [packageName]: `^${outdatedPackage[type]}` }
         : allPackages
     }, {})
 
