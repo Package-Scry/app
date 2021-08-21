@@ -1,6 +1,6 @@
 import { ipcMain } from "electron"
 import type { ReceiveChannel } from "../custom"
-import { updateAllToLatest, updateAllToWanted } from "./commands"
+import { updateAllTo } from "./commands"
 
 interface EventUpdateAll {
   path: string
@@ -13,15 +13,14 @@ export default (send: Send): void => {
   ipcMain.on("updateAllToWanted", async (event, args: EventUpdateAll) => {
     const { path, workspace } = args
 
-    const { wasSuccessful } = await updateAllToWanted(path)
+    const { wasSuccessful } = await updateAllTo(path, "wanted")
 
     send("updatedAll", { workspace, wasSuccessful })
   })
 
   ipcMain.on("updateAllToLatest", async (event, args: EventUpdateAll) => {
     const { path, workspace } = args
-
-    const { wasSuccessful } = await updateAllToLatest(path)
+    const { wasSuccessful } = await updateAllTo(path, "latest")
 
     send("updatedAll", { workspace, wasSuccessful })
   })
