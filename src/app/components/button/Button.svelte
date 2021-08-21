@@ -2,6 +2,7 @@
   import { Types } from "./types"
   import GitHub from "../icon/GitHub.svelte"
   import Update from "../icon/Update.svelte"
+  import Loading from "../icon/Loading.svelte"
   import { Header } from "../typography"
 
   export let type: Types = Types.Primary
@@ -13,6 +14,7 @@
   const icons = {
     github: GitHub,
     updateAll: Update,
+    loading: Loading,
   }
 
   const styles = {
