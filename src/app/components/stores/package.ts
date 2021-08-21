@@ -103,6 +103,15 @@ export const requestUpdateAllPackage = (type: "Wanted" | "Latest"): void => {
 
   isUpdatingAll.set(true)
 
+  packages.update(oldPackages => {
+    return oldPackages.map(oldPackage => ({
+      ...oldPackage,
+      wanted: "loading",
+      latest: "loading",
+      status: "loading",
+    }))
+  })
+
   window.api.send(`updateAllTo${type}`, {
     path,
     workspace: activeTab,
