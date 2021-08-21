@@ -4,9 +4,9 @@ import * as path from "path"
 import { readFile } from "fs"
 import { io, Socket } from "socket.io-client"
 import fixPath from "fix-path"
-import { checkPackages, updateAllToLatest, updatePackage } from "./commands"
+import { checkPackages, updatePackage } from "./commands"
 import initRoutes from "./routes"
-import type { ReceiveChannel, SendChannel } from "../custom"
+import type { ReceiveChannel } from "../custom"
 
 export interface PackageJSON {
   name?: string
