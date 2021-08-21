@@ -28,14 +28,9 @@
     : hasOutdated || hasUpdatable
     ? Types.Primary
     : Types.Secondary
+  $: icon = $isUpdatingAll ? "loading" : "updateAll"
 </script>
 
-<Button
-  {type}
-  icon="updateAll"
-  iconStyle="absolute left-2"
-  {onClick}
-  {isDisabled}
->
+<Button {type} {icon} iconStyle="absolute left-2" {onClick} {isDisabled}>
   {buttonText}
 </Button>

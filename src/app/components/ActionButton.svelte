@@ -35,19 +35,14 @@
     status === "loading"
       ? "Loading"
       : status === "up to date"
-      ? "Up to date"
+      ? "Update"
       : ("Update" as ButtonText)
   $: isDisabled = ["loading", "secondary"].includes(type)
+  $: icon = status === "loading" ? "loading" : "updateAll"
 
   const onClick = () => requestUpdatePackage(packageName, targetVersion)
 </script>
 
-<Button
-  {type}
-  icon="updateAll"
-  iconStyle="absolute left-2"
-  {onClick}
-  {isDisabled}
->
+<Button {type} {icon} iconStyle="absolute left-2" {onClick} {isDisabled}>
   {text}
 </Button>
