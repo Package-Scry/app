@@ -35,7 +35,7 @@
     status === "loading"
       ? "Loading"
       : status === "up to date"
-      ? "Update"
+      ? "Up to date"
       : ("Update" as ButtonText)
   $: isDisabled = ["loading", "secondary"].includes(type)
   $: icon = status === "loading" ? "loading" : "updateAll"
