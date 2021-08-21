@@ -7,13 +7,13 @@
 <svg
   width="32"
   height="32"
-  viewBox="0 0 40 32"
+  viewBox="0 0 40 40"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   class={style}
 >
-  <g filter="white">
-    <g filter="white">
+  <g filter="url(#filter_update0_d)">
+    <g filter="url(#filter_update1_d)">
       <path
         d="M20.6718 8.32825C20.3008 7.95725 19.6992 7.95725 19.3282 8.32825L13.2825 14.374C12.9115 14.745 12.9115 15.3465 13.2825 15.7175C13.6535 16.0885 14.255 16.0885 14.626 15.7175L20 10.3435L25.374 15.7175C25.745 16.0885 26.3465 16.0885 26.7175 15.7175C27.0885 15.3465 27.0885 14.745 26.7175 14.374L20.6718 8.32825ZM20.95 23L20.95 9H19.05L19.05 23H20.95Z"
         fill="white"
@@ -31,7 +31,7 @@
   </g>
   <defs>
     <filter
-      id="filter0_d"
+      id="filter_update0_d"
       x="0"
       y="0"
       width="40"
@@ -65,7 +65,7 @@
       />
     </filter>
     <filter
-      id="filter1_d"
+      id="filter_update1_d"
       x="9.00391"
       y="8.0498"
       width="21.9915"
