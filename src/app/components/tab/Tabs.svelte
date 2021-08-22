@@ -12,7 +12,6 @@
     e.preventDefault()
 
     const tabsScrollPosition = elTabs.scrollLeft
-
     elTabs.scrollTo({
       top: 0,
       left: tabsScrollPosition + e.deltaY,
@@ -26,7 +25,11 @@
   on:wheel={onWheel}
   bind:this={elTabs}
 >
-  {#each tabs as tab}
-    <Tab name={tab} {activeTab} onClose={onTabClose} onClick={onTabClick} />
-  {/each}
+  {#if elTabs}
+    {#each tabs as tab}
+      <Tab name={tab} {activeTab} onClose={onTabClose} onClick={onTabClick} />
+    {/each}
+    <!-- only used so that `scrollIntoView` works properly with last tab -->
+    <span class="w-4" style="min-width: 1rem;" />
+  {/if}
 </div>

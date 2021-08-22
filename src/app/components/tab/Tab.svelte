@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { onMount } from "svelte"
   import Base from "../typography/Base.svelte"
 
+  let elTab: HTMLElement
   export let activeTab: string
   export let name: string
   export let onClick: (tabName: string, isTabActive: boolean) => void
@@ -14,11 +16,27 @@
   $: style = isActive
     ? `${activeStyle} ${tabStyle}`
     : `${tabStyle} bg-gray-11 h-8 hover:bg-gray-12`
+
+  onMount(() => {
+    if (isActive) {
+      const pos = elTab.style.position
+      const left = elTab.style.left
+
+      elTab.style.position = "relative"
+      elTab.style.left = "50px"
+
+      elTab.scrollIntoView({ behavior: "auto", inline: "end" })
+
+      elTab.style.position = pos
+      elTab.style.left = left
+    }
+  })
 </script>
 
 <span
   class={style}
   on:click={() => onClick(name, isActive)}
+  bind:this={elTab}
   style="min-width: fit-content"
 >
   {name}
