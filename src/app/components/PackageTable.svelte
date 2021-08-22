@@ -8,6 +8,7 @@
     Package,
     updatePackages,
     isUpdatingAll,
+    Status,
   } from "./stores/package"
 
   enum COLUMN_KEYS {
@@ -92,11 +93,11 @@
 
     const status = !wasSuccessful
       ? wanted === latest
-        ? "updatable"
-        : "outdated"
+        ? Status.Updatable
+        : Status.Outdated
       : latest === version
-      ? "up to date"
-      : "outdated"
+      ? Status.UpToDate
+      : Status.Outdated
     const updatedWanted = wasSuccessful
       ? latest === version
         ? { wanted: "-" }

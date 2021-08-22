@@ -5,16 +5,21 @@ export interface Package {
   local: string
   wanted: string
   latest: string
-  status: string
+  status: Status
 }
 export interface PackageData {
   name: string
   local?: string
   wanted?: string
   latest?: string
-  status?: string
+  status?: Status
 }
-
+export enum Status {
+  Loading = "loading",
+  UpToDate = "up to date",
+  Updatable = "updatable",
+  Outdated = "outdated",
+}
 export const packages = writable<Package[]>([])
 export const isUpdatingAll = writable<boolean>(false)
 
@@ -41,7 +46,7 @@ export const requestUpdatePackage = (name: string, version: string): void => {
       ...oldPackages.slice(0, packageIndex),
       {
         ...updatedPackage,
-        status: "loading",
+        status: Status.Loading,
       },
       ...oldPackages.slice(packageIndex + 1),
     ]
@@ -63,7 +68,7 @@ export const updatePackages = (newPackages: Package[]): void => {
           ...oldPackage,
           wanted,
           latest,
-          status: wanted === latest ? "updatable" : "outdated",
+          status: wanted === latest ? Status.Updatable : Status.Outdated,
         }
       }
 
@@ -71,7 +76,7 @@ export const updatePackages = (newPackages: Package[]): void => {
         ...oldPackage,
         latest: local.replace("^", ""),
         wanted: "-",
-        status: "up to date",
+        status: Status.UpToDate,
       }
     })
   )
@@ -108,7 +113,7 @@ export const requestUpdateAllPackage = (type: "Wanted" | "Latest"): void => {
       ...oldPackage,
       wanted: "loading",
       latest: "loading",
-      status: "loading",
+      status: Status.Loading,
     }))
   })
 

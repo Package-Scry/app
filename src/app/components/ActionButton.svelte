@@ -1,10 +1,9 @@
 <script lang="ts">
   import Button from "./button/Button.svelte"
   import { Types } from "./button/types"
-  import { requestUpdatePackage } from "./stores/package"
+  import { requestUpdatePackage, Status } from "./stores/package"
 
   type ButtonText = "Update" | "Loading" | "Up to date"
-  type Status = "loading" | "up to date" | "updatable"
 
   export let rowData: {
     status: Status
@@ -26,23 +25,22 @@
       ? wantedVersion
       : latestVersion
   $: type =
-    status === "loading"
+    status === Status.Loading
       ? Types.Loading
-      : status === "up to date"
+      : status === Status.UpToDate
       ? Types.Secondary
       : Types.Primary
   $: text =
-    status === "loading"
+    status === Status.Loading
       ? "Loading"
-      : status === "up to date"
+      : status === Status.UpToDate
       ? "Up to date"
       : ("Update" as ButtonText)
-  $: isDisabled = ["loading", "secondary"].includes(type)
-  $: icon = status === "loading" ? "loading" : "updateAll"
+  $: icon = status === Status.Loading ? "loading" : "updateAll"
 
   const onClick = () => requestUpdatePackage(packageName, targetVersion)
 </script>
 
-<Button {type} {icon} iconStyle="absolute left-2" {onClick} {isDisabled}>
+<Button {type} {icon} iconStyle="absolute left-2" {onClick}>
   {text}
 </Button>
