@@ -19,8 +19,7 @@ contextBridge.exposeInMainWorld("api", {
       "upgrade",
       "alert",
       "proFeature",
-      "updateAllToWanted",
-      "updateAllToLatest",
+      "updateAll",
     ]
 
     if (validChannels.includes(channel)) {

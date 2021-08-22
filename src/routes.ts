@@ -5,22 +5,15 @@ import { updateAllTo } from "./commands"
 interface EventUpdateAll {
   path: string
   workspace: string
+  type: "wanted" | "latest"
 }
 
 type Send = (channel: ReceiveChannel, ...args: TSFixMe[]) => void
 
 export default (send: Send): void => {
-  ipcMain.on("updateAllToWanted", async (event, args: EventUpdateAll) => {
-    const { path, workspace } = args
-
-    const { wasSuccessful } = await updateAllTo(path, "wanted")
-
-    send("updatedAll", { workspace, wasSuccessful })
-  })
-
-  ipcMain.on("updateAllToLatest", async (event, args: EventUpdateAll) => {
-    const { path, workspace } = args
-    const { wasSuccessful } = await updateAllTo(path, "latest")
+  ipcMain.on("updateAll", async (event, args: EventUpdateAll) => {
+    const { path, workspace, type } = args
+    const { wasSuccessful } = await updateAllTo(path, type)
 
     send("updatedAll", { workspace, wasSuccessful })
   })
