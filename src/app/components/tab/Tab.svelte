@@ -31,11 +31,22 @@
       elTab.style.left = left
     }
   })
+
+  const handleOnclick = () => {
+    onClick(name, isActive)
+
+    elTab.scrollIntoView(true)
+
+    window.scrollTo({
+      top: 0,
+      behavior: "auto",
+    })
+  }
 </script>
 
 <span
   class={style}
-  on:click={() => onClick(name, isActive)}
+  on:click={handleOnclick}
   bind:this={elTab}
   style="min-width: fit-content"
 >
