@@ -11,6 +11,9 @@
   export let isDisabled = false
   export let iconStyle = ""
 
+  $: isButtonDisabled =
+    isDisabled || [Types.Loading, Types.Secondary].includes(type)
+
   const icons = {
     github: GitHub,
     updateAll: Update,
@@ -28,11 +31,11 @@
   }
 
   $: style = `${type === "modal" ? "" : styles.common} ${styles[type]}${
-    isDisabled ? "" : " cursor-pointer"
+    isButtonDisabled ? "" : " cursor-pointer"
   }`
 </script>
 
-<div class={style} on:click={isDisabled ? () => {} : onClick}>
+<div class={style} on:click={isButtonDisabled ? () => {} : onClick}>
   <svelte:component this={icons[icon]} style={iconStyle ?? "inline-block"} />
   <Header size="medium" style="inline-block"><slot /></Header>
 </div>
