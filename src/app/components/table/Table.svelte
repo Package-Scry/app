@@ -11,7 +11,7 @@
 </script>
 
 <div class="text-center mx-12 mt-6 mb-20">
-  <Row>
+  <Row style="grid grid-cols-table grid-rows-table-header grid-flow-col mb-4">
     {#each headers as header}
       <Column style="bg-turquoise-1 justify-center" {...header}>
         <Header>{header.text}</Header>
