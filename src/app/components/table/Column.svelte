@@ -15,10 +15,10 @@
     : 'pl-2'}"
   on:click={onClick}
 >
-  {#if !!dataKey}
+  {#if !!dataKey && !render}
     <Base>{rowData[dataKey]}</Base>
   {:else if !!render}
-    <svelte:component this={render} {rowData} />
+    <svelte:component this={render} {rowData} {dataKey} />
   {:else}
     <slot />
   {/if}
