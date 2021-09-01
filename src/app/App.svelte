@@ -23,7 +23,7 @@
 >
   <span
     class="bg-black-1 w-auto mx-5 py-1 px-8 rounded font-serif text-white text-xl self-center"
-    >1.0.1</span
+    >1.0.0</span
   >
   <span
     class="cursor-pointer bg-black-1 w-auto mx-2 py-1 px-6 rounded font-serif text-white text-lg self-center hover:bg-black-5"
