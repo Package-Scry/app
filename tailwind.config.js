@@ -72,6 +72,9 @@ module.exports = {
       margin: {
         18: "4.5rem",
       },
+      inset: {
+        borderless: "calc(0.5rem + 2px)",
+      },
     },
   },
   variants: {

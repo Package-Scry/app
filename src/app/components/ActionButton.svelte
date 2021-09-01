@@ -41,6 +41,13 @@
   const onClick = () => requestUpdatePackage(packageName, targetVersion)
 </script>
 
-<Button {type} {icon} iconStyle="absolute left-2" {onClick}>
+<Button
+  {type}
+  {icon}
+  iconStyle={type === Types.Secondary
+    ? "absolute left-2"
+    : "absolute left-borderless"}
+  {onClick}
+>
   {text}
 </Button>
