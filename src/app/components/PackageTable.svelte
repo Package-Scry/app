@@ -123,10 +123,9 @@
   const columns = [
     { dataKey: COLUMN_KEYS.Name },
     { dataKey: COLUMN_KEYS.Local },
-    { dataKey: COLUMN_KEYS.Wanted },
-    { dataKey: COLUMN_KEYS.Latest },
+    { dataKey: COLUMN_KEYS.Wanted, render: Button },
+    { dataKey: COLUMN_KEYS.Latest, render: Button },
     { dataKey: COLUMN_KEYS.Status },
-    { render: Button },
   ]
 </script>
 
