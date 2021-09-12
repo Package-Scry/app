@@ -14,6 +14,8 @@
     local: string
   }
 
+  export let dataKey: string
+
   $: status = rowData.status
   $: packageName = rowData.name
   $: localVersion = rowData.local
@@ -24,19 +26,29 @@
     wantedVersion !== localVersion.replace("^", "")
       ? wantedVersion
       : latestVersion
-  $: type =
-    status === Status.Loading
-      ? Types.Loading
-      : status === Status.UpToDate
-      ? Types.Secondary
-      : Types.Primary
-  $: text =
-    status === Status.Loading
-      ? "Loading"
-      : status === Status.UpToDate
-      ? "Up to date"
-      : ("Update" as ButtonText)
-  $: icon = status === Status.Loading ? "loading" : "updateAll"
+
+  const types = {
+    [Status.Loading]: Status.Loading,
+    [Status.UpToDate]: Types.Secondary,
+    [Status.Updatable]: Types.Primary,
+    [Status.Outdated]: Types.Primary,
+  }
+  const icons = {
+    [Status.Loading]: "loading",
+    [Status.UpToDate]: "",
+    [Status.Updatable]: "updateAll",
+    [Status.Outdated]: "updateAll",
+  }
+  $: texts = {
+    [Status.Loading]: "Loading",
+    [Status.UpToDate]: "Up to date",
+    [Status.Updatable]: rowData[dataKey],
+    [Status.Outdated]: rowData[dataKey],
+  }
+
+  $: type = types[status]
+  $: icon = icons[status]
+  $: text = texts[status]
 
   const onClick = () => requestUpdatePackage(packageName, targetVersion)
 </script>
