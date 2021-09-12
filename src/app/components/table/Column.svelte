@@ -12,7 +12,7 @@
 <div
   class="truncate h-full flex items-center text-white text-xl font-serif {!render
     ? `${style} px-2`
-    : 'pl-2'}"
+    : ''}"
   on:click={onClick}
 >
   {#if !!dataKey && !render}
