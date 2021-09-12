@@ -117,15 +117,12 @@
     { text: "Local" },
     { text: "Wanted" },
     { text: "Latest" },
-    { text: "Status" },
-    { render: HeaderButton },
   ]
   const columns = [
     { dataKey: COLUMN_KEYS.Name },
     { dataKey: COLUMN_KEYS.Local },
     { dataKey: COLUMN_KEYS.Wanted, render: Button },
     { dataKey: COLUMN_KEYS.Latest, render: Button },
-    { dataKey: COLUMN_KEYS.Status },
   ]
 </script>
 
