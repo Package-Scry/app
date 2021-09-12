@@ -1,7 +1,7 @@
 <script lang="ts">
   import PackageTable from "./components/PackageTable.svelte"
   import Workspaces from "./components/Workspaces.svelte"
-  import { isLoggedIn } from "./components/stores/user"
+  import { hasPro, isLoggedIn } from "./components/stores/user"
   import LoginModal from "./components/LoginModal.svelte"
   import ProFeatureModal from "./components/ProFeatureModal.svelte"
   import UpgradeModal from "./components/UpgradeModal.svelte"
@@ -30,7 +30,9 @@
   >
     Feedback
   </span>
-  <UpgradeButton />
+  {#if !$hasPro}
+    <UpgradeButton />
+  {/if}
 </div>
 
 <LoginModal />
