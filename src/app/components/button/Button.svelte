@@ -9,6 +9,7 @@
   export let icon: string = undefined
   export let onClick: () => void
   export let isDisabled = false
+  export let style = ""
   export let iconStyle = ""
 
   $: isButtonDisabled =
@@ -21,7 +22,7 @@
   }
 
   const styles = {
-    common: `select-none rounded-md text-center w-full h-full flex items-center justify-center relative`,
+    common: `select-none rounded-md text-center h-full flex items-center justify-center relative`,
     primary: `bg-turquoise-4 hover:bg-gray-3 hover:shadow-inner`,
     secondary: `border-2 border-turquoise-5`,
     loading: `bg-gray-6`,
@@ -30,12 +31,12 @@
     } px-10 mt-14 rounded-lg hover:bg-black-5`,
   }
 
-  $: style = `${type === "modal" ? "" : styles.common} ${styles[type]}${
-    isButtonDisabled ? "" : " cursor-pointer"
-  }`
+  $: finalStyle = `${style ? ` ${style}` : ""}${
+    type === "modal" ? "" : styles.common
+  } ${styles[type]}${isButtonDisabled ? "" : " cursor-pointer"}`
 </script>
 
-<div class={style} on:click={isButtonDisabled ? () => {} : onClick}>
+<div class={finalStyle} on:click={isButtonDisabled ? () => {} : onClick}>
   <svelte:component this={icons[icon]} style={iconStyle ?? "inline-block"} />
   <Header size="medium" style="inline-block"><slot /></Header>
 </div>
