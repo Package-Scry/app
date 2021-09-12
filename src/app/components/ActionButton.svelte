@@ -44,6 +44,7 @@
 <Button
   {type}
   {icon}
+  style="w-40 m-4 justify-self-center"
   iconStyle={type === Types.Secondary
     ? "absolute left-2"
     : "absolute left-borderless"}
