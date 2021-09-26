@@ -28,7 +28,7 @@
       : latestVersion
 
   const types = {
-    [Status.Loading]: Status.Loading,
+    [Status.Loading]: Types.Loading,
     [Status.UpToDate]: Types.Secondary,
     [Status.Updatable]: Types.Primary,
     [Status.Outdated]: Types.Primary,
