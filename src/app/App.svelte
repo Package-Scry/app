@@ -7,9 +7,8 @@
   import UpgradeModal from "./components/UpgradeModal.svelte"
   import AuthHandler from "./components/AuthHandler.svelte"
   import UpgradeButton from "./components/UpgradeButton.svelte"
-  import Button from "./components/button/Button.svelte"
-  import { Types } from "./components/button/types"
   import Header from "./components/typography/Header.svelte"
+  import HeaderButton from "./components/HeaderButton.svelte"
 </script>
 
 <AuthHandler />
@@ -24,24 +23,8 @@
     >
       Actions
     </Header>
-    <Button
-      type={Types.Primary}
-      style="w-full py-3 justify-self-center"
-      iconStyle={"absolute left-borderless"}
-      icon="updateAll"
-      onClick={() => {}}
-    >
-      Update all to Wanted
-    </Button>
-    <Button
-      type={Types.Primary}
-      style="w-full py-3 justify-self-center"
-      iconStyle={"absolute left-borderless"}
-      icon="updateAll"
-      onClick={() => {}}
-    >
-      Update all to Latest
-    </Button>
+    <HeaderButton />
+    <HeaderButton isWanted={false} />
   </div>
 
   <PackageTable />

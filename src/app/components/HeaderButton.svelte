@@ -7,19 +7,20 @@
     requestUpdateAllPackage,
   } from "./stores/package"
 
+  export let isWanted = true
   $: hasOutdated = !!$packages.find(p => p.latest !== p.local.replace("^", ""))
   $: hasUpdatable = !!$packages.find(
     p => p.wanted !== "-" && p.wanted !== p.local.replace("^", "")
   )
-  $: onClick = () => requestUpdateAllPackage(hasUpdatable ? "Wanted" : "Latest")
+  $: onClick = () => requestUpdateAllPackage(isWanted ? "Wanted" : "Latest")
   $: isDisabled = $isUpdatingAll || (!hasOutdated && !hasUpdatable)
 
   $: buttonText = $isUpdatingAll
     ? "Loading"
     : hasUpdatable
-    ? "Update all"
+    ? `Update all ${isWanted ? "wanted" : "latest"}`
     : hasOutdated
-    ? "Update all"
+    ? `Update all ${isWanted ? "wanted" : "latest"}`
     : "Up to date"
 
   $: type = $isUpdatingAll
@@ -30,6 +31,13 @@
   $: icon = $isUpdatingAll ? "loading" : "updateAll"
 </script>
 
-<Button {type} {icon} iconStyle="absolute left-2" {onClick} {isDisabled}>
+<Button
+  {type}
+  {icon}
+  iconStyle="absolute left-borderless"
+  style="w-full py-3 justify-self-center"
+  {onClick}
+  {isDisabled}
+>
   {buttonText}
 </Button>
