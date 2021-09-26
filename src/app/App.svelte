@@ -7,12 +7,43 @@
   import UpgradeModal from "./components/UpgradeModal.svelte"
   import AuthHandler from "./components/AuthHandler.svelte"
   import UpgradeButton from "./components/UpgradeButton.svelte"
+  import Button from "./components/button/Button.svelte"
+  import { Types } from "./components/button/types"
+  import Header from "./components/typography/Header.svelte"
 </script>
 
 <AuthHandler />
 
 {#if $isLoggedIn}
   <Workspaces />
+  <div
+    class="grid grid-cols-2 items-center grid-rows-table gap-y-4 gap-x-4 my-4 mx-14"
+  >
+    <Header
+      style="w-full h-full bg-turquoise-1 col-span-full justify-center px-2 flex items-center"
+    >
+      Actions
+    </Header>
+    <Button
+      type={Types.Primary}
+      style="w-full py-3 justify-self-center"
+      iconStyle={"absolute left-borderless"}
+      icon="updateAll"
+      onClick={() => {}}
+    >
+      Update all to Wanted
+    </Button>
+    <Button
+      type={Types.Primary}
+      style="w-full py-3 justify-self-center"
+      iconStyle={"absolute left-borderless"}
+      icon="updateAll"
+      onClick={() => {}}
+    >
+      Update all to Latest
+    </Button>
+  </div>
+
   <PackageTable />
   <ProFeatureModal />
   <UpgradeModal />
