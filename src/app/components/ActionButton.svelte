@@ -21,11 +21,7 @@
   $: localVersion = rowData.local
   $: wantedVersion = rowData.wanted
   $: latestVersion = rowData.latest
-  $: targetVersion =
-    wantedVersion !== latestVersion &&
-    wantedVersion !== localVersion.replace("^", "")
-      ? wantedVersion
-      : latestVersion
+  $: targetVersion = rowData[dataKey]
 
   const types = {
     [Status.Loading]: Types.Loading,
