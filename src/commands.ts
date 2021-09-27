@@ -117,8 +117,7 @@ export const updateAllTo = async (
     const parsedData: PackageJSON = JSON.parse(data)
     const { dependencies, devDependencies } = parsedData
     const { packages: outdatedPackages } = await checkPackages(filePath)
-
-    const updatedDependencies = Object.keys(dependencies).reduce<
+    const updatedDependencies = Object.keys(dependencies ?? {}).reduce<
       PackageJSON["dependencies"]
     >((allPackages, packageName) => {
       const outdatedPackage = outdatedPackages.find(p => p.name === packageName)
@@ -127,7 +126,7 @@ export const updateAllTo = async (
         ? { ...allPackages, [packageName]: `^${outdatedPackage[type]}` }
         : allPackages
     }, {})
-    const updatedDevDependencies = Object.keys(devDependencies).reduce<
+    const updatedDevDependencies = Object.keys(devDependencies ?? {}).reduce<
       PackageJSON["devDependencies"]
     >((allPackages, packageName) => {
       const outdatedPackage = outdatedPackages.find(p => p.name === packageName)
