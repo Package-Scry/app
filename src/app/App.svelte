@@ -9,6 +9,8 @@
   import UpgradeButton from "./components/UpgradeButton.svelte"
   import Header from "./components/typography/Header.svelte"
   import HeaderButton from "./components/HeaderButton.svelte"
+
+  const onClick = () => window.api.send("feedback", {})
 </script>
 
 <AuthHandler />
@@ -41,6 +43,7 @@
   >
   <span
     class="cursor-pointer bg-black-1 w-auto mx-2 py-1 px-6 rounded font-serif text-white text-lg self-center hover:bg-black-5"
+    on:click={onClick}
   >
     Feedback
   </span>

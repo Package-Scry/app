@@ -13,6 +13,7 @@ export type SendChannel =
   | "alert"
   | "proFeature"
   | "updateAll"
+  | "feedback"
 export type ReceiveChannel =
   | "packages"
   | "outdated"

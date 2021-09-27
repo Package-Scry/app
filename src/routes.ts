@@ -1,4 +1,4 @@
-import { ipcMain } from "electron"
+import { ipcMain, shell } from "electron"
 import type { ReceiveChannel } from "../custom"
 import { updateAllTo } from "./commands"
 
@@ -16,5 +16,9 @@ export default (send: Send): void => {
     const { wasSuccessful } = await updateAllTo(path, type)
 
     send("updatedAll", { workspace, wasSuccessful })
+  })
+
+  ipcMain.on("feedback", () => {
+    shell.openExternal(`https://www.packagescry.com/contact-us/`)
   })
 }

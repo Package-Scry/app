@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld("api", {
       "alert",
       "proFeature",
       "updateAll",
+      "feedback",
     ]
 
     if (validChannels.includes(channel)) {
