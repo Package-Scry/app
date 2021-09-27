@@ -3,8 +3,6 @@
   import { Types } from "./button/types"
   import { requestUpdatePackage, Status } from "./stores/package"
 
-  type ButtonText = "Update" | "Loading" | "Up to date"
-
   export let rowData: {
     status: Status
     name: string
@@ -16,12 +14,14 @@
 
   export let dataKey: string
 
-  $: status = rowData.status
   $: packageName = rowData.name
   $: localVersion = rowData.local
-  $: wantedVersion = rowData.wanted
-  $: latestVersion = rowData.latest
   $: targetVersion = rowData[dataKey]
+  $: status =
+    rowData.status !== Status.Loading &&
+    targetVersion === localVersion.replace("^", "")
+      ? Status.UpToDate
+      : rowData.status
 
   const types = {
     [Status.Loading]: Types.Loading,
