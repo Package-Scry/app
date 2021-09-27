@@ -102,7 +102,7 @@ export const updatePackage = (data: PackageData): void => {
   })
 }
 
-export const requestUpdateAllPackage = (type: "Wanted" | "Latest"): void => {
+export const requestUpdateAllPackage = (type: "wanted" | "latest"): void => {
   const activeTab = localStorage.getItem("activeTab")
   const path = localStorage.getItem(`dirPath-${activeTab}`)
 

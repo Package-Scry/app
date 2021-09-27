@@ -12,7 +12,7 @@
   $: hasUpdatable = !!$packages.find(
     p => p.wanted !== "-" && p.wanted !== p.local.replace("^", "")
   )
-  $: onClick = () => requestUpdateAllPackage(isWanted ? "Wanted" : "Latest")
+  $: onClick = () => requestUpdateAllPackage(isWanted ? "wanted" : "latest")
   $: isDisabled = $isUpdatingAll || (!hasOutdated && !hasUpdatable)
 
   $: buttonText = $isUpdatingAll
