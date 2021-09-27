@@ -21,7 +21,7 @@
     <rect
       id="icon-loading-bar0"
       class="icon-loading-rect"
-      fill="#003366"
+      fill="#ffffff"
       x="0"
       y="25%"
       width="5"
@@ -30,7 +30,7 @@
     <rect
       id="icon-loading-bar1"
       class="icon-loading-rect"
-      fill="#003366"
+      fill="#ffffff"
       x="6"
       y="25%"
       width="5"
@@ -39,7 +39,7 @@
     <rect
       id="icon-loading-bar2"
       class="icon-loading-rect"
-      fill="#003366"
+      fill="#ffffff"
       x="12"
       y="25%"
       width="5"
@@ -48,7 +48,7 @@
     <rect
       id="icon-loading-bar3"
       class="icon-loading-rect"
-      fill="#003366"
+      fill="#ffffff"
       x="18"
       y="25%"
       width="5"
@@ -57,7 +57,7 @@
     <rect
       id="icon-loading-bar4"
       class="icon-loading-rect"
-      fill="#003366"
+      fill="#ffffff"
       x="24"
       y="25%"
       width="5"
