@@ -47,7 +47,6 @@ async function createWindow() {
   win = new BrowserWindow({
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      contextIsolation: true,
     },
     show: false,
   })
