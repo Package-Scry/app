@@ -117,7 +117,7 @@
   },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "electron-updater": "^4.3.5",
+    "electron-updater": "^5.2.1",
     "fix-path": "^3.0.0",
     "socket.io-client": "^3.1.1",
     "svelte": "^3.38.2",
