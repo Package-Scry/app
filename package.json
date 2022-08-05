@@ -88,7 +88,7 @@
     "@tsconfig/svelte": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
-    "autoprefixer": "^10.2.5",
+    "autoprefixer": "^10.4.8",
     "css-loader": "^6.7.1",
     "electron": "^20.0.1",
     "electron-builder": "^23.3.3",
