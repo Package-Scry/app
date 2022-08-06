@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 module.exports = {
-  purge: ["./src/index.html", "./dist/**/*"],
+  content: ["./src/index.html", "./dist/**/*"],
   theme: {
     extend: {
       boxShadow: {
