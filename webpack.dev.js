@@ -10,8 +10,10 @@ module.exports = [
     ...renderer,
     devtool: "inline-source-map",
     devServer: {
-      contentBase: "./dist",
-      writeToDisk: true,
+      devMiddleware: {
+        publicPath: "./dist",
+        writeToDisk: true,
+      },
     },
   },
 ]
