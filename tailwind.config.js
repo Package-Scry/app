@@ -1,6 +1,11 @@
 // eslint-disable-next-line
 module.exports = {
-  content: ["./src/index.html", "./dist/**/*"],
+  content: [
+    "./src/index.html",
+    "./src/index-dev.html",
+    "./src/app/**/*.svelte",
+    "./src/app/index.ts",
+  ],
   theme: {
     extend: {
       boxShadow: {

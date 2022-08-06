@@ -14,6 +14,9 @@ module.exports = [
         publicPath: "./dist",
         writeToDisk: true,
       },
+      client: {
+        webSocketURL: "ws://localhost:8080/ws",
+      },
     },
   },
 ]
