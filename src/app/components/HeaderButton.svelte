@@ -18,9 +18,9 @@
   $: buttonText = $isUpdatingAll
     ? "Loading"
     : hasUpdatable
-    ? `Update all ${isWanted ? "wanted" : "latest"}`
+    ? `Update all to ${isWanted ? "wanted" : "latest"}`
     : hasOutdated
-    ? `Update all ${isWanted ? "wanted" : "latest"}`
+    ? `Update all to ${isWanted ? "wanted" : "latest"}`
     : "Up to date"
 
   $: type = $isUpdatingAll
