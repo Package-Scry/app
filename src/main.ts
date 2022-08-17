@@ -8,6 +8,7 @@ import { checkPackages, updatePackage } from "./commands"
 import initRoutes from "./routes"
 import type { ReceiveChannel } from "../custom"
 import { ReceiveChannel, SendChannels } from "../custom"
+import { ReceiveChannels, SendChannels } from "../custom"
 
 export interface PackageJSON {
   name?: string
@@ -64,6 +65,8 @@ async function createWindow() {
 const gotTheLock = app.requestSingleInstanceLock()
 const send = <T>(channel: ReceiveChannel, args: T) =>
   win.webContents.send(channel, args)
+const send: WebContentsSend = (channel, args) =>
+  win.webContents.send(channel.toString(), args)
 
 app.on("open-url", (event, _) => {
   event.preventDefault()
