@@ -13,7 +13,7 @@ export enum SendChannels {
   Upgrade,
   Alert,
   ProFeature,
-  IpdateAll,
+  UpdateAll,
   Feedback,
   GetChangeLog,
 }
