@@ -1,35 +1,66 @@
 export {}
 
-export type SendChannel =
-  | "workspaceFolder"
-  | "outdated"
-  | "packageUpdate"
-  | "cancelled"
-  | "authenticate"
-  | "isLoggedIn"
-  | "token"
-  | "logout"
-  | "upgrade"
-  | "alert"
-  | "proFeature"
-  | "updateAll"
-  | "feedback"
-export type ReceiveChannel =
-  | "packages"
-  | "outdated"
-  | "packageUpdated"
-  | "cancelled"
-  | "saveToken"
-  | "logout"
-  | "alert"
-  | "proFeature"
-  | "updatedAll"
+export enum SendChannels {
+  AlertError,
+  WorkspaceFolder,
+  Outdated,
+  PackageUpdate,
+  Cancelled,
+  Authenticate,
+  IsLoggedIn,
+  Token,
+  Logout,
+  Upgrade,
+  Alert,
+  ProFeature,
+  IpdateAll,
+  Feedback,
+  GetChangeLog,
+}
+
+export enum ReceiveChannels {
+  Packages,
+  Outdated,
+  PackageUpdated,
+  Cancelled,
+  SaveToken,
+  Logout,
+  Alert,
+  ProFeature,
+  UpdatedAll,
+  SendChangeLog,
+}
+
+export interface DefaultEventArgs {
+  path: string
+  workspace: string
+}
+
+export interface CallbackStatus {
+  wasSuccessful: boolean
+  error?: string
+}
+
+interface MetaData extends CallbackStatus {
+  workspace: string
+}
 
 declare global {
   interface Window {
     api: {
-      send: (channel: SendChannel, data: TSFixMe) => void
-      receive: (channel: ReceiveChannel, data: TSFixMe) => void
+      send: <T>(channel: SendChannels, data: T & MetaData) => void
+      receive: <T>(channel: ReceiveChannels, data: T) => void
+    }
+  }
+}
+
+declare module "electron" {
+  namespace Electron {
+    interface IpcMain extends NodeJS.EventEmitter {
+      on(
+        channel: SendChannels,
+        listener: (event: IpcMainEvent, ...args: any[]) => void
+      ): this
     }
   }
 }
