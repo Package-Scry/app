@@ -6,8 +6,6 @@ import { io, Socket } from "socket.io-client"
 import fixPath from "fix-path"
 import { checkPackages, updatePackage } from "./commands"
 import initRoutes from "./routes"
-import type { ReceiveChannel } from "../custom"
-import { ReceiveChannel, SendChannels } from "../custom"
 import { ReceiveChannels, SendChannels } from "../custom"
 
 export interface PackageJSON {
@@ -63,8 +61,6 @@ async function createWindow() {
 }
 
 const gotTheLock = app.requestSingleInstanceLock()
-const send = <T>(channel: ReceiveChannel, args: T) =>
-  win.webContents.send(channel, args)
 const send: WebContentsSend = (channel, args) =>
   win.webContents.send(channel.toString(), args)
 
@@ -156,11 +152,9 @@ if (!gotTheLock) {
     return dir.filePaths[0]
   }
 
-  initRoutes((channel: ReceiveChannel, args: TSFixMe[]) =>
-    win.webContents.send(channel, args)
-  )
+  initRoutes(send)
 
-  ipcMain.on("token", (_, token: string) => {
+  ipcMain.on(SendChannels.Token, (_, token: string) => {
     socket = io(HOST, {
       query: {
         token: token ?? "",
@@ -186,54 +180,57 @@ if (!gotTheLock) {
       }
     )
 
-    ipcMain.on("authenticate", openLogin)
+    ipcMain.on(SendChannels.Authenticate, openLogin)
 
-    ipcMain.on("upgrade", () => {
+    ipcMain.on(SendChannels.Upgrade, () => {
       shell.openExternal(`https://packagescry.com/sign-up`)
     })
   })
 
-  ipcMain.on("workspaceFolder", async (event, args: EventWorkspace) => {
-    const { path, workspaceCount } = args
+  ipcMain.on(
+    SendChannels.WorkspaceFolder,
+    async (event, args: EventWorkspace) => {
+      const { path, workspaceCount } = args
 
-    if (!isProVersion && !!workspaceCount && workspaceCount > 0)
-      return win.webContents.send("proFeature", {})
+      if (!isProVersion && !!workspaceCount && workspaceCount > 0)
+        return win.webContents.send("proFeature", {})
 
-    const filePath = path ?? (await getSelectedFolderPath())
-    const send = (channel: string, args: TSFixMe[]) =>
-      win.webContents.send(channel, args)
+      const filePath = path ?? (await getSelectedFolderPath())
+      const send = (channel: string, args: TSFixMe[]) =>
+        win.webContents.send(channel, args)
 
-    if (filePath === false) return win.webContents.send("cancelled", {})
+      if (filePath === false) return win.webContents.send("cancelled", {})
 
-    readFile(`${filePath}/package.json`, "utf-8", (error, data) => {
-      if (error) {
-        console.error("error", error)
-        return win.webContents.send("packages", "error")
-      }
+      readFile(`${filePath}/package.json`, "utf-8", (error, data) => {
+        if (error) {
+          console.error("error", error)
+          return win.webContents.send("packages", "error")
+        }
 
-      const parsedData: PackageJSON = JSON.parse(data)
-      const { dependencies, devDependencies, name } = parsedData
+        const parsedData: PackageJSON = JSON.parse(data)
+        const { dependencies, devDependencies, name } = parsedData
 
-      checkPackages(filePath, name, send)
+        checkPackages(filePath, name, send)
 
-      const allDependencies = { ...dependencies, ...devDependencies }
-      const packages = Object.keys(allDependencies).map(key => ({
-        name: key,
-        local: allDependencies[key],
-        latest: "loading",
-        wanted: "loading",
-        status: "loading",
-      }))
+        const allDependencies = { ...dependencies, ...devDependencies }
+        const packages = Object.keys(allDependencies).map(key => ({
+          name: key,
+          local: allDependencies[key],
+          latest: "loading",
+          wanted: "loading",
+          status: "loading",
+        }))
 
-      return win.webContents.send("packages", {
-        filePath,
-        packages: packages.sort((a, b) => (a.name < b.name ? -1 : 1)),
-        name,
+        return win.webContents.send("packages", {
+          filePath,
+          packages: packages.sort((a, b) => (a.name < b.name ? -1 : 1)),
+          name,
+        })
       })
-    })
-  })
+    }
+  )
 
-  ipcMain.on("packageUpdate", (event, args: EventPackageUpdate) => {
+  ipcMain.on(SendChannels.PackageUpdate, (event, args: EventPackageUpdate) => {
     const { name, path, project, version } = args
     const send = (channel: string, args: TSFixMe[]) =>
       win.webContents.send(channel, args)
