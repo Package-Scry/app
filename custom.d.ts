@@ -1,7 +1,6 @@
 export {}
 
 export enum SendChannels {
-  AlertError,
   WorkspaceFolder,
   Outdated,
   PackageUpdate,
@@ -19,6 +18,7 @@ export enum SendChannels {
 }
 
 export enum ReceiveChannels {
+  AlertError,
   Packages,
   Outdated,
   PackageUpdated,
