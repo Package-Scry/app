@@ -37,12 +37,12 @@ export interface DefaultEventArgs {
 }
 
 export interface CallbackStatus {
-  wasSuccessful: boolean
+  wasSuccessful?: boolean
   error?: string
 }
 
 interface MetaData extends CallbackStatus {
-  workspace: string
+  workspace?: string
 }
 
 declare global {
