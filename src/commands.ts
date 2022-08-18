@@ -1,10 +1,11 @@
 import { exec } from "child_process"
-import type { BrowserWindow } from "electron"
 import { getErrorFromCli, Error } from "./utils"
 import { readFileSync } from "fs"
 import type { PackageJSON } from "./main"
 import util from "util"
 import { writeFileSync } from "original-fs"
+import type { WebContentsSend } from "."
+import { ReceiveChannels } from "../custom"
 
 const pExec = util.promisify(exec)
 
@@ -17,7 +18,7 @@ interface Packages {
 export const checkPackages = async (
   filePath: string,
   project?: string,
-  send?: BrowserWindow["webContents"]["send"]
+  send?: WebContentsSend
 ): Promise<{
   packages: Packages[]
 }> => {
@@ -32,7 +33,7 @@ export const checkPackages = async (
       })
       .slice(1)
 
-    send?.("outdated", { packages, project })
+    send?.(ReceiveChannels.Outdated, { packages, project })
 
     return packages
   }
@@ -58,8 +59,8 @@ export const updatePackage = (
   filePath: string,
   packageName: string,
   version: string,
-  project: string,
-  send: BrowserWindow["webContents"]["send"]
+  workspace: string,
+  send: WebContentsSend
 ): void => {
   exec(
     `cd "${filePath}" && npm i ${packageName}@${version}`,
@@ -72,10 +73,10 @@ export const updatePackage = (
         console.log(`stderr: ${stderr}`)
       }
 
-      send("packageUpdated", {
+      send(ReceiveChannels.PackageUpdated, {
         name: packageName,
         version,
-        project,
+        workspace,
         wasSuccessful: !!stdout,
       })
     }

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { SendChannels } from "../../../custom"
+
   import Modal from "./modal/Modal.svelte"
   import { isLoggedIn } from "./stores/user"
 </script>
@@ -8,7 +10,7 @@
   buttonText="Login with GitHub"
   buttonIcon="github"
   onClick={() => {
-    window.api.send("authenticate", {})
+    window.api.send(SendChannels.Authenticate, {})
   }}
   onCancel={() => {}}
   isVisible={!$isLoggedIn}

@@ -2,6 +2,7 @@
   import Modal from "./modal/Modal.svelte"
   import Base from "./typography/Base.svelte"
   import { closeProModal, isProModalOpen } from "./stores/ui"
+  import { SendChannels } from "../../../custom"
 </script>
 
 <Modal
@@ -12,7 +13,7 @@
     closeProModal()
   }}
   onClick={() => {
-    window.api.send("upgrade", {})
+    window.api.send(SendChannels.Upgrade, {})
 
     closeProModal()
   }}

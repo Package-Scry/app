@@ -1,12 +1,17 @@
 <script lang="ts">
+  import { ReceiveChannels, SendChannels } from "../../../custom"
+
   import { openProModal } from "./stores/ui"
   import { token, login } from "./stores/user"
   import { activeTab } from "./stores/workspace"
 
-  window.api.send("token", $token)
+  window.api.send(SendChannels.Token, {
+    token: $token,
+    workspace: $activeTab,
+  })
 
   window.api.receive(
-    "saveToken",
+    ReceiveChannels.SaveToken,
     ({ token, hasPro }: { token: string; hasPro: boolean }) => {
       login(token, hasPro, $activeTab)
 
@@ -14,15 +19,18 @@
         ? localStorage.getItem(`dirPath-${$activeTab}`)
         : null
 
-      window.api.send("workspaceFolder", { path })
+      window.api.send(SendChannels.WorkspaceFolder, {
+        path,
+        workspace: $activeTab,
+      })
     }
   )
 
-  window.api.receive("proFeature", () => {
+  window.api.receive(ReceiveChannels.ProFeature, () => {
     openProModal()
   })
 
-  window.api.receive("alert", (text: string) => {
+  window.api.receive(ReceiveChannels.Alert, (text: string) => {
     console.log("|  ALERT  |")
     console.log(text)
   })

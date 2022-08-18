@@ -3,6 +3,7 @@
   import Base from "./typography/Base.svelte"
   import Item from "./list/Item.svelte"
   import { isUpgradeModalOpen, closeUpgradeModal } from "./stores/ui"
+  import { SendChannels } from "../../../custom"
 </script>
 
 <Modal
@@ -13,7 +14,7 @@
     closeUpgradeModal()
   }}
   onClick={() => {
-    window.api.send("upgrade", {})
+    window.api.send(SendChannels.Upgrade, {})
 
     closeUpgradeModal()
   }}

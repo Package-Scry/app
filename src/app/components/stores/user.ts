@@ -2,6 +2,7 @@ import { writable } from "svelte/store"
 import { openUpgradeModal } from "./ui"
 import { workspaces } from "./workspace"
 import { closeProModal, closeUpgradeModal } from "./ui"
+import { SendChannels } from "../../../../custom"
 
 export const isLoggedIn = writable(false)
 export const hasPro = writable(false)
@@ -38,5 +39,5 @@ export const logout = (): void => {
 
   localStorage.removeItem("token")
 
-  window.api.send("token", null)
+  window.api.send(SendChannels.Token, null)
 }

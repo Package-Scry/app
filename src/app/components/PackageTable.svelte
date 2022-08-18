@@ -1,7 +1,6 @@
 <script lang="ts">
   import Table from "./Table/Table.svelte"
   import Button from "./ActionButton.svelte"
-  import HeaderButton from "./HeaderButton.svelte"
   import {
     packages,
     updatePackage,
@@ -10,6 +9,7 @@
     isUpdatingAll,
     Status,
   } from "./stores/package"
+  import { ReceiveChannels, SendChannels } from "../../../custom"
 
   enum COLUMN_KEYS {
     Name = "name",
@@ -42,7 +42,7 @@
     wasSuccessful: boolean
   }
 
-  window.api.receive("updatedAll", (data: UpdateAllToEvent) => {
+  window.api.receive(ReceiveChannels.UpdatedAll, (data: UpdateAllToEvent) => {
     const { wasSuccessful, workspace } = data
     const activeTab = localStorage.getItem("activeTab")
 
@@ -50,12 +50,16 @@
       if (wasSuccessful) {
         const path = localStorage.getItem(`dirPath-${workspace}`)
 
-        window.api.send("workspaceFolder", { path })
+        // TODO: add refresh event instead?
+        window.api.send(SendChannels.WorkspaceFolder, {
+          path,
+          workspace,
+        })
       }
     }
   })
 
-  window.api.receive("outdated", (data: OutdatedEvent) => {
+  window.api.receive(ReceiveChannels.Outdated, (data: OutdatedEvent) => {
     const { packages: newPackages, project } = data
     const activeTab = localStorage.getItem("activeTab")
 
@@ -66,7 +70,7 @@
     updatePackages(newPackages)
   })
 
-  window.api.receive("packages", (data: PackagesEvent) => {
+  window.api.receive(ReceiveChannels.Packages, (data: PackagesEvent) => {
     const { filePath, name, packages: eventPackages } = data
 
     isUpdatingAll.set(true)
@@ -78,7 +82,7 @@
     }
   })
 
-  window.api.receive("packageUpdated", (data: UpdatedEvent) => {
+  window.api.receive(ReceiveChannels.PackageUpdated, (data: UpdatedEvent) => {
     const { name, project, version, wasSuccessful } = data
     const activeTab = localStorage.getItem("activeTab")
 

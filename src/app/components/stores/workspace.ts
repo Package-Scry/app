@@ -1,4 +1,5 @@
 import { writable } from "svelte/store"
+import { SendChannels } from "../../../../custom"
 
 const getWorkspaces = () =>
   localStorage.getItem("tabs")
@@ -50,6 +51,6 @@ export const close = (tab: string, isTabActive: boolean): void => {
       ? localStorage.getItem(`dirPath-${newActiveTab}`)
       : null
 
-    window.api.send("workspaceFolder", { path })
+    window.api.send(SendChannels.WorkspaceFolder, { path })
   }
 }

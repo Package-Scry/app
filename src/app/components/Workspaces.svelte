@@ -8,12 +8,16 @@
   } from "./stores/workspace"
   import LogoutButton from "./LogoutButton.svelte"
   import { isUpdatingAll } from "./stores/package"
+  import { ReceiveChannels, SendChannels } from "../../../custom"
 
-  window.api.receive("cancelled", () => {
-    if (!$activeTab) window.api.send("workspaceFolder", { path: null })
+  window.api.receive(ReceiveChannels.Cancelled, () => {
+    if (!$activeTab)
+      window.api.send(SendChannels.WorkspaceFolder, {
+        path: null,
+      })
   })
 
-  window.api.receive("packages", (data: { name: string }) => {
+  window.api.receive(ReceiveChannels.Packages, (data: { name: string }) => {
     const newActiveTab = data.name
 
     changeActive(newActiveTab, $workspaces)
@@ -25,13 +29,19 @@
     if (!isTabActive) {
       const path = localStorage.getItem(`dirPath-${workspace}`)
 
-      window.api.send("workspaceFolder", { path })
+      window.api.send(SendChannels.WorkspaceFolder, {
+        path,
+        workspace,
+      })
     }
   }
   const addNewTab = () => {
     const workspaceCount = $workspaces.length
 
-    window.api.send("workspaceFolder", { path: null, workspaceCount })
+    window.api.send(SendChannels.WorkspaceFolder, {
+      path: null,
+      workspaceCount,
+    })
   }
 </script>
 

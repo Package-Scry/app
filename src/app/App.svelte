@@ -9,8 +9,9 @@
   import UpgradeButton from "./components/UpgradeButton.svelte"
   import Header from "./components/typography/Header.svelte"
   import HeaderButton from "./components/HeaderButton.svelte"
+  import { SendChannels } from "../../custom"
 
-  const onClick = () => window.api.send("feedback", {})
+  const onClick = () => window.api.send(SendChannels.Feedback, {})
 </script>
 
 <AuthHandler />

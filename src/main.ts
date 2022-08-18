@@ -7,6 +7,7 @@ import fixPath from "fix-path"
 import { checkPackages, updatePackage } from "./commands"
 import initRoutes from "./routes"
 import { ReceiveChannels, SendChannels } from "../custom"
+import type { WebContentsSend } from "."
 
 export interface PackageJSON {
   name?: string
@@ -26,7 +27,7 @@ interface EventWorkspace {
 interface EventPackageUpdate {
   name: string
   path: string
-  project: string
+  workspace: string
   version: string
 }
 
@@ -141,7 +142,7 @@ if (!gotTheLock) {
   })
 
   const alert = (text: string) => {
-    win.webContents.send("alert", text)
+    send(ReceiveChannels.Alert, text)
   }
 
   const getSelectedFolderPath = async () => {
@@ -173,7 +174,7 @@ if (!gotTheLock) {
       `authentication`,
       ({ token, hasPro }: { token: string; hasPro: boolean }) => {
         isProVersion = hasPro
-        win.webContents.send("saveToken", { token, hasPro })
+        send(ReceiveChannels.SaveToken, { token, hasPro })
         socket.disconnect()
 
         ipcMain.removeListener("authenticate", openLogin)
@@ -193,18 +194,16 @@ if (!gotTheLock) {
       const { path, workspaceCount } = args
 
       if (!isProVersion && !!workspaceCount && workspaceCount > 0)
-        return win.webContents.send("proFeature", {})
+        return send(ReceiveChannels.ProFeature, {})
 
       const filePath = path ?? (await getSelectedFolderPath())
-      const send = (channel: string, args: TSFixMe[]) =>
-        win.webContents.send(channel, args)
 
-      if (filePath === false) return win.webContents.send("cancelled", {})
+      if (filePath === false) return send(ReceiveChannels.Cancelled, {})
 
       readFile(`${filePath}/package.json`, "utf-8", (error, data) => {
         if (error) {
           console.error("error", error)
-          return win.webContents.send("packages", "error")
+          return send(ReceiveChannels.Packages, "error")
         }
 
         const parsedData: PackageJSON = JSON.parse(data)
@@ -221,7 +220,7 @@ if (!gotTheLock) {
           status: "loading",
         }))
 
-        return win.webContents.send("packages", {
+        return send(ReceiveChannels.Packages, {
           filePath,
           packages: packages.sort((a, b) => (a.name < b.name ? -1 : 1)),
           name,
@@ -230,11 +229,9 @@ if (!gotTheLock) {
     }
   )
 
-  ipcMain.on(SendChannels.PackageUpdate, (event, args: EventPackageUpdate) => {
-    const { name, path, project, version } = args
-    const send = (channel: string, args: TSFixMe[]) =>
-      win.webContents.send(channel, args)
+  ipcMain.on(SendChannels.PackageUpdate, (_, args: EventPackageUpdate) => {
+    const { name, path, workspace, version } = args
 
-    updatePackage(path, name, version, project, send)
+    updatePackage(path, name, version, workspace, send)
   })
 }

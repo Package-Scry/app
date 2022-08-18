@@ -1,4 +1,5 @@
 import { writable } from "svelte/store"
+import { SendChannels } from "../../../../custom"
 
 export interface Package {
   name: string
@@ -29,11 +30,11 @@ export const requestUpdatePackage = (name: string, version: string): void => {
 
   isUpdatingAll.set(true)
 
-  window.api.send("packageUpdate", {
+  window.api.send(SendChannels.PackageUpdate, {
     name,
     path,
     version,
-    project: activeTab,
+    workspace: activeTab,
   })
 
   packages.update(oldPackages => {
@@ -117,7 +118,7 @@ export const requestUpdateAllPackage = (type: "wanted" | "latest"): void => {
     }))
   })
 
-  window.api.send("updateAll", {
+  window.api.send(SendChannels.UpdateAll, {
     path,
     workspace: activeTab,
     type,
