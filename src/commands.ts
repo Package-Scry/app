@@ -5,7 +5,7 @@ import type { PackageJSON } from "./main"
 import util from "util"
 import { writeFileSync } from "original-fs"
 import type { WebContentsSend } from "."
-import { ReceiveChannels } from "../custom"
+import { PackageUpdate, ReceiveChannels } from "../custom"
 
 const pExec = util.promisify(exec)
 
@@ -55,32 +55,34 @@ export const checkPackages = async (
   }
 }
 
-export const updatePackage = (
-  filePath: string,
-  packageName: string,
-  version: string,
-  workspace: string,
+export const updatePackage = async (
+  { meta, data }: Omit<PackageUpdate, "channel">,
   send: WebContentsSend
-): void => {
-  exec(
-    `cd "${filePath}" && npm i ${packageName}@${version}`,
-    (error, stdout, stderr) => {
-      if (error) {
-        console.log(`error: ${error.message}`)
-      }
-
-      if (stderr) {
-        console.log(`stderr: ${stderr}`)
-      }
-
-      send(ReceiveChannels.PackageUpdated, {
-        name: packageName,
-        version,
-        workspace,
-        wasSuccessful: !!stdout,
-      })
+) => {
+  const { name, version } = data
+  const { path, workspace } = meta
+  exec(`cd "${path}" && npm i ${name}@${version}`, (error, stdout, stderr) => {
+    if (error) {
+      console.log(`error: ${error.message}`)
     }
-  )
+
+    if (stderr) {
+      console.log(`stderr: ${stderr}`)
+    }
+
+    const wasSuccessful = !!stdout
+
+    send(ReceiveChannels.PackageUpdated, {
+      name,
+      version,
+      workspace,
+      wasSuccessful,
+    })
+
+    return { wasSuccessful }
+  })
+
+  return { wasSuccessful: false }
 }
 
 const runCommand = async (
