@@ -1,6 +1,13 @@
 import { ipcMain } from "electron"
 import type { WebContentsSend } from ".."
-import { ReceiveChannels, CallbackStatus, MainEvents } from "../../custom"
+import {
+  ReceiveChannels,
+  CallbackStatus,
+  MainEvents,
+  SendChannels,
+  PackageUpdate,
+} from "../../custom"
+import { updatePackage } from "../commands"
 
 const addRoute = <T extends MainEvents>(
   send: WebContentsSend,
@@ -20,4 +27,8 @@ const addRoute = <T extends MainEvents>(
 
     if (!wasSuccessful) send(ReceiveChannels.AlertError, { workspace, error })
   })
+}
+
+export const initRoutes = (send: WebContentsSend) => {
+  addRoute<PackageUpdate>(send, SendChannels.PackageUpdate, updatePackage)
 }
