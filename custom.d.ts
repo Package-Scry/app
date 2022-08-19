@@ -3,7 +3,6 @@ export {}
 export enum SendChannels {
   OpenWorkspaceFolder = "OpenWorkspaceFolder",
   PackageUpdate = "PackageUpdate",
-  Cancelled = "Cancelled",
   Authenticate = "Authenticate",
   IsLoggedIn = "IsLoggedIn",
   Token = "Token",
@@ -19,7 +18,7 @@ export enum ReceiveChannels {
   Packages = "Packages",
   Outdated = "Outdated",
   PackageUpdated = "PackageUpdated",
-  Cancelled = "Cancelled",
+  OpenWFolderCancelled = "OpenWFolderCancelled",
   SaveToken = "SaveToken",
   Alert = "Alert",
   ProFeature = "ProFeature",
@@ -28,7 +27,7 @@ export enum ReceiveChannels {
 }
 
 export interface DefaultEventArgs {
-  meta: { path?: string; workspace: string }
+  meta: { path?: string; workspace?: string }
 }
 
 interface TokenArgs extends DefaultEventArgs {
@@ -71,8 +70,13 @@ interface ProFeature {
   channel: ReceiveChannels.ProFeature
   fn: (args: ProFeatureArgs) => void
 }
+interface OpenWFolderCancelledArgs extends DefaultRendererEventArgs {}
+interface OpenWFolderCancelled {
+  channel: ReceiveChannels.OpenWFolderCancelled
+  fn: (args: OpenWFolderCancelledArgs) => void
+}
 
-export type RendererEvents = ProFeature
+export type RendererEvents = ProFeature | OpenWFolderCancelled
 
 export interface CallbackStatus {
   wasSuccessful?: boolean
@@ -82,7 +86,7 @@ export interface CallbackStatus {
 declare global {
   interface Window {
     api: {
-      send: ({ channel, data }: MainEvents) => void
+      send: ({ channel, data, meta }: MainEvents) => void
       receive: ({ channel, fn }: RendererEvents) => void
     }
   }
