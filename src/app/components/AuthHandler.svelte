@@ -27,8 +27,11 @@
     }
   )
 
-  window.api.receive(ReceiveChannels.ProFeature, () => {
-    openProModal()
+  window.api.receive({
+    channel: ReceiveChannels.ProFeature,
+    fn: _ => {
+      openProModal()
+    },
   })
 
   window.api.receive(ReceiveChannels.Alert, (text: string) => {
