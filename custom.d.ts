@@ -1,7 +1,7 @@
 export {}
 
 export enum SendChannels {
-  WorkspaceFolder = "WorkspaceFolder",
+  OpenWorkspaceFolder = "OpenWorkspaceFolder",
   PackageUpdate = "PackageUpdate",
   Cancelled = "Cancelled",
   Authenticate = "Authenticate",
@@ -50,7 +50,16 @@ export interface PackageUpdate extends PackageUpdateArgs {
   channel: SendChannels.PackageUpdate
 }
 
-export type MainEvents = Token | PackageUpdate
+interface OpenWorkspaceFolderArgs extends DefaultEventArgs {
+  data: {
+    workspaceCount
+  }
+}
+export interface OpenWorkspaceFolder extends OpenWorkspaceFolderArgs {
+  channel: SendChannels.OpenWorkspaceFolder
+}
+
+export type MainEvents = Token | PackageUpdate | OpenWorkspaceFolder
 
 export interface CallbackStatus {
   wasSuccessful?: boolean
