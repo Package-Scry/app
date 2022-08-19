@@ -165,10 +165,4 @@ if (!gotTheLock) {
       shell.openExternal(`https://packagescry.com/sign-up`)
     })
   })
-
-  ipcMain.on(SendChannels.PackageUpdate, (_, args: EventPackageUpdate) => {
-    const { name, path, workspace, version } = args
-
-    updatePackage(path, name, version, workspace, send)
-  })
 }
