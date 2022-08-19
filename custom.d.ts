@@ -1,20 +1,17 @@
 export {}
 
 export enum SendChannels {
-  WorkspaceFolder,
-  Outdated,
-  PackageUpdate,
-  Cancelled,
-  Authenticate,
-  IsLoggedIn,
-  Token,
-  Logout,
-  Upgrade,
-  Alert,
-  ProFeature,
-  UpdateAll,
-  Feedback,
-  GetChangeLog,
+  WorkspaceFolder = "WorkspaceFolder",
+  PackageUpdate = "PackageUpdate",
+  Cancelled = "Cancelled",
+  Authenticate = "Authenticate",
+  IsLoggedIn = "IsLoggedIn",
+  Token = "Token",
+  Upgrade = "Upgrade",
+  Alert = "Alert",
+  UpdateAll = "UpdateAll",
+  Feedback = "Feedback",
+  GetChangeLog = "GetChangeLog",
 }
 
 export enum ReceiveChannels {
@@ -24,7 +21,6 @@ export enum ReceiveChannels {
   PackageUpdated,
   Cancelled,
   SaveToken,
-  Logout,
   Alert,
   ProFeature,
   UpdatedAll,
@@ -32,9 +28,29 @@ export enum ReceiveChannels {
 }
 
 export interface DefaultEventArgs {
-  path: string
-  workspace: string
+  meta: { path?: string; workspace: string }
 }
+
+interface TokenArgs extends DefaultEventArgs {
+  data: {
+    token: string
+  }
+}
+export interface Token extends TokenArgs {
+  channel: SendChannels.Token
+}
+
+interface PackageUpdateArgs extends DefaultEventArgs {
+  data: {
+    name: string
+    version: string
+  }
+}
+export interface PackageUpdate extends PackageUpdateArgs {
+  channel: SendChannels.PackageUpdate
+}
+
+export type MainEvents = Token | PackageUpdate
 
 export interface CallbackStatus {
   wasSuccessful?: boolean
@@ -48,7 +64,7 @@ interface MetaData extends CallbackStatus {
 declare global {
   interface Window {
     api: {
-      send: <T>(channel: SendChannels, data: T & MetaData) => void
+      send: ({ channel, data }: MainEvents) => void
       receive: <T>(channel: ReceiveChannels, data: T) => void
     }
   }
