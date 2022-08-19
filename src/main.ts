@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, shell } from "electron"
+import { app, BrowserWindow, ipcMain, shell } from "electron"
 import { autoUpdater } from "electron-updater"
 import * as path from "path"
 import { readFile } from "fs"
@@ -8,21 +8,7 @@ import { checkPackages, updatePackage } from "./commands"
 import initRoutes from "./routes"
 import { ReceiveChannels, SendChannels } from "../custom"
 import type { WebContentsSend } from "."
-
-export interface PackageJSON {
-  name?: string
-  dependencies?: {
-    [key in string]: string
-  }
-  devDependencies?: {
-    [key in string]: string
-  }
-}
-
-interface EventWorkspace {
-  path: string | null
-  workspaceCount: number
-}
+import { setisProVersion } from "./authentication"
 
 interface EventPackageUpdate {
   name: string
@@ -145,14 +131,6 @@ if (!gotTheLock) {
     send(ReceiveChannels.Alert, text)
   }
 
-  const getSelectedFolderPath = async () => {
-    const dir = await dialog.showOpenDialog({ properties: ["openDirectory"] })
-
-    if (dir.canceled) return false
-
-    return dir.filePaths[0]
-  }
-
   initRoutes(send)
 
   ipcMain.on(SendChannels.Token, (_, token: string) => {
@@ -173,7 +151,7 @@ if (!gotTheLock) {
     socket.on(
       `authentication`,
       ({ token, hasPro }: { token: string; hasPro: boolean }) => {
-        isProVersion = hasPro
+        setisProVersion(hasPro)
         send(ReceiveChannels.SaveToken, { token, hasPro })
         socket.disconnect()
 
@@ -187,47 +165,6 @@ if (!gotTheLock) {
       shell.openExternal(`https://packagescry.com/sign-up`)
     })
   })
-
-  ipcMain.on(
-    SendChannels.WorkspaceFolder,
-    async (event, args: EventWorkspace) => {
-      const { path, workspaceCount } = args
-
-      if (!isProVersion && !!workspaceCount && workspaceCount > 0)
-        return send(ReceiveChannels.ProFeature, {})
-
-      const filePath = path ?? (await getSelectedFolderPath())
-
-      if (filePath === false) return send(ReceiveChannels.Cancelled, {})
-
-      readFile(`${filePath}/package.json`, "utf-8", (error, data) => {
-        if (error) {
-          console.error("error", error)
-          return send(ReceiveChannels.Packages, "error")
-        }
-
-        const parsedData: PackageJSON = JSON.parse(data)
-        const { dependencies, devDependencies, name } = parsedData
-
-        checkPackages(filePath, name, send)
-
-        const allDependencies = { ...dependencies, ...devDependencies }
-        const packages = Object.keys(allDependencies).map(key => ({
-          name: key,
-          local: allDependencies[key],
-          latest: "loading",
-          wanted: "loading",
-          status: "loading",
-        }))
-
-        return send(ReceiveChannels.Packages, {
-          filePath,
-          packages: packages.sort((a, b) => (a.name < b.name ? -1 : 1)),
-          name,
-        })
-      })
-    }
-  )
 
   ipcMain.on(SendChannels.PackageUpdate, (_, args: EventPackageUpdate) => {
     const { name, path, workspace, version } = args
