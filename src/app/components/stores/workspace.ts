@@ -51,6 +51,10 @@ export const close = (tab: string, isTabActive: boolean): void => {
       ? localStorage.getItem(`dirPath-${newActiveTab}`)
       : null
 
-    window.api.send(SendChannels.WorkspaceFolder, { path })
+    window.api.send({
+      channel: SendChannels.OpenWorkspaceFolder,
+      meta: { path },
+      data: { workspaceCount: 0 },
+    })
   }
 }

@@ -51,9 +51,13 @@
         const path = localStorage.getItem(`dirPath-${workspace}`)
 
         // TODO: add refresh event instead?
-        window.api.send(SendChannels.WorkspaceFolder, {
-          path,
-          workspace,
+
+        window.api.send({
+          channel: SendChannels.OpenWorkspaceFolder,
+          meta: {
+            path,
+          },
+          data: { workspaceCount: 0 },
         })
       }
     }
@@ -70,16 +74,19 @@
     updatePackages(newPackages)
   })
 
-  window.api.receive(ReceiveChannels.Packages, (data: PackagesEvent) => {
-    const { filePath, name, packages: eventPackages } = data
+  window.api.receive({
+    channel: ReceiveChannels.GetPackages,
+    fn: ({ data }) => {
+      const { filePath, name, packages: eventPackages } = data
 
-    isUpdatingAll.set(true)
+      isUpdatingAll.set(true)
 
-    if (filePath) {
-      packages.set(eventPackages)
+      if (filePath) {
+        packages.set(eventPackages)
 
-      localStorage.setItem(`dirPath-${name}`, filePath)
-    }
+        localStorage.setItem(`dirPath-${name}`, filePath)
+      }
+    },
   })
 
   window.api.receive(ReceiveChannels.PackageUpdated, (data: UpdatedEvent) => {

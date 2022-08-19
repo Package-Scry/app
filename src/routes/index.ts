@@ -6,8 +6,10 @@ import {
   MainEvents,
   SendChannels,
   PackageUpdate,
+  OpenWorkspaceFolder,
 } from "../../custom"
 import { updatePackage } from "../commands"
+import { openWorkspaceFolder } from "./openWorkspaceFolder"
 
 const addRoute = <T extends MainEvents>(
   send: WebContentsSend,
@@ -25,10 +27,16 @@ const addRoute = <T extends MainEvents>(
     const { wasSuccessful, error } = eventData
     const workspace = argsWithoutChannel.meta.workspace
 
-    if (!wasSuccessful) send(ReceiveChannels.AlertError, { workspace, error })
+    if (!wasSuccessful)
+      send(ReceiveChannels.AlertError, { workspace, error, channel })
   })
 }
 
 export const initRoutes = (send: WebContentsSend) => {
   addRoute<PackageUpdate>(send, SendChannels.PackageUpdate, updatePackage)
+  addRoute<OpenWorkspaceFolder>(
+    send,
+    SendChannels.OpenWorkspaceFolder,
+    openWorkspaceFolder
+  )
 }

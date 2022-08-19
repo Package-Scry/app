@@ -20,9 +20,12 @@
         ? localStorage.getItem(`dirPath-${$activeTab}`)
         : null
 
-      window.api.send(SendChannels.WorkspaceFolder, {
-        path,
-        workspace: $activeTab,
+      window.api.send({
+        channel: SendChannels.OpenWorkspaceFolder,
+        meta: {
+          path,
+        },
+        data: { workspaceCount: 0 },
       })
     }
   )

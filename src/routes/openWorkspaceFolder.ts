@@ -46,7 +46,7 @@ export const openWorkspaceFolder = async (
       status: "loading",
     }))
 
-    send(ReceiveChannels.Packages, {
+    send(ReceiveChannels.GetPackages, {
       filePath,
       packages: packages.sort((a, b) => (a.name < b.name ? -1 : 1)),
       name,

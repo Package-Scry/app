@@ -10,37 +10,56 @@
   import { isUpdatingAll } from "./stores/package"
   import { ReceiveChannels, SendChannels } from "../../../custom"
 
-  window.api.receive(ReceiveChannels.Cancelled, () => {
-    if (!$activeTab)
-      window.api.send(SendChannels.WorkspaceFolder, {
-        path: null,
-      })
+  window.api.receive({
+    channel: ReceiveChannels.OpenWFolderCancelled,
+    fn: _ => {
+      if (!$activeTab)
+        window.api.send({
+          channel: SendChannels.OpenWorkspaceFolder,
+          meta: {
+            path: null,
+          },
+          data: {
+            workspaceCount: 0,
+          },
+        })
+    },
   })
 
-  window.api.receive(ReceiveChannels.Packages, (data: { name: string }) => {
-    const newActiveTab = data.name
+  window.api.receive({
+    channel: ReceiveChannels.GetPackages,
+    fn: ({ data }) => {
+      const newActiveTab = data.name
 
-    changeActive(newActiveTab, $workspaces)
+      changeActive(newActiveTab, $workspaces)
 
-    isUpdatingAll.set(false)
+      isUpdatingAll.set(false)
+    },
   })
 
   const onTabClick = (workspace: string, isTabActive: boolean) => {
     if (!isTabActive) {
+      const workspaceCount = $workspaces.length
       const path = localStorage.getItem(`dirPath-${workspace}`)
 
-      window.api.send(SendChannels.WorkspaceFolder, {
-        path,
-        workspace,
+      window.api.send({
+        channel: SendChannels.OpenWorkspaceFolder,
+        meta: {
+          path,
+        },
+        data: { workspaceCount },
       })
     }
   }
   const addNewTab = () => {
     const workspaceCount = $workspaces.length
 
-    window.api.send(SendChannels.WorkspaceFolder, {
-      path: null,
-      workspaceCount,
+    window.api.send({
+      channel: SendChannels.OpenWorkspaceFolder,
+      meta: {
+        path: null,
+      },
+      data: { workspaceCount },
     })
   }
 </script>
