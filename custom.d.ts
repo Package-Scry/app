@@ -15,16 +15,16 @@ export enum SendChannels {
 }
 
 export enum ReceiveChannels {
-  AlertError,
-  Packages,
-  Outdated,
-  PackageUpdated,
-  Cancelled,
-  SaveToken,
-  Alert,
-  ProFeature,
-  UpdatedAll,
-  SendChangeLog,
+  AlertError = "AlertError",
+  Packages = "Packages",
+  Outdated = "Outdated",
+  PackageUpdated = "PackageUpdated",
+  Cancelled = "Cancelled",
+  SaveToken = "SaveToken",
+  Alert = "Alert",
+  ProFeature = "ProFeature",
+  UpdatedAll = "UpdatedAll",
+  SendChangeLog = "SendChangeLog",
 }
 
 export interface DefaultEventArgs {
@@ -61,20 +61,29 @@ export interface OpenWorkspaceFolder extends OpenWorkspaceFolderArgs {
 
 export type MainEvents = Token | PackageUpdate | OpenWorkspaceFolder
 
+interface MetaData extends CallbackStatus {
+  meta: { workspace?: string }
+}
+interface DefaultRendererEventArgs extends MetaData {}
+
+interface ProFeatureArgs extends DefaultRendererEventArgs {}
+interface ProFeature {
+  channel: ReceiveChannels.ProFeature
+  fn: (args: ProFeatureArgs) => void
+}
+
+export type RendererEvents = ProFeature
+
 export interface CallbackStatus {
   wasSuccessful?: boolean
   error?: string
-}
-
-interface MetaData extends CallbackStatus {
-  workspace?: string
 }
 
 declare global {
   interface Window {
     api: {
       send: ({ channel, data }: MainEvents) => void
-      receive: <T>(channel: ReceiveChannels, data: T) => void
+      receive: ({ channel, fn }: RendererEvents) => void
     }
   }
 }
