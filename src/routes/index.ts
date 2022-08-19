@@ -1,25 +1,23 @@
 import { ipcMain } from "electron"
 import type { WebContentsSend } from ".."
-import {
-  SendChannels,
-  ReceiveChannels,
-  CallbackStatus,
-  DefaultEventArgs,
-} from "../../custom"
+import { ReceiveChannels, CallbackStatus, MainEvents } from "../../custom"
 
-// TODO: is <T> neccessary at all?
-const addRoute = <T, A extends DefaultEventArgs>(
+const addRoute = <T extends MainEvents>(
   send: WebContentsSend,
-  sendChannel: SendChannels,
-  receiveChannel: ReceiveChannels,
-  fn: (args: A) => Promise<T & CallbackStatus>
+  sendChannel: T["channel"],
+  fn: (
+    args: Omit<T, "channel">,
+    send: WebContentsSend
+  ) => Promise<CallbackStatus>
 ) => {
-  ipcMain.on(sendChannel, async (event, args: A) => {
-    const data = await fn(args)
-    const { wasSuccessful, error } = data
-    const { workspace } = args
+  ipcMain.on(sendChannel, async (event, args: T) => {
+    const { channel, ...argsWithoutChannel } = args
+
+    const eventData = await fn(argsWithoutChannel, send)
+
+    const { wasSuccessful, error } = eventData
+    const workspace = argsWithoutChannel.meta.workspace
 
     if (!wasSuccessful) send(ReceiveChannels.AlertError, { workspace, error })
-    else send<T>(receiveChannel, { ...data, workspace })
   })
 }
