@@ -22,7 +22,7 @@ export const openWorkspaceFolder = async (
   const filePath = path ?? (await getSelectedFolderPath())
 
   if (filePath === false) {
-    send(ReceiveChannels.Cancelled, {})
+    send(ReceiveChannels.OpenWFolderCancelled, {})
     return { wasSuccessful: true }
   }
 
