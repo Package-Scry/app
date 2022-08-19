@@ -1,3 +1,5 @@
+import type { Package } from "./src/app/components/stores/package"
+
 export {}
 
 export enum SendChannels {
@@ -15,7 +17,7 @@ export enum SendChannels {
 
 export enum ReceiveChannels {
   AlertError = "AlertError",
-  Packages = "Packages",
+  GetPackages = "GetPackages",
   Outdated = "Outdated",
   PackageUpdated = "PackageUpdated",
   OpenWFolderCancelled = "OpenWFolderCancelled",
@@ -70,13 +72,26 @@ interface ProFeature {
   channel: ReceiveChannels.ProFeature
   fn: (args: ProFeatureArgs) => void
 }
+
 interface OpenWFolderCancelledArgs extends DefaultRendererEventArgs {}
 interface OpenWFolderCancelled {
   channel: ReceiveChannels.OpenWFolderCancelled
   fn: (args: OpenWFolderCancelledArgs) => void
 }
 
-export type RendererEvents = ProFeature | OpenWFolderCancelled
+interface GetPackagesArgs extends DefaultRendererEventArgs {
+  data: {
+    packages: Package[]
+    filePath: string
+    name: string
+  }
+}
+interface GetPackages {
+  channel: ReceiveChannels.GetPackages
+  fn: (args: GetPackagesArgs) => void
+}
+
+export type RendererEvents = ProFeature | OpenWFolderCancelled | GetPackages
 
 export interface CallbackStatus {
   wasSuccessful?: boolean
