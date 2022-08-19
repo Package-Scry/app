@@ -8,7 +8,7 @@ import { checkPackages, updatePackage } from "./commands"
 import initRoutes from "./routes"
 import { ReceiveChannels, SendChannels } from "../custom"
 import type { WebContentsSend } from "."
-import { setisProVersion } from "./authentication"
+import { setIsProVersion } from "./authentication"
 
 interface EventPackageUpdate {
   name: string
@@ -151,7 +151,7 @@ if (!gotTheLock) {
     socket.on(
       `authentication`,
       ({ token, hasPro }: { token: string; hasPro: boolean }) => {
-        setisProVersion(hasPro)
+        setIsProVersion(hasPro)
         send(ReceiveChannels.SaveToken, { token, hasPro })
         socket.disconnect()
 
