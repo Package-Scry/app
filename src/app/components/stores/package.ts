@@ -30,11 +30,13 @@ export const requestUpdatePackage = (name: string, version: string): void => {
 
   isUpdatingAll.set(true)
 
-  window.api.send(SendChannels.PackageUpdate, {
-    name,
-    path,
-    version,
-    workspace: activeTab,
+  window.api.send({
+    channel: SendChannels.PackageUpdate,
+    data: { name, version },
+    meta: {
+      path,
+      workspace: activeTab,
+    },
   })
 
   packages.update(oldPackages => {
