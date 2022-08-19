@@ -5,9 +5,10 @@
   import { token, login } from "./stores/user"
   import { activeTab } from "./stores/workspace"
 
-  window.api.send(SendChannels.Token, {
-    token: $token,
-    workspace: $activeTab,
+  window.api.send({
+    channel: SendChannels.Token,
+    meta: { workspace: $activeTab },
+    data: { token: $token },
   })
 
   window.api.receive(
