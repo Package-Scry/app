@@ -1,3 +1,5 @@
+import { dialog } from "electron"
+
 export interface Error {
   error: {
     code: string
@@ -38,4 +40,12 @@ export const getErrorFromCli = (error: string): Error => {
       },
     }
   )
+}
+
+export const getSelectedFolderPath = async () => {
+  const dir = await dialog.showOpenDialog({ properties: ["openDirectory"] })
+
+  if (dir.canceled) return false
+
+  return dir.filePaths[0]
 }
