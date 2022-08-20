@@ -8,7 +8,7 @@ export enum SendChannels {
   PackageUpdate = "PackageUpdate",
   Authenticate = "Authenticate",
   IsLoggedIn = "IsLoggedIn",
-  Token = "Token",
+  ValidateToken = "ValidateToken",
   Upgrade = "Upgrade",
   Alert = "Alert",
   UpdateAllPackages = "UpdateAllPackages",
@@ -20,13 +20,13 @@ export interface DefaultEventArgs {
   meta: { path?: string; workspace?: string }
 }
 
-interface TokenArgs extends DefaultEventArgs {
+interface ValidateTokenArgs extends DefaultEventArgs {
   data: {
     token: string
   }
 }
-export interface Token extends TokenArgs {
-  channel: SendChannels.Token
+export interface ValidateToken extends ValidateTokenArgs {
+  channel: SendChannels.ValidateToken
 }
 
 interface PackageUpdateArgs extends DefaultEventArgs {
@@ -57,11 +57,17 @@ export interface UpdateAllPackages extends UpdateAllPackagesArgs {
   channel: SendChannels.UpdateAllPackages
 }
 
+interface AuthenticateArgs extends DefaultEventArgs {}
+export interface Authenticate extends AuthenticateArgs {
+  channel: SendChannels.Authenticate
+}
+
 export type MainEvents =
-  | Token
+  | ValidateToken
   | PackageUpdate
   | OpenWorkspaceFolder
   | UpdateAllPackages
+  | Authenticate
 
 // -------- ReceiveChannels --------
 
