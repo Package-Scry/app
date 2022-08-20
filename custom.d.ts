@@ -63,7 +63,7 @@ export interface OpenWorkspaceFolder extends OpenWorkspaceFolderArgs {
 export type MainEvents = Token | PackageUpdate | OpenWorkspaceFolder
 
 interface MetaData extends CallbackStatus {
-  meta: { workspace?: string }
+  meta?: { workspace?: string }
 }
 interface DefaultRendererEventArgs extends MetaData {}
 
@@ -72,12 +72,15 @@ interface ProFeature {
   channel: ReceiveChannels.ProFeature
   fn: (args: ProFeatureArgs) => void
 }
+type ProFeatureSend = Omit<ProFeature, "fn"> & ProFeatureArgs
 
 interface OpenWFolderCancelledArgs extends DefaultRendererEventArgs {}
 interface OpenWFolderCancelled {
   channel: ReceiveChannels.OpenWFolderCancelled
   fn: (args: OpenWFolderCancelledArgs) => void
 }
+type OpenWFolderCancelledSend = Omit<OpenWFolderCancelled, "fn"> &
+  OpenWFolderCancelledArgs
 
 interface GetPackagesArgs extends DefaultRendererEventArgs {
   data: {
@@ -90,8 +93,13 @@ interface GetPackages {
   channel: ReceiveChannels.GetPackages
   fn: (args: GetPackagesArgs) => void
 }
+type GetPackagesSend = Omit<GetPackages, "fn"> & GetPackagesArgs
 
 export type RendererEvents = ProFeature | OpenWFolderCancelled | GetPackages
+export type RendererEventsSend =
+  | ProFeatureSend
+  | OpenWFolderCancelledSend
+  | GetPackagesSend
 
 export interface CallbackStatus {
   wasSuccessful?: boolean

@@ -1,28 +1,30 @@
 import { readFile } from "fs"
-import type { WebContentsSend, PackageJSON } from ".."
+import type { PackageJSON } from ".."
 import { ReceiveChannels, OpenWorkspaceFolder } from "../../custom"
+import { Status } from "../app/components/stores/package"
 import { getIsProVersion } from "../authentication"
 import { checkPackages } from "../commands"
+import { send } from "../send"
 import { getSelectedFolderPath } from "../utils"
 
-export const openWorkspaceFolder = async (
-  { meta, data }: Omit<OpenWorkspaceFolder, "channel">,
-  send: WebContentsSend
-) => {
+export const openWorkspaceFolder = async ({
+  meta,
+  data,
+}: Omit<OpenWorkspaceFolder, "channel">) => {
   const { workspaceCount } = data
   const { path } = meta
   // TODO: do this without mutation
   let wasSuccessful = true
 
   if (!getIsProVersion() && !!workspaceCount && workspaceCount > 0) {
-    send(ReceiveChannels.ProFeature, {})
+    send({ channel: ReceiveChannels.ProFeature, ...{} })
     return { wasSuccessful: true }
   }
 
   const filePath = path ?? (await getSelectedFolderPath())
 
   if (filePath === false) {
-    send(ReceiveChannels.OpenWFolderCancelled, {})
+    send({ channel: ReceiveChannels.OpenWFolderCancelled, ...{} })
     return { wasSuccessful: true }
   }
 
@@ -43,13 +45,16 @@ export const openWorkspaceFolder = async (
       local: allDependencies[key],
       latest: "loading",
       wanted: "loading",
-      status: "loading",
+      status: Status.Loading,
     }))
 
-    send(ReceiveChannels.GetPackages, {
-      filePath,
-      packages: packages.sort((a, b) => (a.name < b.name ? -1 : 1)),
-      name,
+    send({
+      channel: ReceiveChannels.GetPackages,
+      data: {
+        filePath,
+        packages: packages.sort((a, b) => (a.name < b.name ? -1 : 1)),
+        name,
+      },
     })
 
     return {
