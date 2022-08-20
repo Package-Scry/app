@@ -24,13 +24,6 @@
     workspace: string
   }
 
-  interface UpdatedEvent {
-    name: string
-    version: string
-    project: string
-    wasSuccessful: boolean
-  }
-
   window.api.receive(ReceiveChannels.UpdatedAll, (data: UpdateAllToEvent) => {
     const { wasSuccessful, workspace } = data
     const activeTab = localStorage.getItem("activeTab")
@@ -82,38 +75,42 @@
     },
   })
 
-  window.api.receive(ReceiveChannels.PackageUpdated, (data: UpdatedEvent) => {
-    const { name, project, version, wasSuccessful } = data
-    const activeTab = localStorage.getItem("activeTab")
+  window.api.receive({
+    channel: ReceiveChannels.PackageUpdated,
+    fn: ({ data, meta, wasSuccessful }) => {
+      const { name, version } = data
+      const { workspace } = meta
+      const activeTab = localStorage.getItem("activeTab")
 
-    if (activeTab !== project) return
+      if (activeTab !== workspace) return
 
-    isUpdatingAll.set(false)
+      isUpdatingAll.set(false)
 
-    const currentPackage = $packages.find(
-      npmPackage => npmPackage.name === name
-    )
-    const { latest, local, wanted } = currentPackage
+      const currentPackage = $packages.find(
+        npmPackage => npmPackage.name === name
+      )
+      const { latest, local, wanted } = currentPackage
 
-    const status = !wasSuccessful
-      ? wanted === latest
-        ? Status.Updatable
+      const status = !wasSuccessful
+        ? wanted === latest
+          ? Status.Updatable
+          : Status.Outdated
+        : latest === version
+        ? Status.UpToDate
         : Status.Outdated
-      : latest === version
-      ? Status.UpToDate
-      : Status.Outdated
-    const updatedWanted = wasSuccessful
-      ? latest === version
-        ? { wanted: "-" }
-        : { wanted }
-      : {}
+      const updatedWanted = wasSuccessful
+        ? latest === version
+          ? { wanted: "-" }
+          : { wanted }
+        : {}
 
-    updatePackage({
-      name,
-      status,
-      local: wasSuccessful ? `^${version}` : local,
-      ...updatedWanted,
-    })
+      updatePackage({
+        name,
+        status,
+        local: wasSuccessful ? `^${version}` : local,
+        ...updatedWanted,
+      })
+    },
   })
 
   const COLUMN_NAMES = [

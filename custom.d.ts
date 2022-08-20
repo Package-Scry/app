@@ -84,14 +84,14 @@ interface AlertError {
 }
 type AlertErrorSend = Omit<AlertError, "fn"> & AlertErrorArgs
 
-interface ProFeatureArgs extends DefaultRendererEventArgs {}
+interface ProFeatureArgs {}
 interface ProFeature {
   channel: ReceiveChannels.ProFeature
   fn: (args: ProFeatureArgs) => void
 }
 type ProFeatureSend = Omit<ProFeature, "fn"> & ProFeatureArgs
 
-interface OpenWFolderCancelledArgs extends DefaultRendererEventArgs {}
+interface OpenWFolderCancelledArgs {}
 interface OpenWFolderCancelled {
   channel: ReceiveChannels.OpenWFolderCancelled
   fn: (args: OpenWFolderCancelledArgs) => void
@@ -99,7 +99,7 @@ interface OpenWFolderCancelled {
 type OpenWFolderCancelledSend = Omit<OpenWFolderCancelled, "fn"> &
   OpenWFolderCancelledArgs
 
-interface GetPackagesArgs extends DefaultRendererEventArgs {
+interface GetPackagesArgs {
   data: {
     packages: Package[]
     filePath: string
@@ -111,7 +111,8 @@ interface GetPackages {
   fn: (args: GetPackagesArgs) => void
 }
 type GetPackagesSend = Omit<GetPackages, "fn"> & GetPackagesArgs
-interface GetOutdatedPackagesArgs extends DefaultRendererEventArgs {
+
+interface GetOutdatedPackagesArgs extends MetaData {
   data: {
     packages: Omit<Package, "local", "status">[]
   }
@@ -123,18 +124,32 @@ interface GetOutdatedPackages {
 type GetOutdatedPackagesSend = Omit<GetOutdatedPackages, "fn"> &
   GetOutdatedPackagesArgs
 
+interface PackageUpdatedArgs extends MetaData, CallbackStatus {
+  data: {
+    name: string
+    version: string
+  }
+}
+interface PackageUpdated {
+  channel: ReceiveChannels.PackageUpdated
+  fn: (args: PackageUpdatedArgs) => void
+}
+type PackageUpdatedSend = Omit<PackageUpdated, "fn"> & PackageUpdatedArgs
+
 export type RendererEvents =
   | AlertError
   | ProFeature
   | OpenWFolderCancelled
   | GetPackages
   | GetOutdatedPackages
+  | PackageUpdated
 export type RendererEventsSend =
   | AlertErrorSend
   | ProFeatureSend
   | OpenWFolderCancelledSend
   | GetPackagesSend
   | GetOutdatedPackagesSend
+  | PackageUpdatedSend
 
 declare global {
   interface Window {
