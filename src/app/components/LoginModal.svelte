@@ -10,7 +10,7 @@
   buttonText="Login with GitHub"
   buttonIcon="github"
   onClick={() => {
-    window.api.send(SendChannels.Authenticate, {})
+    window.api.send({ channel: SendChannels.Authenticate, ...{ meta: {} } })
   }}
   onCancel={() => {}}
   isVisible={!$isLoggedIn}

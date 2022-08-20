@@ -39,5 +39,9 @@ export const logout = (): void => {
 
   localStorage.removeItem("token")
 
-  window.api.send(SendChannels.Token, null)
+  window.api.send({
+    channel: SendChannels.ValidateToken,
+    data: { token: null },
+    meta: {},
+  })
 }

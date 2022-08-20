@@ -7,10 +7,12 @@ import {
   PackageUpdate,
   OpenWorkspaceFolder,
   UpdateAllPackages,
+  ValidateToken,
 } from "../../custom"
 import { updateAllPackagesTo, updatePackage } from "../commands"
 import { send } from "../send"
 import { openWorkspaceFolder } from "./openWorkspaceFolder"
+import { validateToken } from "./validateToken"
 
 const addRoute = <T extends MainEvents>(
   sendChannel: T["channel"],
@@ -43,4 +45,5 @@ export const initRoutes = () => {
     SendChannels.UpdateAllPackages,
     updateAllPackagesTo
   )
+  addRoute<ValidateToken>(SendChannels.ValidateToken, validateToken)
 }

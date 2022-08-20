@@ -6,8 +6,8 @@
   import { activeTab } from "./stores/workspace"
 
   window.api.send({
-    channel: SendChannels.Token,
-    meta: { workspace: $activeTab },
+    channel: SendChannels.ValidateToken,
+    meta: {},
     data: { token: $token },
   })
 
