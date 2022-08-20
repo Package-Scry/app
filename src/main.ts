@@ -7,6 +7,7 @@ import initRoutes from "./routes"
 import { ReceiveChannels, SendChannels } from "../custom"
 import { setIsProVersion } from "./authentication"
 import { createWindow, win } from "./window"
+import { send } from "./send"
 
 let socket: Socket
 const HOST = "https://package-scry.herokuapp.com/"
@@ -119,7 +120,7 @@ if (!gotTheLock) {
       `authentication`,
       ({ token, hasPro }: { token: string; hasPro: boolean }) => {
         setIsProVersion(hasPro)
-        send(ReceiveChannels.SaveToken, { token, hasPro })
+        send({ channel: ReceiveChannels.SaveToken, data: { token, hasPro } })
         socket.disconnect()
 
         ipcMain.removeListener("authenticate", openLogin)

@@ -136,6 +136,18 @@ interface PackageUpdated {
 }
 type PackageUpdatedSend = Omit<PackageUpdated, "fn"> & PackageUpdatedArgs
 
+interface SaveTokenArgs {
+  data: {
+    token: string
+    hasPro: boolean
+  }
+}
+interface SaveToken {
+  channel: ReceiveChannels.SaveToken
+  fn: (args: SaveTokenArgs) => void
+}
+type SaveTokenSend = Omit<SaveToken, "fn"> & SaveTokenArgs
+
 export type RendererEvents =
   | AlertError
   | ProFeature
@@ -143,6 +155,7 @@ export type RendererEvents =
   | GetPackages
   | GetOutdatedPackages
   | PackageUpdated
+  | SaveToken
 export type RendererEventsSend =
   | AlertErrorSend
   | ProFeatureSend
@@ -150,6 +163,7 @@ export type RendererEventsSend =
   | GetPackagesSend
   | GetOutdatedPackagesSend
   | PackageUpdatedSend
+  | SaveTokenSend
 
 declare global {
   interface Window {

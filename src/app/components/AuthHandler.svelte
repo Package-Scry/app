@@ -11,9 +11,10 @@
     data: { token: $token },
   })
 
-  window.api.receive(
-    ReceiveChannels.SaveToken,
-    ({ token, hasPro }: { token: string; hasPro: boolean }) => {
+  window.api.receive({
+    channel: ReceiveChannels.SaveToken,
+    fn: ({ data }) => {
+      const { token, hasPro } = data
       login(token, hasPro, $activeTab)
 
       const path = $activeTab
@@ -27,8 +28,8 @@
         },
         data: { workspaceCount: 0 },
       })
-    }
-  )
+    },
+  })
 
   window.api.receive({
     channel: ReceiveChannels.ProFeature,

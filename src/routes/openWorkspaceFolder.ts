@@ -25,6 +25,7 @@ export const openWorkspaceFolder = async ({
 
   if (filePath === false) {
     send({ channel: ReceiveChannels.OpenWFolderCancelled, ...{} })
+
     return { wasSuccessful: true }
   }
 
