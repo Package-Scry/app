@@ -9,10 +9,10 @@ import {
   OpenWorkspaceFolder,
 } from "../../custom"
 import { updatePackage } from "../commands"
+import { send } from "../send"
 import { openWorkspaceFolder } from "./openWorkspaceFolder"
 
 const addRoute = <T extends MainEvents>(
-  send: WebContentsSend,
   sendChannel: T["channel"],
   fn: (
     args: Omit<T, "channel">,
