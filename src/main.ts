@@ -1,27 +1,14 @@
 import { app, BrowserWindow, ipcMain, shell } from "electron"
 import { autoUpdater } from "electron-updater"
 import * as path from "path"
-import { readFile } from "fs"
 import { io, Socket } from "socket.io-client"
 import fixPath from "fix-path"
-import { checkPackages, updatePackage } from "./commands"
 import initRoutes from "./routes"
 import { ReceiveChannels, SendChannels } from "../custom"
-import type { WebContentsSend } from "."
 import { setIsProVersion } from "./authentication"
+import { createWindow, win } from "./window"
 
-interface EventPackageUpdate {
-  name: string
-  path: string
-  workspace: string
-  version: string
-}
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let win: BrowserWindow
 let socket: Socket
-let isProVersion = false
 const HOST = "https://package-scry.herokuapp.com/"
 const env = process.env.NODE_ENV || "development"
 
@@ -29,27 +16,7 @@ if (env !== "development") {
   fixPath()
 }
 
-async function createWindow() {
-  // Create the browser windows.
-  win = new BrowserWindow({
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
-    show: false,
-  })
-
-  win.removeMenu()
-  win.maximize()
-  // and load the index.html of the app.
-  await win.loadFile(path.join(__dirname, "./index.html"))
-
-  // Open the DevTools.
-  win.webContents.openDevTools()
-}
-
 const gotTheLock = app.requestSingleInstanceLock()
-const send: WebContentsSend = (channel, args) =>
-  win.webContents.send(channel.toString(), args)
 
 app.on("open-url", (event, _) => {
   event.preventDefault()
