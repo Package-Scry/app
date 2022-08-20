@@ -2,6 +2,7 @@ import type { Package } from "./src/app/components/stores/package"
 
 export {}
 
+// -------- SendChannels --------
 export enum SendChannels {
   OpenWorkspaceFolder = "OpenWorkspaceFolder",
   PackageUpdate = "PackageUpdate",
@@ -13,19 +14,6 @@ export enum SendChannels {
   UpdateAll = "UpdateAll",
   Feedback = "Feedback",
   GetChangeLog = "GetChangeLog",
-}
-
-export enum ReceiveChannels {
-  AlertError = "AlertError",
-  GetPackages = "GetPackages",
-  Outdated = "Outdated",
-  PackageUpdated = "PackageUpdated",
-  OpenWFolderCancelled = "OpenWFolderCancelled",
-  SaveToken = "SaveToken",
-  Alert = "Alert",
-  ProFeature = "ProFeature",
-  UpdatedAll = "UpdatedAll",
-  SendChangeLog = "SendChangeLog",
 }
 
 export interface DefaultEventArgs {
@@ -62,12 +50,29 @@ export interface OpenWorkspaceFolder extends OpenWorkspaceFolderArgs {
 
 export type MainEvents = Token | PackageUpdate | OpenWorkspaceFolder
 
-interface MetaData extends CallbackStatus {
-  meta?: { workspace?: string }
-}
-interface DefaultRendererEventArgs extends MetaData {}
+// -------- ReceiveChannels --------
 
-interface AlertErrorArgs extends DefaultRendererEventArgs {
+export enum ReceiveChannels {
+  AlertError = "AlertError",
+  GetPackages = "GetPackages",
+  GetOutdatedPackages = "GetOutdatedPackages",
+  PackageUpdated = "PackageUpdated",
+  OpenWFolderCancelled = "OpenWFolderCancelled",
+  SaveToken = "SaveToken",
+  Alert = "Alert",
+  ProFeature = "ProFeature",
+  UpdatedAll = "UpdatedAll",
+  SendChangeLog = "SendChangeLog",
+}
+
+export interface CallbackStatus {
+  wasSuccessful: boolean
+}
+interface MetaData {
+  meta: { workspace: string }
+}
+
+interface AlertErrorArgs extends MetaData {
   data: {
     error: string
     channel: SendChannels
@@ -106,22 +111,30 @@ interface GetPackages {
   fn: (args: GetPackagesArgs) => void
 }
 type GetPackagesSend = Omit<GetPackages, "fn"> & GetPackagesArgs
+interface GetOutdatedPackagesArgs extends DefaultRendererEventArgs {
+  data: {
+    packages: Omit<Package, "local", "status">[]
+  }
+}
+interface GetOutdatedPackages {
+  channel: ReceiveChannels.GetOutdatedPackages
+  fn: (args: GetOutdatedPackagesArgs) => void
+}
+type GetOutdatedPackagesSend = Omit<GetOutdatedPackages, "fn"> &
+  GetOutdatedPackagesArgs
 
 export type RendererEvents =
   | AlertError
   | ProFeature
   | OpenWFolderCancelled
   | GetPackages
+  | GetOutdatedPackages
 export type RendererEventsSend =
   | AlertErrorSend
   | ProFeatureSend
   | OpenWFolderCancelledSend
   | GetPackagesSend
-
-export interface CallbackStatus {
-  wasSuccessful?: boolean
-  error?: string
-}
+  | GetOutdatedPackagesSend
 
 declare global {
   interface Window {

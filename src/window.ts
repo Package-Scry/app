@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell } from "electron"
+import { BrowserWindow } from "electron"
 import * as path from "path"
 
 // Keep a global reference of the window object, if you don't, the window will

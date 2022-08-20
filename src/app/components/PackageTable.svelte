@@ -24,17 +24,6 @@
     workspace: string
   }
 
-  interface OutdatedEvent {
-    packages: Package[]
-    project: string
-  }
-
-  interface PackagesEvent {
-    packages: Package[]
-    filePath: string
-    name: string
-  }
-
   interface UpdatedEvent {
     name: string
     version: string
@@ -63,15 +52,19 @@
     }
   })
 
-  window.api.receive(ReceiveChannels.Outdated, (data: OutdatedEvent) => {
-    const { packages: newPackages, project } = data
-    const activeTab = localStorage.getItem("activeTab")
+  window.api.receive({
+    channel: ReceiveChannels.GetOutdatedPackages,
+    fn: ({ data, meta }) => {
+      const { packages: newPackages } = data
+      const { workspace } = meta
+      const activeTab = localStorage.getItem("activeTab")
 
-    if (activeTab !== project) return
+      if (activeTab !== workspace) return
 
-    isUpdatingAll.set(false)
+      isUpdatingAll.set(false)
 
-    updatePackages(newPackages)
+      updatePackages(newPackages)
+    },
   })
 
   window.api.receive({
