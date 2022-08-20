@@ -1,11 +1,11 @@
 import { exec } from "child_process"
 import { getErrorFromCli, Error } from "./utils"
 import { readFileSync } from "fs"
-import type { PackageJSON } from "./main"
 import util from "util"
 import { writeFileSync } from "original-fs"
-import type { WebContentsSend } from "."
 import { PackageUpdate, ReceiveChannels } from "../custom"
+import { send } from "./send"
+import type { PackageJSON } from "."
 
 const pExec = util.promisify(exec)
 
@@ -17,8 +17,7 @@ interface Packages {
 
 export const checkPackages = async (
   filePath: string,
-  project?: string,
-  send?: WebContentsSend
+  project?: string
 ): Promise<{
   packages: Packages[]
 }> => {
@@ -33,7 +32,11 @@ export const checkPackages = async (
       })
       .slice(1)
 
-    send?.(ReceiveChannels.Outdated, { packages, project })
+    send?.({
+      channel: ReceiveChannels.GetOutdatedPackages,
+      data: { packages },
+      meta: { workspace: project },
+    })
 
     return packages
   }
@@ -55,10 +58,10 @@ export const checkPackages = async (
   }
 }
 
-export const updatePackage = async (
-  { meta, data }: Omit<PackageUpdate, "channel">,
-  send: WebContentsSend
-) => {
+export const updatePackage = async ({
+  meta,
+  data,
+}: Omit<PackageUpdate, "channel">) => {
   const { name, version } = data
   const { path, workspace } = meta
   exec(`cd "${path}" && npm i ${name}@${version}`, (error, stdout, stderr) => {
@@ -72,14 +75,17 @@ export const updatePackage = async (
 
     const wasSuccessful = !!stdout
 
-    send(ReceiveChannels.PackageUpdated, {
-      name,
-      version,
-      workspace,
+    send({
+      channel: ReceiveChannels.PackageUpdated,
+      data: {
+        name,
+        version,
+      },
+      meta: { workspace },
       wasSuccessful,
     })
 
-    return { wasSuccessful }
+    return { wasSuccessful, error: error?.message }
   })
 
   return { wasSuccessful: false }

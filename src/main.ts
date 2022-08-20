@@ -96,10 +96,10 @@ if (!gotTheLock) {
   })
 
   const alert = (text: string) => {
-    send(ReceiveChannels.Alert, text)
+    send({ channel: ReceiveChannels.TestAlert, data: { text } })
   }
 
-  initRoutes(send)
+  initRoutes()
 
   ipcMain.on(SendChannels.Token, (_, token: string) => {
     socket = io(HOST, {

@@ -59,8 +59,8 @@ export enum ReceiveChannels {
   PackageUpdated = "PackageUpdated",
   OpenWFolderCancelled = "OpenWFolderCancelled",
   SaveToken = "SaveToken",
-  Alert = "Alert",
-  ProFeature = "ProFeature",
+  TestAlert = "TestAlert",
+  IsProFeature = "IsProFeature",
   UpdatedAll = "UpdatedAll",
   SendChangeLog = "SendChangeLog",
 }
@@ -84,12 +84,12 @@ interface AlertError {
 }
 type AlertErrorSend = Omit<AlertError, "fn"> & AlertErrorArgs
 
-interface ProFeatureArgs {}
-interface ProFeature {
-  channel: ReceiveChannels.ProFeature
-  fn: (args: ProFeatureArgs) => void
+interface IsProFeatureArgs {}
+interface IsProFeature {
+  channel: ReceiveChannels.IsProFeature
+  fn: (args: IsProFeatureArgs) => void
 }
-type ProFeatureSend = Omit<ProFeature, "fn"> & ProFeatureArgs
+type IsProFeatureSend = Omit<IsProFeature, "fn"> & IsProFeatureArgs
 
 interface OpenWFolderCancelledArgs {}
 interface OpenWFolderCancelled {
@@ -148,22 +148,35 @@ interface SaveToken {
 }
 type SaveTokenSend = Omit<SaveToken, "fn"> & SaveTokenArgs
 
+interface TestAlertArgs {
+  data: {
+    text: string
+  }
+}
+interface TestAlert {
+  channel: ReceiveChannels.TestAlert
+  fn: (args: TestAlertArgs) => void
+}
+type TestAlertSend = Omit<TestAlert, "fn"> & TestAlertArgs
+
 export type RendererEvents =
   | AlertError
-  | ProFeature
+  | IsProFeature
   | OpenWFolderCancelled
   | GetPackages
   | GetOutdatedPackages
   | PackageUpdated
   | SaveToken
+  | TestAlert
 export type RendererEventsSend =
   | AlertErrorSend
-  | ProFeatureSend
+  | IsProFeatureSend
   | OpenWFolderCancelledSend
   | GetPackagesSend
   | GetOutdatedPackagesSend
   | PackageUpdatedSend
   | SaveTokenSend
+  | TestAlertSend
 
 declare global {
   interface Window {

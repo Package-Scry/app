@@ -17,7 +17,7 @@ export const openWorkspaceFolder = async ({
   let wasSuccessful = true
 
   if (!getIsProVersion() && !!workspaceCount && workspaceCount > 0) {
-    send({ channel: ReceiveChannels.ProFeature, ...{} })
+    send({ channel: ReceiveChannels.IsProFeature, ...{} })
     return { wasSuccessful: true }
   }
 
@@ -38,7 +38,7 @@ export const openWorkspaceFolder = async ({
     const parsedData: PackageJSON = JSON.parse(data)
     const { dependencies, devDependencies, name } = parsedData
 
-    checkPackages(filePath, name, send)
+    checkPackages(filePath, name)
 
     const allDependencies = { ...dependencies, ...devDependencies }
     const packages = Object.keys(allDependencies).map(key => ({

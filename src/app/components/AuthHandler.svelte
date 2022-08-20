@@ -32,14 +32,18 @@
   })
 
   window.api.receive({
-    channel: ReceiveChannels.ProFeature,
+    channel: ReceiveChannels.IsProFeature,
     fn: _ => {
       openProModal()
     },
   })
 
-  window.api.receive(ReceiveChannels.Alert, (text: string) => {
-    console.log("|  ALERT  |")
-    console.log(text)
+  window.api.receive({
+    channel: ReceiveChannels.TestAlert,
+    fn: ({ data }) => {
+      const { text } = data
+      console.log("|  ALERT  |")
+      console.log(text)
+    },
   })
 </script>
