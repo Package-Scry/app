@@ -1,5 +1,4 @@
 import { ipcMain } from "electron"
-import type { WebContentsSend } from ".."
 import {
   ReceiveChannels,
   CallbackStatus,
@@ -14,15 +13,12 @@ import { openWorkspaceFolder } from "./openWorkspaceFolder"
 
 const addRoute = <T extends MainEvents>(
   sendChannel: T["channel"],
-  fn: (
-    args: Omit<T, "channel">,
-    send: WebContentsSend
-  ) => Promise<CallbackStatus>
+  fn: (args: Omit<T, "channel">) => Promise<CallbackStatus>
 ) => {
   ipcMain.on(sendChannel, async (event, args: T) => {
     const { channel, ...argsWithoutChannel } = args
 
-    const eventData = await fn(argsWithoutChannel, send)
+    const eventData = await fn(argsWithoutChannel)
 
     const { wasSuccessful, error } = eventData
     const workspace = argsWithoutChannel.meta.workspace
@@ -36,7 +32,7 @@ const addRoute = <T extends MainEvents>(
   })
 }
 
-export const initRoutes = (send: WebContentsSend) => {
+export const initRoutes = () => {
   addRoute<PackageUpdate>(SendChannels.PackageUpdate, updatePackage)
   addRoute<OpenWorkspaceFolder>(
     SendChannels.OpenWorkspaceFolder,
