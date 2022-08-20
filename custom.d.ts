@@ -62,12 +62,23 @@ export interface Authenticate extends AuthenticateArgs {
   channel: SendChannels.Authenticate
 }
 
+interface UpgradeArgs extends DefaultEventArgs {}
+export interface Upgrade extends UpgradeArgs {
+  channel: SendChannels.Upgrade
+}
+
+interface AuthenticateArgs extends DefaultEventArgs {}
+export interface Authenticate extends AuthenticateArgs {
+  channel: SendChannels.Authenticate
+}
+
 export type MainEvents =
   | ValidateToken
   | PackageUpdate
   | OpenWorkspaceFolder
   | UpdateAllPackages
   | Authenticate
+  | Upgrade
 
 // -------- ReceiveChannels --------
 

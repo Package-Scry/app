@@ -32,10 +32,6 @@ export const validateToken = async ({
   // TODO: move them to their own routes
   ipcMain.on(SendChannels.Authenticate, openLogin)
 
-  ipcMain.on(SendChannels.Upgrade, () => {
-    shell.openExternal(`https://packagescry.com/sign-up`)
-  })
-
   return {
     wasSuccessful: true,
   }

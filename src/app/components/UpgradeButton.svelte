@@ -6,7 +6,7 @@
   const style =
     "cursor-pointer bg-green-1 w-auto mr-auto ml-5 py-1 px-4 rounded font-serif text-white text-xl self-center hover:bg-green-2"
   const onClick = () => {
-    window.api.send(SendChannels.Upgrade, {})
+    window.api.send({ channel: SendChannels.Upgrade, meta: {} })
   }
 </script>
 

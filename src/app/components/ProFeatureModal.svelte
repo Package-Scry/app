@@ -13,7 +13,7 @@
     closeProModal()
   }}
   onClick={() => {
-    window.api.send(SendChannels.Upgrade, {})
+    window.api.send({ channel: SendChannels.Upgrade, meta: {} })
 
     closeProModal()
   }}

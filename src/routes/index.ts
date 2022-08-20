@@ -1,4 +1,4 @@
-import { ipcMain } from "electron"
+import { ipcMain, shell } from "electron"
 import {
   ReceiveChannels,
   CallbackStatus,
@@ -8,6 +8,7 @@ import {
   OpenWorkspaceFolder,
   UpdateAllPackages,
   ValidateToken,
+  Upgrade,
 } from "../../custom"
 import { updateAllPackagesTo, updatePackage } from "../commands"
 import { send } from "../send"
@@ -46,4 +47,9 @@ export const initRoutes = () => {
     updateAllPackagesTo
   )
   addRoute<ValidateToken>(SendChannels.ValidateToken, validateToken)
+  addRoute<Upgrade>(SendChannels.Upgrade, async () => {
+    shell.openExternal(`https://packagescry.com/sign-up`)
+
+    return { wasSuccessful: true }
+  })
 }
