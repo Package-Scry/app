@@ -1,16 +1,13 @@
-import { app, BrowserWindow, ipcMain, shell } from "electron"
+import { app, BrowserWindow } from "electron"
 import { autoUpdater } from "electron-updater"
 import * as path from "path"
-import { io, Socket } from "socket.io-client"
 import fixPath from "fix-path"
 import initRoutes from "./routes"
-import { ReceiveChannels, SendChannels } from "../custom"
-import { setIsProVersion } from "./authentication"
+import { ReceiveChannels } from "../custom"
 import { createWindow, win } from "./window"
 import { send } from "./send"
+import { socket } from "./socket"
 
-let socket: Socket
-const HOST = "https://package-scry.herokuapp.com/"
 const env = process.env.NODE_ENV || "development"
 
 if (env !== "development") {
@@ -100,37 +97,4 @@ if (!gotTheLock) {
   }
 
   initRoutes()
-
-  ipcMain.on(SendChannels.Token, (_, token: string) => {
-    socket = io(HOST, {
-      query: {
-        token: token ?? "",
-      },
-    })
-
-    const openLogin = () => {
-      shell.openExternal(`https://package-scry.herokuapp.com/auth/${socket.id}`)
-    }
-
-    socket.on("connect", () => {
-      console.log(`Socket ${socket.id} connected`)
-    })
-
-    socket.on(
-      `authentication`,
-      ({ token, hasPro }: { token: string; hasPro: boolean }) => {
-        setIsProVersion(hasPro)
-        send({ channel: ReceiveChannels.SaveToken, data: { token, hasPro } })
-        socket.disconnect()
-
-        ipcMain.removeListener("authenticate", openLogin)
-      }
-    )
-
-    ipcMain.on(SendChannels.Authenticate, openLogin)
-
-    ipcMain.on(SendChannels.Upgrade, () => {
-      shell.openExternal(`https://packagescry.com/sign-up`)
-    })
-  })
 }
