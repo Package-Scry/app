@@ -11,7 +11,7 @@ export enum SendChannels {
   Token = "Token",
   Upgrade = "Upgrade",
   Alert = "Alert",
-  UpdateAll = "UpdateAll",
+  UpdateAllPackages = "UpdateAllPackages",
   Feedback = "Feedback",
   GetChangeLog = "GetChangeLog",
 }
@@ -48,7 +48,20 @@ export interface OpenWorkspaceFolder extends OpenWorkspaceFolderArgs {
   channel: SendChannels.OpenWorkspaceFolder
 }
 
-export type MainEvents = Token | PackageUpdate | OpenWorkspaceFolder
+interface UpdateAllPackagesArgs extends DefaultEventArgs {
+  data: {
+    type: "wanted" | "latest"
+  }
+}
+export interface UpdateAllPackages extends UpdateAllPackagesArgs {
+  channel: SendChannels.UpdateAllPackages
+}
+
+export type MainEvents =
+  | Token
+  | PackageUpdate
+  | OpenWorkspaceFolder
+  | UpdateAllPackages
 
 // -------- ReceiveChannels --------
 
@@ -61,7 +74,7 @@ export enum ReceiveChannels {
   SaveToken = "SaveToken",
   TestAlert = "TestAlert",
   IsProFeature = "IsProFeature",
-  UpdatedAll = "UpdatedAll",
+  UpdatedAllPackage = "UpdatedAllPackage",
   SendChangeLog = "SendChangeLog",
 }
 
@@ -159,6 +172,14 @@ interface TestAlert {
 }
 type TestAlertSend = Omit<TestAlert, "fn"> & TestAlertArgs
 
+interface UpdatedAllPackageArgs extends MetaData, CallbackStatus {}
+interface UpdatedAllPackage {
+  channel: ReceiveChannels.UpdatedAllPackage
+  fn: (args: UpdatedAllPackageArgs) => void
+}
+type UpdatedAllPackageSend = Omit<UpdatedAllPackage, "fn"> &
+  UpdatedAllPackageArgs
+
 export type RendererEvents =
   | AlertError
   | IsProFeature
@@ -168,6 +189,7 @@ export type RendererEvents =
   | PackageUpdated
   | SaveToken
   | TestAlert
+  | UpdatedAllPackage
 export type RendererEventsSend =
   | AlertErrorSend
   | IsProFeatureSend
@@ -177,6 +199,7 @@ export type RendererEventsSend =
   | PackageUpdatedSend
   | SaveTokenSend
   | TestAlertSend
+  | UpdatedAllPackageSend
 
 declare global {
   interface Window {

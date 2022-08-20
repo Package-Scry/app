@@ -6,8 +6,9 @@ import {
   SendChannels,
   PackageUpdate,
   OpenWorkspaceFolder,
+  UpdateAllPackages,
 } from "../../custom"
-import { updatePackage } from "../commands"
+import { updateAllPackagesTo, updatePackage } from "../commands"
 import { send } from "../send"
 import { openWorkspaceFolder } from "./openWorkspaceFolder"
 
@@ -37,5 +38,9 @@ export const initRoutes = () => {
   addRoute<OpenWorkspaceFolder>(
     SendChannels.OpenWorkspaceFolder,
     openWorkspaceFolder
+  )
+  addRoute<UpdateAllPackages>(
+    SendChannels.UpdateAllPackages,
+    updateAllPackagesTo
   )
 }

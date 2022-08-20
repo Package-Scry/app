@@ -19,30 +19,28 @@
     Status = "status",
   }
 
-  interface UpdateAllToEvent {
-    wasSuccessful: boolean
-    workspace: string
-  }
+  window.api.receive({
+    channel: ReceiveChannels.UpdatedAllPackage,
+    fn: ({ meta, wasSuccessful }) => {
+      const { workspace } = meta
+      const activeTab = localStorage.getItem("activeTab")
 
-  window.api.receive(ReceiveChannels.UpdatedAll, (data: UpdateAllToEvent) => {
-    const { wasSuccessful, workspace } = data
-    const activeTab = localStorage.getItem("activeTab")
+      if (workspace === activeTab) {
+        if (wasSuccessful) {
+          const path = localStorage.getItem(`dirPath-${workspace}`)
 
-    if (workspace === activeTab) {
-      if (wasSuccessful) {
-        const path = localStorage.getItem(`dirPath-${workspace}`)
+          // TODO: add refresh event instead?
 
-        // TODO: add refresh event instead?
-
-        window.api.send({
-          channel: SendChannels.OpenWorkspaceFolder,
-          meta: {
-            path,
-          },
-          data: { workspaceCount: 0 },
-        })
+          window.api.send({
+            channel: SendChannels.OpenWorkspaceFolder,
+            meta: {
+              path,
+            },
+            data: { workspaceCount: 0 },
+          })
+        }
       }
-    }
+    },
   })
 
   window.api.receive({

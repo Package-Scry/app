@@ -3,7 +3,7 @@ import { getErrorFromCli, Error } from "./utils"
 import { readFileSync } from "fs"
 import util from "util"
 import { writeFileSync } from "original-fs"
-import { PackageUpdate, ReceiveChannels } from "../custom"
+import { PackageUpdate, ReceiveChannels, UpdateAllPackages } from "../custom"
 import { send } from "./send"
 import type { PackageJSON } from "."
 
@@ -117,15 +117,17 @@ const runCommand = async (
   }
 }
 
-export const updateAllTo = async (
-  filePath: string,
-  type: "wanted" | "latest"
-): Promise<{ wasSuccessful: boolean }> => {
+export const updateAllPackagesTo = async ({
+  meta,
+  data,
+}: Omit<UpdateAllPackages, "channel">) => {
+  const { type } = data
+  const { workspace, path } = meta
   try {
-    const data = readFileSync(`${filePath}/package.json`, { encoding: "utf8" })
+    const data = readFileSync(`${path}/package.json`, { encoding: "utf8" })
     const parsedData: PackageJSON = JSON.parse(data)
     const { dependencies, devDependencies } = parsedData
-    const { packages: outdatedPackages } = await checkPackages(filePath)
+    const { packages: outdatedPackages } = await checkPackages(path)
     const updatedDependencies = Object.keys(dependencies ?? {}).reduce<
       PackageJSON["dependencies"]
     >((allPackages, packageName) => {
@@ -152,18 +154,22 @@ export const updateAllTo = async (
     }
 
     writeFileSync(
-      `${filePath}/package.json`,
+      `${path}/package.json`,
       JSON.stringify(newPackageJSON, null, 2)
     )
 
-    const { wasSuccessful } = await runCommand(
-      `cd "${filePath}" && npm i --json`
-    )
+    const { wasSuccessful } = await runCommand(`cd "${path}" && npm i --json`)
+
+    send({
+      channel: ReceiveChannels.UpdatedAllPackage,
+      meta: { workspace },
+      wasSuccessful,
+    })
 
     return { wasSuccessful }
   } catch (error) {
     console.log("error reading or writing the file", error)
 
-    return { wasSuccessful: false }
+    return { wasSuccessful: false, error }
   }
 }

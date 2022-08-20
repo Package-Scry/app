@@ -120,9 +120,14 @@ export const requestUpdateAllPackage = (type: "wanted" | "latest"): void => {
     }))
   })
 
-  window.api.send(SendChannels.UpdateAll, {
-    path,
-    workspace: activeTab,
-    type,
+  window.api.send({
+    channel: SendChannels.UpdateAllPackages,
+    data: {
+      type,
+    },
+    meta: {
+      path,
+      workspace: activeTab,
+    },
   })
 }

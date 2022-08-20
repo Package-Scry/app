@@ -1,24 +1,8 @@
 import { ipcMain, shell } from "electron"
-import type { ReceiveChannel } from "../custom"
-import { updateAllTo } from "./commands"
+import { SendChannels } from "../custom"
 
-interface EventUpdateAll {
-  path: string
-  workspace: string
-  type: "wanted" | "latest"
-}
-
-type Send = (channel: ReceiveChannel, ...args: TSFixMe[]) => void
-
-export default (send: Send): void => {
-  ipcMain.on("updateAll", async (event, args: EventUpdateAll) => {
-    const { path, workspace, type } = args
-    const { wasSuccessful } = await updateAllTo(path, type)
-
-    send("updatedAll", { workspace, wasSuccessful })
-  })
-
-  ipcMain.on("feedback", () => {
+export default (): void => {
+  ipcMain.on(SendChannels.Feedback, () => {
     shell.openExternal(`https://www.packagescry.com/contact-us/`)
   })
 }
