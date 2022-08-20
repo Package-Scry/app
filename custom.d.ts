@@ -10,7 +10,6 @@ export enum SendChannels {
   IsLoggedIn = "IsLoggedIn",
   ValidateToken = "ValidateToken",
   Upgrade = "Upgrade",
-  Alert = "Alert",
   UpdateAllPackages = "UpdateAllPackages",
   Feedback = "Feedback",
   GetChangeLog = "GetChangeLog",
@@ -67,9 +66,9 @@ export interface Upgrade extends UpgradeArgs {
   channel: SendChannels.Upgrade
 }
 
-interface AuthenticateArgs extends DefaultEventArgs {}
-export interface Authenticate extends AuthenticateArgs {
-  channel: SendChannels.Authenticate
+interface FeedbackArgs extends DefaultEventArgs {}
+export interface Feedback extends FeedbackArgs {
+  channel: SendChannels.Feedback
 }
 
 export type MainEvents =
@@ -79,6 +78,7 @@ export type MainEvents =
   | UpdateAllPackages
   | Authenticate
   | Upgrade
+  | Feedback
 
 // -------- ReceiveChannels --------
 

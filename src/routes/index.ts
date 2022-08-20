@@ -9,6 +9,7 @@ import {
   UpdateAllPackages,
   ValidateToken,
   Upgrade,
+  Feedback,
 } from "../../custom"
 import { updateAllPackagesTo, updatePackage } from "../commands"
 import { send } from "../send"
@@ -49,6 +50,11 @@ export const initRoutes = () => {
   addRoute<ValidateToken>(SendChannels.ValidateToken, validateToken)
   addRoute<Upgrade>(SendChannels.Upgrade, async () => {
     shell.openExternal(`https://packagescry.com/sign-up`)
+
+    return { wasSuccessful: true }
+  })
+  addRoute<Feedback>(SendChannels.Feedback, async () => {
+    shell.openExternal(`https://www.packagescry.com/contact-us/`)
 
     return { wasSuccessful: true }
   })
