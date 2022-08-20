@@ -28,14 +28,17 @@ const addRoute = <T extends MainEvents>(
     const workspace = argsWithoutChannel.meta.workspace
 
     if (!wasSuccessful)
-      send(ReceiveChannels.AlertError, { workspace, error, channel })
+      send({
+        channel: ReceiveChannels.AlertError,
+        meta: { workspace },
+        data: { error, channel: sendChannel },
+      })
   })
 }
 
 export const initRoutes = (send: WebContentsSend) => {
-  addRoute<PackageUpdate>(send, SendChannels.PackageUpdate, updatePackage)
+  addRoute<PackageUpdate>(SendChannels.PackageUpdate, updatePackage)
   addRoute<OpenWorkspaceFolder>(
-    send,
     SendChannels.OpenWorkspaceFolder,
     openWorkspaceFolder
   )

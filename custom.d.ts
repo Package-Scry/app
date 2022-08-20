@@ -67,6 +67,18 @@ interface MetaData extends CallbackStatus {
 }
 interface DefaultRendererEventArgs extends MetaData {}
 
+interface AlertErrorArgs extends DefaultRendererEventArgs {
+  data: {
+    error: string
+    channel: SendChannels
+  }
+}
+interface AlertError {
+  channel: ReceiveChannels.AlertError
+  fn: (args: AlertErrorArgs) => void
+}
+type AlertErrorSend = Omit<AlertError, "fn"> & AlertErrorArgs
+
 interface ProFeatureArgs extends DefaultRendererEventArgs {}
 interface ProFeature {
   channel: ReceiveChannels.ProFeature
@@ -95,8 +107,13 @@ interface GetPackages {
 }
 type GetPackagesSend = Omit<GetPackages, "fn"> & GetPackagesArgs
 
-export type RendererEvents = ProFeature | OpenWFolderCancelled | GetPackages
+export type RendererEvents =
+  | AlertError
+  | ProFeature
+  | OpenWFolderCancelled
+  | GetPackages
 export type RendererEventsSend =
+  | AlertErrorSend
   | ProFeatureSend
   | OpenWFolderCancelledSend
   | GetPackagesSend
