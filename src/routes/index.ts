@@ -13,7 +13,7 @@ import { openWorkspaceFolder } from "./openWorkspaceFolder"
 
 const addRoute = <T extends MainEvents>(
   sendChannel: T["channel"],
-  fn: (args: Omit<T, "channel">) => Promise<CallbackStatus>
+  fn: (args: Omit<T, "channel">) => Promise<CallbackStatus & { error?: string }>
 ) => {
   ipcMain.on(sendChannel, async (event, args: T) => {
     const { channel, ...argsWithoutChannel } = args
