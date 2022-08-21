@@ -10,12 +10,13 @@ module.exports = [
     ...renderer,
     devtool: "inline-source-map",
     devServer: {
+      port: 8137,
       devMiddleware: {
         publicPath: "./dist",
         writeToDisk: true,
       },
       client: {
-        webSocketURL: "ws://localhost:8080/ws",
+        webSocketURL: "ws://localhost:8137/ws",
       },
     },
   },
