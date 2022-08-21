@@ -8,7 +8,7 @@
   } from "./stores/workspace"
   import LogoutButton from "./LogoutButton.svelte"
   import { isUpdatingAll } from "./stores/package"
-  import { ReceiveChannels, SendChannels } from "../../../custom"
+  import { ReceiveChannels, SendChannels } from "../../channels"
 
   window.api.receive({
     channel: ReceiveChannels.OpenWFolderCancelled,

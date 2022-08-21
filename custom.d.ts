@@ -1,19 +1,9 @@
 import type { Package } from "./src/app/components/stores/package"
+import type { ReceiveChannels, SendChannels } from "./src/channels"
 
 export {}
 
 // -------- SendChannels --------
-export enum SendChannels {
-  OpenWorkspaceFolder = "OpenWorkspaceFolder",
-  PackageUpdate = "PackageUpdate",
-  Authenticate = "Authenticate",
-  IsLoggedIn = "IsLoggedIn",
-  ValidateToken = "ValidateToken",
-  Upgrade = "Upgrade",
-  UpdateAllPackages = "UpdateAllPackages",
-  Feedback = "Feedback",
-  GetChangeLog = "GetChangeLog",
-}
 
 export interface DefaultEventArgs {
   meta: { path?: string; workspace?: string }
@@ -81,19 +71,6 @@ export type MainEvents =
   | Feedback
 
 // -------- ReceiveChannels --------
-
-export enum ReceiveChannels {
-  AlertError = "AlertError",
-  GetPackages = "GetPackages",
-  GetOutdatedPackages = "GetOutdatedPackages",
-  PackageUpdated = "PackageUpdated",
-  OpenWFolderCancelled = "OpenWFolderCancelled",
-  SaveToken = "SaveToken",
-  TestAlert = "TestAlert",
-  IsProFeature = "IsProFeature",
-  UpdatedAllPackage = "UpdatedAllPackage",
-  SendChangeLog = "SendChangeLog",
-}
 
 export interface CallbackStatus {
   wasSuccessful: boolean

@@ -3,9 +3,10 @@ import { getErrorFromCli, Error } from "./utils"
 import { readFileSync } from "fs"
 import util from "util"
 import { writeFileSync } from "original-fs"
-import { PackageUpdate, ReceiveChannels, UpdateAllPackages } from "../custom"
+import type { PackageUpdate, UpdateAllPackages } from "../custom"
 import { send } from "./send"
 import type { PackageJSON } from "."
+import { ReceiveChannels } from "./channels"
 
 const pExec = util.promisify(exec)
 

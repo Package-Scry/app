@@ -9,7 +9,7 @@
   import UpgradeButton from "./components/UpgradeButton.svelte"
   import Header from "./components/typography/Header.svelte"
   import HeaderButton from "./components/HeaderButton.svelte"
-  import { SendChannels } from "../../custom"
+  import { SendChannels } from "../channels"
 
   const onClick = () =>
     window.api.send({ channel: SendChannels.Feedback, meta: {} })

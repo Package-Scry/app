@@ -1,9 +1,10 @@
 import { readFile } from "fs"
 import type { PackageJSON } from ".."
-import { ReceiveChannels, OpenWorkspaceFolder } from "../../custom"
+import type { OpenWorkspaceFolder } from "../../custom"
 import { Status } from "../app/components/stores/package"
 import { getIsProVersion } from "../authentication"
 import { checkPackages } from "../commands"
+import { ReceiveChannels } from "../channels"
 import { send } from "../send"
 import { getSelectedFolderPath } from "../utils"
 

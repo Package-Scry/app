@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ReceiveChannels, SendChannels } from "../../../custom"
+  import { ReceiveChannels, SendChannels } from "../../channels"
 
   import { openProModal } from "./stores/ui"
   import { token, login } from "./stores/user"

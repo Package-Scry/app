@@ -2,7 +2,7 @@ import { writable } from "svelte/store"
 import { openUpgradeModal } from "./ui"
 import { workspaces } from "./workspace"
 import { closeProModal, closeUpgradeModal } from "./ui"
-import { SendChannels } from "../../../../custom"
+import { SendChannels } from "../../../channels"
 
 export const isLoggedIn = writable(false)
 export const hasPro = writable(false)

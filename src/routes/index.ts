@@ -1,9 +1,7 @@
 import { ipcMain, shell } from "electron"
-import {
-  ReceiveChannels,
+import type {
   CallbackStatus,
   MainEvents,
-  SendChannels,
   PackageUpdate,
   OpenWorkspaceFolder,
   UpdateAllPackages,
@@ -12,6 +10,7 @@ import {
   Feedback,
 } from "../../custom"
 import { updateAllPackagesTo, updatePackage } from "../commands"
+import { ReceiveChannels, SendChannels } from "../channels"
 import { send } from "../send"
 import { openWorkspaceFolder } from "./openWorkspaceFolder"
 import { validateToken } from "./validateToken"

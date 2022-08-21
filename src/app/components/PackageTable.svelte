@@ -4,12 +4,11 @@
   import {
     packages,
     updatePackage,
-    Package,
     updatePackages,
     isUpdatingAll,
     Status,
   } from "./stores/package"
-  import { ReceiveChannels, SendChannels } from "../../../custom"
+  import { ReceiveChannels, SendChannels } from "../../channels"
 
   enum COLUMN_KEYS {
     Name = "name",

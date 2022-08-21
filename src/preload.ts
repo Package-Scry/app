@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron"
-import { ReceiveChannels, SendChannels } from "../custom"
+import { ReceiveChannels, SendChannels } from "./channels"
 
 // https://github.com/reZach/secure-electron-template/blob/master/docs/newtoelectron.md
 // Expose protected methods that allow the renderer process to use

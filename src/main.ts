@@ -2,11 +2,11 @@ import { app, BrowserWindow } from "electron"
 import { autoUpdater } from "electron-updater"
 import * as path from "path"
 import fixPath from "fix-path"
-import initRoutes from "./routes"
-import { ReceiveChannels } from "../custom"
 import { createWindow, win } from "./window"
-import { send } from "./send"
+// import { send } from "./send"
 import { socket } from "./socket"
+import { initRoutes } from "./routes"
+// import { ReceiveChannels } from "./channels"
 
 const env = process.env.NODE_ENV || "development"
 
@@ -93,7 +93,7 @@ if (!gotTheLock) {
   })
 
   const alert = (text: string) => {
-    send({ channel: ReceiveChannels.TestAlert, data: { text } })
+    // send({ channel: ReceiveChannels.TestAlert, data: { text } })
   }
 
   initRoutes()

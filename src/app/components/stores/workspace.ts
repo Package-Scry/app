@@ -1,5 +1,5 @@
 import { writable } from "svelte/store"
-import { SendChannels } from "../../../../custom"
+import { SendChannels } from "../../../channels"
 
 const getWorkspaces = () =>
   localStorage.getItem("tabs")

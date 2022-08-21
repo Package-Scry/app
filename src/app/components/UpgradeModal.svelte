@@ -3,7 +3,7 @@
   import Base from "./typography/Base.svelte"
   import Item from "./list/Item.svelte"
   import { isUpgradeModalOpen, closeUpgradeModal } from "./stores/ui"
-  import { SendChannels } from "../../../custom"
+  import { SendChannels } from "../../channels"
 </script>
 
 <Modal

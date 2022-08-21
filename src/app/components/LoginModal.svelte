@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SendChannels } from "../../../custom"
+  import { SendChannels } from "../../channels"
 
   import Modal from "./modal/Modal.svelte"
   import { isLoggedIn } from "./stores/user"

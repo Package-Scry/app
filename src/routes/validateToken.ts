@@ -1,6 +1,7 @@
 import { ipcMain, shell } from "electron"
-import { ReceiveChannels, SendChannels, ValidateToken } from "../../custom"
+import type { ValidateToken } from "../../custom"
 import { setIsProVersion } from "../authentication"
+import { ReceiveChannels, SendChannels } from "../channels"
 import { send } from "../send"
 import { setSocket, socket } from "../socket"
 

@@ -1,5 +1,5 @@
 import { writable } from "svelte/store"
-import { SendChannels } from "../../../../custom"
+import { SendChannels } from "../../../channels"
 
 export interface Package {
   name: string
