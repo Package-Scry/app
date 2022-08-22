@@ -19,12 +19,6 @@ export const getChangeLogs = async ({
   const { workspace } = meta
   const { packages } = data
 
-  const isMajorVersion = (release: { [keys: string]: string }) => {
-    const releaseName = release.tag_name.split("-")[0]
-
-    return `${releaseName.split(".")[1]}.${releaseName.split(".")[2]}` === "0.0"
-  }
-
   const getMajorVersion = (version: string) =>
     parseInt(version.replace("v", "").split(".")[0], 10)
 
@@ -47,15 +41,27 @@ export const getChangeLogs = async ({
     version: number,
     latestVersion: number
   ): Promise<ChangeLog[]> => {
-    console.log("fetching", version, `${baseUrl}/releases/tags/v${version}.0.0`)
-    const response = await fetch(`${baseUrl}/releases/tags/v${version}.0.0`, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-    const data = (await response.json()) as TSFixMe
-    console.log(data)
+    const fetchAndParse = async (url: string) => {
+      try {
+        console.log("fetching", url)
+        const response = await fetch(url, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        })
+
+        const data = (await response.json()) as TSFixMe
+        return data?.tag_name ? data : null
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const data =
+      (await fetchAndParse(`${baseUrl}/releases/tags/v${version}.0.0`)) ??
+      (await fetchAndParse(`${baseUrl}/releases/tags/${version}.0.0`))
+
     // @ts-ignore
     const changeLog: ChangeLog = {
       version: data?.tag_name,
@@ -78,14 +84,14 @@ export const getChangeLogs = async ({
     currentVersion: string
   }) => {
     const { currentVersion, owner, repo } = npmPackage
-    const versionNumber = getMajorVersion(currentVersion)
+    const majorVersion = getMajorVersion(currentVersion)
     const githubURL = `https://api.github.com/repos/${owner}/${repo}`
 
     try {
       const latestMajorVersion = await getLatestMajorVersion(githubURL)
       const changeLogs = await getChangeLogFromGitHub(
         githubURL,
-        versionNumber + 1,
+        majorVersion + 1,
         latestMajorVersion
       )
 
