@@ -58,9 +58,9 @@ export const openWorkspaceFolder = async ({
         name,
       },
     })
-
-    return {
-      wasSuccessful,
-    }
   })
+
+  return {
+    wasSuccessful,
+  }
 }
