@@ -5,9 +5,8 @@ import { ReceiveChannels, SendChannels } from "../channels"
 import { send } from "../send"
 import { setSocket, socket } from "../socket"
 
-export const validateToken = async ({
-  data,
-}: Omit<ValidateToken, "channel">) => {
+export const validateToken = async (args: Omit<ValidateToken, "channel">) => {
+  const { data } = args
   const { token } = data
   setSocket(token)
 

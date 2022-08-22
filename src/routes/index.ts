@@ -20,12 +20,11 @@ const addRoute = <T extends MainEvents>(
   fn: (args: Omit<T, "channel">) => Promise<CallbackStatus & { error?: string }>
 ) => {
   ipcMain.on(sendChannel, async (event, args: T) => {
-    const { channel, ...argsWithoutChannel } = args
 
-    const eventData = await fn(argsWithoutChannel)
+    const eventData = await fn(args)
 
     const { wasSuccessful, error } = eventData
-    const workspace = argsWithoutChannel.meta.workspace
+    const workspace = args.meta.workspace
 
     if (!wasSuccessful)
       send({

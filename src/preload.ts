@@ -5,9 +5,9 @@ import { ReceiveChannels, SendChannels } from "./channels"
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld("api", {
-  send: ({ channel, data }) => {
+  send: ({ channel, ...args }) => {
     if (Object.values(SendChannels).includes(channel)) {
-      ipcRenderer.send(channel, data)
+      ipcRenderer.send(channel, args)
     }
   },
   receive: ({ channel, fn }) => {
