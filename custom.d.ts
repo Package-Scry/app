@@ -1,5 +1,6 @@
 import type { Package } from "./src/app/components/stores/package"
 import type { ReceiveChannels, SendChannels } from "./src/channels"
+import type { ChangeLog } from "./src/routes/getChangeLogs"
 
 export {}
 
@@ -30,7 +31,7 @@ export interface PackageUpdate extends PackageUpdateArgs {
 
 interface OpenWorkspaceFolderArgs extends DefaultEventArgs {
   data: {
-    workspaceCount
+    workspaceCount: number
   }
 }
 export interface OpenWorkspaceFolder extends OpenWorkspaceFolderArgs {
@@ -61,6 +62,19 @@ export interface Feedback extends FeedbackArgs {
   channel: SendChannels.Feedback
 }
 
+interface GetChangeLogArgs extends DefaultEventArgs {
+  data: {
+    packages: {
+      owner: string
+      repo: string
+      currentVersion: string
+    }[]
+  }
+}
+export interface GetChangeLog extends GetChangeLogArgs {
+  channel: SendChannels.GetChangeLog
+}
+
 export type MainEvents =
   | ValidateToken
   | PackageUpdate
@@ -69,6 +83,7 @@ export type MainEvents =
   | Authenticate
   | Upgrade
   | Feedback
+  | GetChangeLog
 
 // -------- ReceiveChannels --------
 
@@ -174,6 +189,15 @@ interface UpdatedAllPackage {
 type UpdatedAllPackageSend = Omit<UpdatedAllPackage, "fn"> &
   UpdatedAllPackageArgs
 
+interface SendChangeLogArgs extends MetaData, CallbackStatus {
+  data: { name: string; changeLogs: ChangeLog[] }
+}
+interface SendChangeLog {
+  channel: ReceiveChannels.SendChangeLog
+  fn: (args: SendChangeLogArgs) => void
+}
+type SendChangeLogSend = Omit<SendChangeLog, "fn"> & SendChangeLogArgs
+
 export type RendererEvents =
   | AlertError
   | IsProFeature
@@ -184,6 +208,7 @@ export type RendererEvents =
   | SaveToken
   | TestAlert
   | UpdatedAllPackage
+  | SendChangeLog
 export type RendererEventsSend =
   | AlertErrorSend
   | IsProFeatureSend
@@ -194,6 +219,7 @@ export type RendererEventsSend =
   | SaveTokenSend
   | TestAlertSend
   | UpdatedAllPackageSend
+  | SendChangeLogSend
 
 declare global {
   interface Window {

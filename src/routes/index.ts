@@ -8,18 +8,21 @@ import type {
   ValidateToken,
   Upgrade,
   Feedback,
+  GetChangeLog,
 } from "../../custom"
 import { updateAllPackagesTo, updatePackage } from "../commands"
 import { ReceiveChannels, SendChannels } from "../channels"
 import { send } from "../send"
 import { openWorkspaceFolder } from "./openWorkspaceFolder"
 import { validateToken } from "./validateToken"
+import { getChangeLogs } from "./getChangeLogs"
 
 const addRoute = <T extends MainEvents>(
   sendChannel: T["channel"],
   fn: (args: Omit<T, "channel">) => Promise<CallbackStatus & { error?: string }>
 ) => {
   ipcMain.on(sendChannel, async (event, args: T) => {
+    console.log(`${sendChannel}|`, args)
 
     const eventData = await fn(args)
 
@@ -36,6 +39,7 @@ const addRoute = <T extends MainEvents>(
 }
 
 export const initRoutes = () => {
+  addRoute<GetChangeLog>(SendChannels.GetChangeLog, getChangeLogs)
   addRoute<PackageUpdate>(SendChannels.PackageUpdate, updatePackage)
   addRoute<OpenWorkspaceFolder>(
     SendChannels.OpenWorkspaceFolder,
