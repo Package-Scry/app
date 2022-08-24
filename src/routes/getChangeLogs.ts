@@ -36,6 +36,39 @@ export const getChangeLogs = async ({
     return getMajorVersion(tag_name)
   }
 
+  const getBreakingChange = (changeLog: string): string | null => {
+    const regXHeader = /#{1,6}.+/g
+    const headers: string[] = changeLog.match(regXHeader)
+    const breakingChangeIndex = headers.findIndex(header =>
+      header.toLocaleLowerCase().includes("breaking")
+    )
+
+    if (breakingChangeIndex === -1) return null
+
+    const isTheSameHeader = (header: string, headerCount: number) =>
+      (header.match(new RegExp("#", "g")) || []).length === headerCount
+
+    const headerCount = (
+      headers[breakingChangeIndex].match(new RegExp("#", "g")) || []
+    ).length
+    const isLastItem =
+      headers
+        .slice(breakingChangeIndex + 1)
+        .filter(header => isTheSameHeader(header, headerCount)).length === 0
+    const start = changeLog.search(headers[breakingChangeIndex])
+    console.log({ start })
+    console.log({ isLastItem })
+    const end = isLastItem
+      ? changeLog.length
+      : changeLog.search(
+          headers
+            .slice(breakingChangeIndex + 1)
+            .find(header => isTheSameHeader(header, headerCount))
+        )
+
+    return changeLog.slice(start, end)
+  }
+
   const getChangeLogFromGitHub = async (
     baseUrl: string,
     version: number,
@@ -62,14 +95,18 @@ export const getChangeLogs = async ({
       (await fetchAndParse(`${baseUrl}/releases/tags/v${version}.0.0`)) ??
       (await fetchAndParse(`${baseUrl}/releases/tags/${version}.0.0`))
 
+    const body: string = data?.body
+    const breakingItemsText = getBreakingChange(body)
+
     // @ts-ignore
     const changeLog: ChangeLog = {
       version: data?.tag_name,
       changes: {
         // @ts-ignore
-        breaking: [data?.body],
+        breaking: [breakingItemsText],
       },
     }
+
     const hasReachedLatest =
       getMajorVersion(changeLog.version) === latestVersion
     const newChangeLogs = hasReachedLatest
