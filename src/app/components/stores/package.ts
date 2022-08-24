@@ -7,6 +7,7 @@ export interface Package {
   wanted: string
   latest: string
   status: Status
+  changeLog: string | null
 }
 export interface PackageData {
   name: string
@@ -14,6 +15,7 @@ export interface PackageData {
   wanted?: string
   latest?: string
   status?: Status
+  changeLog?: string | null
 }
 export enum Status {
   Loading = "loading",
@@ -88,21 +90,16 @@ export const updatePackages = (newPackages: Package[]): void => {
 export const updatePackage = (data: PackageData): void => {
   const { name } = data
 
-  packages.update(oldPackages => {
-    const packageIndex = oldPackages.findIndex(
-      npmPackage => npmPackage.name === name
+  packages.update(oldPackages =>
+    oldPackages.map(npmPackage =>
+      npmPackage.name === name
+        ? {
+            ...npmPackage,
+            ...data,
+          }
+        : npmPackage
     )
-    const updatedPackage = oldPackages[packageIndex]
-
-    return [
-      ...oldPackages.slice(0, packageIndex),
-      {
-        ...updatedPackage,
-        ...data,
-      },
-      ...oldPackages.slice(packageIndex + 1),
-    ]
-  })
+  )
 }
 
 export const requestUpdateAllPackage = (type: "wanted" | "latest"): void => {
