@@ -1,3 +1,4 @@
+import { marked } from "marked"
 import type { GetChangeLog } from "../../custom"
 import fetch from "node-fetch"
 import { ReceiveChannels, SendChannels } from "../channels"
@@ -6,9 +7,7 @@ import { send } from "../send"
 export interface ChangeLog {
   version: string
   changes: {
-    breaking: {
-      items: string[]
-    }
+    breaking: string
   }
 }
 
@@ -96,14 +95,13 @@ export const getChangeLogs = async ({
       (await fetchAndParse(`${baseUrl}/releases/tags/${version}.0.0`))
 
     const body: string = data?.body
-    const breakingItemsText = getBreakingChange(body)
+    const breakingText = getBreakingChange(body)
+    const breakingTextHtml = marked.parse(breakingText)
 
-    // @ts-ignore
     const changeLog: ChangeLog = {
       version: data?.tag_name,
       changes: {
-        // @ts-ignore
-        breaking: [breakingItemsText],
+        breaking: breakingTextHtml,
       },
     }
 
