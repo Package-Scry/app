@@ -1,6 +1,7 @@
 <script lang="ts">
   import Table from "./Table/Table.svelte"
   import Button from "./ActionButton.svelte"
+  import ChangeLogIcon from "./ChangeLogIcon.svelte"
   import {
     packages,
     updatePackage,
@@ -16,6 +17,7 @@
     Wanted = "wanted",
     Latest = "latest",
     Status = "status",
+    ChangeLog = "changeLog",
   }
 
   window.api.receive({
@@ -121,6 +123,7 @@
     { dataKey: COLUMN_KEYS.Local },
     { dataKey: COLUMN_KEYS.Wanted, render: Button },
     { dataKey: COLUMN_KEYS.Latest, render: Button },
+    { dataKey: COLUMN_KEYS.ChangeLog, render: ChangeLogIcon },
   ]
 </script>
 

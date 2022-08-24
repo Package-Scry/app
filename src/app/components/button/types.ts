@@ -3,4 +3,5 @@ export enum Types {
   Secondary = "secondary",
   Loading = "loading",
   Modal = "modal",
+  Icon = "icon",
 }
