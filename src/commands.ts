@@ -174,3 +174,17 @@ export const updateAllPackagesTo = async ({
     return { wasSuccessful: false, error }
   }
 }
+export const getGitHubRepoUrl = async (name: string, path: string) => {
+  try {
+    const { wasSuccessful, response } = await runCommand(
+      `cd "${path}" && npm repo ${name} --browser=false --json`
+    )
+    const url = JSON.parse(response)?.url.split("/").slice(0, 5).join("/")
+
+    return { wasSuccessful, url }
+  } catch (error) {
+    console.log("error reading or writing the file", error)
+
+    return { wasSuccessful: false, error }
+  }
+}
