@@ -65,8 +65,7 @@ export interface Feedback extends FeedbackArgs {
 interface GetChangeLogArgs extends DefaultEventArgs {
   data: {
     packages: {
-      owner: string
-      repo: string
+      name: string
       currentVersion: string
     }[]
   }

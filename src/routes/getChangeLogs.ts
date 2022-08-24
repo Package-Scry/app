@@ -3,6 +3,7 @@ import type { GetChangeLog } from "../../custom"
 import fetch from "node-fetch"
 import { ReceiveChannels, SendChannels } from "../channels"
 import { send } from "../send"
+import { getGitHubRepoUrl } from "../commands"
 
 export interface ChangeLog {
   version: string
@@ -15,7 +16,7 @@ export const getChangeLogs = async ({
   meta,
   data,
 }: Omit<GetChangeLog, "channel">) => {
-  const { workspace } = meta
+  const { workspace, path } = meta
   const { packages } = data
 
   const getMajorVersion = (version: string) =>
@@ -113,19 +114,26 @@ export const getChangeLogs = async ({
 
     return [changeLog, ...newChangeLogs]
   }
-  const getChangeLog = async (npmPackage: {
-    owner: string
-    repo: string
-    currentVersion: string
-  }) => {
-    const { currentVersion, owner, repo } = npmPackage
-    const majorVersion = getMajorVersion(currentVersion)
-    const githubURL = `https://api.github.com/repos/${owner}/${repo}`
-
+  const getChangeLog = async (
+    npmPackage: {
+      name: string
+      currentVersion: string
+    },
+    path: string
+  ) => {
+    const { currentVersion, name } = npmPackage
     try {
-      const latestMajorVersion = await getLatestMajorVersion(githubURL)
+      const majorVersion = getMajorVersion(currentVersion)
+
+      const { wasSuccessful, url } = await getGitHubRepoUrl(name, path)
+
+      if (!wasSuccessful || !url.includes("github"))
+        throw new Error("Couldn't find repo url")
+
+      const gitHubUrl = url.replace("github.com", "api.github.com/repos")
+      const latestMajorVersion = await getLatestMajorVersion(gitHubUrl)
       const changeLogs = await getChangeLogFromGitHub(
-        githubURL,
+        gitHubUrl,
         majorVersion + 1,
         latestMajorVersion
       )
@@ -133,7 +141,7 @@ export const getChangeLogs = async ({
       send({
         channel: ReceiveChannels.SendChangeLog,
         meta: { workspace },
-        data: { name: repo, changeLogs },
+        data: { name, changeLogs },
         wasSuccessful: true,
       })
     } catch (error) {
@@ -141,7 +149,7 @@ export const getChangeLogs = async ({
       send({
         channel: ReceiveChannels.SendChangeLog,
         meta: { workspace },
-        data: { name: repo, changeLogs: null },
+        data: { name, changeLogs: null },
         wasSuccessful: false,
       })
       send({
@@ -153,7 +161,7 @@ export const getChangeLogs = async ({
   }
 
   packages.forEach(async npmPackage => {
-    getChangeLog(npmPackage)
+    getChangeLog(npmPackage, path)
   })
 
   return { wasSuccessful: true }

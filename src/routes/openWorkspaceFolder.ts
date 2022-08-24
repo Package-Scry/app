@@ -48,6 +48,7 @@ export const openWorkspaceFolder = async ({
       latest: "loading",
       wanted: "loading",
       status: Status.Loading,
+      changeLog: null,
     }))
 
     send({
