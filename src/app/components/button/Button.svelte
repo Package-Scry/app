@@ -26,7 +26,7 @@
   const styles = {
     common: `select-none rounded-md text-center h-full flex items-center justify-center relative`,
     primary: `bg-turquoise-4 hover:bg-gray-3 hover:shadow-inner`,
-    icon: `text-center h-full flex items-center justify-center relative rounded-full select-none hover:shadow-inner`,
+    icon: `text-center h-full flex items-center justify-center relative rounded-full select-none`,
     secondary: `border-2 border-turquoise-5`,
     loading: `bg-gray-6`,
     modal: `cursor-pointer inline-block bg-black-3 py-${
