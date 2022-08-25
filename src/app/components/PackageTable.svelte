@@ -55,7 +55,46 @@
 
       isUpdatingAll.set(false)
 
+      const packagesWithBreakingChange = newPackages
+        .filter(({ wanted, latest, name }) => {
+          const local = $packages
+            .find(npmPackage => npmPackage.name === name)
+            ?.local.replace("^", "")
+
+          return latest !== wanted && latest !== local
+        })
+        .map(({ name }) => {
+          const local = $packages
+            .find(npmPackage => npmPackage.name === name)
+            ?.local.replace("^", "")
+
+          return { name, currentVersion: local }
+        })
+
+      if (!!packagesWithBreakingChange.length)
+        window.api.send({
+          channel: SendChannels.GetChangeLog,
+          data: {
+            packages: packagesWithBreakingChange,
+          },
+          meta: {
+            workspace: activeTab,
+            path: localStorage.getItem(`dirPath-${activeTab}`),
+          },
+        })
+
       updatePackages(newPackages)
+    },
+  })
+  window.api.receive({
+    channel: ReceiveChannels.SendChangeLog,
+    fn: ({ data, meta }) => {
+      const { workspace } = meta
+      const activeTab = localStorage.getItem("activeTab")
+
+      if (activeTab !== workspace) return
+
+      updatePackage(data)
     },
   })
 

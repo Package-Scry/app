@@ -3,11 +3,11 @@ import { SendChannels } from "../../../channels"
 
 export interface Package {
   name: string
-  local: string
+  local?: string
   wanted: string
   latest: string
-  status: Status
-  changeLog: string | null
+  status?: Status
+  changeLog?: string | null
 }
 export interface PackageData {
   name: string
