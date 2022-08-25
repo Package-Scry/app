@@ -117,6 +117,7 @@
     { text: "Local" },
     { text: "Wanted" },
     { text: "Latest" },
+    { text: "" },
   ]
   const columns = [
     { dataKey: COLUMN_KEYS.Name },

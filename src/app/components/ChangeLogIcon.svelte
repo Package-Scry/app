@@ -26,7 +26,7 @@
 <Button
   type={Types.Icon}
   icon={"warning"}
-  style="w-16 m-4 justify-self-center"
+  style="w-16 justify-self-center"
   iconStyle="inline-block"
   {onClick}
 >
