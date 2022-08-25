@@ -10,6 +10,7 @@
     wanted: string
     latest: string
     local: string
+    changeLogs: string
   }
 
   export let dataKey: string
@@ -17,18 +18,22 @@
   console.log(dataKey)
 
   $: packageName = rowData.name
+  $: localVersion = rowData.local
+  $: hasBreakingChange = !!rowData.changeLogs
 
   const onClick = () => {
     console.log("jere")
   }
 </script>
 
-<Button
-  type={Types.Icon}
-  icon={"warning"}
-  style="w-16 justify-self-center"
-  iconStyle="inline-block"
-  {onClick}
->
-  {""}
-</Button>
+{#if hasBreakingChange}
+  <Button
+    type={Types.Icon}
+    icon={"warning"}
+    style="w-16 justify-self-center"
+    iconStyle="inline-block"
+    {onClick}
+  >
+    {""}
+  </Button>
+{/if}

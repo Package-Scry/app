@@ -135,7 +135,7 @@ type GetPackagesSend = Omit<GetPackages, "fn"> & GetPackagesArgs
 
 interface GetOutdatedPackagesArgs extends MetaData {
   data: {
-    packages: Omit<Package, "local", "status">[]
+    packages: Omit<Package, "local" | "status" | "changeLog">[]
   }
 }
 interface GetOutdatedPackages {
