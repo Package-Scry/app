@@ -10,6 +10,7 @@
   import Header from "./components/typography/Header.svelte"
   import HeaderButton from "./components/HeaderButton.svelte"
   import { SendChannels } from "../channels"
+  import ChangeLogModal from "./components/ChangeLogModal.svelte"
 
   const onClick = () =>
     window.api.send({ channel: SendChannels.Feedback, meta: {} })
@@ -34,6 +35,7 @@
   <PackageTable />
   <ProFeatureModal />
   <UpgradeModal />
+  <ChangeLogModal />
 {/if}
 
 <div

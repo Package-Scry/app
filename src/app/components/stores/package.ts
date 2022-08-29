@@ -1,5 +1,6 @@
 import { writable } from "svelte/store"
 import { SendChannels } from "../../../channels"
+import type { ChangeLog } from "../../../routes/getChangeLogs"
 
 export interface Package {
   name: string
@@ -7,7 +8,7 @@ export interface Package {
   wanted: string
   latest: string
   status?: Status
-  changeLog?: string | null
+  changeLogs?: ChangeLog[]
 }
 export interface PackageData {
   name: string
@@ -15,7 +16,7 @@ export interface PackageData {
   wanted?: string
   latest?: string
   status?: Status
-  changeLog?: string | null
+  changeLogs?: ChangeLog[]
 }
 export enum Status {
   Loading = "loading",
@@ -25,6 +26,7 @@ export enum Status {
 }
 export const packages = writable<Package[]>([])
 export const isUpdatingAll = writable<boolean>(false)
+export const selectedPackage = writable<string>("")
 
 export const requestUpdatePackage = (name: string, version: string): void => {
   const activeTab = localStorage.getItem("activeTab")
