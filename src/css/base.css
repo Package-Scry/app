@@ -40,6 +40,26 @@ ps-tabs::-webkit-scrollbar {
   animation-delay: 0.6s;
 }
 
+.change-log-modal h1 {
+  font-size: 1.875rem;
+}
+
+.change-log-modal h2 {
+  font-size: 1.5rem;
+}
+
+.change-log-modal h3 {
+  font-size: 1.25rem;
+}
+
+.change-log-modal ul > li {
+  margin: 2rem 0;
+  list-style: disc inside;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  color: rgb(248 250 252);
+}
+
 @keyframes grow {
   100% {
     transform: scaleY(1);
