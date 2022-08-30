@@ -2,7 +2,7 @@
   import type { SvelteComponentDev } from "svelte/internal"
   import { Header } from "../typography"
   import Button from "../button/Button.svelte"
-  import { onMount } from "svelte"
+  import { Types } from "../button/types"
 
   export let isVisible = false
   export let style = ""
@@ -28,7 +28,9 @@
       <Header style="text-center mb-6" size="xl">{headerText}</Header>
       <slot name="content" />
       {#if !footerRender}
-        <Button type="modal" icon={buttonIcon} {onClick}>{buttonText}</Button>
+        <Button type={Types.Modal} icon={buttonIcon} {onClick}
+          >{buttonText}</Button
+        >
         {#if cancelText}
           <div
             class="cursor-pointer text-xl mt-3 hover:underline"
