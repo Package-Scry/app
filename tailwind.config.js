@@ -6,6 +6,7 @@ module.exports = {
     "./src/app/**/*.svelte",
     "./src/app/index.ts",
   ],
+  safelist: ["text-2xl", "text-3xl", "text-4xl", "text-sm"],
   theme: {
     extend: {
       boxShadow: {
