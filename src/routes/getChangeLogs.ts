@@ -97,7 +97,7 @@ export const getChangeLogs = async ({
 
     const body: string = data?.body
     const breakingText = getBreakingChange(body)
-    const breakingTextHtml = marked.parse(breakingText)
+    const breakingTextHtml = breakingText ? marked.parse(breakingText) : null
 
     const changeLog: ChangeLog = {
       version: data?.tag_name,
