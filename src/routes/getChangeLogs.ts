@@ -1,4 +1,3 @@
-import { marked } from "marked"
 import type { GetChangeLog } from "../../custom"
 import fetch from "node-fetch"
 import { ReceiveChannels } from "../channels"
@@ -15,18 +14,20 @@ export const getChangeLogs = async ({
   meta,
   data,
 }: Omit<GetChangeLog, "channel">) => {
-  const { workspace, path } = meta
+  const { workspace } = meta
 
   const response = await fetch(
     "https://breaking-production.up.railway.app/changeLogs",
     {
       method: "POST",
       body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "breaking-api-key": "aJzzRC2HTywKgcmxG7pG",
+      },
     }
   )
-  const { wasSuccessful, data: dataChangeLogs } = (await response.json()) as {
-    wasSuccessful: boolean
+  const { data: dataChangeLogs } = (await response.json()) as {
     data: {
       name: string
       changeLogs: ChangeLog[]
@@ -34,7 +35,7 @@ export const getChangeLogs = async ({
   }
 
   console.log("DATA")
-  console.log(dataChangeLogs)
+  console.log(JSON.stringify(dataChangeLogs, null, 2))
 
   dataChangeLogs.forEach(({ name, changeLogs }) => {
     send({
@@ -42,12 +43,7 @@ export const getChangeLogs = async ({
       meta: { workspace },
       data: {
         name,
-        changeLogs: changeLogs?.map(changeLog => ({
-          ...changeLog,
-          changes: {
-            breaking: marked.parse(changeLog?.changes?.breaking) ?? null,
-          },
-        })),
+        changeLogs,
       },
       wasSuccessful: false,
     })
