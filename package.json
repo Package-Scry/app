@@ -7,9 +7,9 @@
     "dev": "electron -r dotenv/config ./dist/main.js",
     "build": "webpack --node-env production --config ./webpack.prod.js",
     "start": "npm run build && electron -r dotenv/config ./dist/main.js",
-    "format": "prettier --write ./src/**/*.{js,svelte,html,ts}",
-    "lint": "eslint './src/**/*.{js,ts,svelte}'",
-    "lint:fix": "eslint --fix './src/**/*.{js,ts,svelte}'",
+    "format": "prettier --write 'src//**/*.{js,svelte,html,ts}'",
+    "lint": "eslint --no-error-on-unmatched-pattern './src/**/*.{js,ts,svelte}'",
+    "lint:fix": "eslint --no-error-on-unmatched-pattern --fix './src/**/*.{js,ts,svelte}'",
     "postinstall": "electron-builder install-app-deps",
     "dist": "npm run build && electron-builder -w"
   },
@@ -73,7 +73,7 @@
     }
   },
   "lint-staged": {
-    "*.{ts,svelte}": [
+    "*.{js,ts,svelte}": [
       "npm run format",
       "npm run lint:fix"
     ]
