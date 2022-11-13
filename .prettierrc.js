@@ -3,7 +3,7 @@ module.exports = {
   singleQuote: false,
   trailingComma: "es5",
   bracketSpacing: true,
-  jsxBracketSameLine: false,
+  bracketSameLine: false,
   arrowParens: "avoid",
   endOfLine: "auto",
   overrides: [

@@ -73,7 +73,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,svelte}": [
+    "*.{ts,svelte}": [
       "npm run format",
       "npm run lint:fix"
     ]
