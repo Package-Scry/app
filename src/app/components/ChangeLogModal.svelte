@@ -1,6 +1,6 @@
 <script lang="ts">
   import Modal from "./modal/Modal.svelte"
-  import Base from "./typography/Base.svelte"
+  import Text from "./typography/Text.svelte"
   import Header from "./typography/Header.svelte"
   import { closeChangeLogModal, isChangeLogModalOpen } from "./stores/ui"
   import { packages, selectedPackage } from "./stores/package"
@@ -26,10 +26,10 @@
   <div slot="content">
     {#each changeLogs as changeLog}
       {#if !!changeLog.changes.breaking}
-        <Header size="medium">{changeLog.version}</Header>
-        <Base style="mt-4 text-left">
+        <Header size="medium" style="mt-8">{changeLog.version}</Header>
+        <Text style="mt-4 text-left text-l">
           {@html changeLog.changes.breaking}
-        </Base>
+        </Text>
       {/if}
     {/each}
   </div>
