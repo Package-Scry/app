@@ -67,11 +67,6 @@
       "path": "/releases"
     }
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npx lint-staged"
-    }
-  },
   "lint-staged": {
     "*.{js,ts,svelte}": [
       "npm run format",
