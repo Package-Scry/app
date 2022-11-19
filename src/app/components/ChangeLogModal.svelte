@@ -20,7 +20,7 @@
   onClick={() => closeChangeLogModal()}
   onCancel={() => closeChangeLogModal()}
   isVisible={$isChangeLogModalOpen}
-  wrapperStyle="overflow-y-auto"
+  wrapperStyle="overflow-y-auto bg-opacity-50"
   style=" mb-40 mt-16 change-log-modal"
 >
   <div slot="content">

@@ -71,17 +71,31 @@
           return { name, currentVersion: local }
         })
 
-      if (!!packagesWithBreakingChange.length)
-        window.api.send({
-          channel: SendChannels.GetChangeLog,
-          data: {
-            packages: packagesWithBreakingChange,
-          },
-          meta: {
-            workspace: activeTab,
-            path: localStorage.getItem(`dirPath-${activeTab}`),
-          },
-        })
+      if (!!packagesWithBreakingChange.length) {
+        const chunk = (
+          arr: {
+            name: string
+            currentVersion: string
+          }[],
+          size: number
+        ) =>
+          Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+            arr.slice(i * size, i * size + size)
+          )
+
+        chunk(packagesWithBreakingChange, 100).forEach(chunkedPackages =>
+          window.api.send({
+            channel: SendChannels.GetChangeLog,
+            data: {
+              packages: chunkedPackages,
+            },
+            meta: {
+              workspace: activeTab,
+              path: localStorage.getItem(`dirPath-${activeTab}`),
+            },
+          })
+        )
+      }
 
       updatePackages(newPackages)
     },
