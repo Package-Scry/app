@@ -101,6 +101,21 @@
     },
   })
   window.api.receive({
+    channel: ReceiveChannels.PackageUpdateErrored,
+    fn: ({ data, meta }) => {
+      const { workspace } = meta
+      const activeTab = localStorage.getItem("activeTab")
+
+      if (activeTab !== workspace) return
+
+      const { name, version, error } = data
+
+      console.log("got errdd")
+      console.log(data)
+    },
+  })
+
+  window.api.receive({
     channel: ReceiveChannels.SendChangeLog,
     fn: ({ data, meta }) => {
       const { workspace } = meta

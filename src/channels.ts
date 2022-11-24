@@ -21,4 +21,5 @@ export enum ReceiveChannels {
   IsProFeature = "IsProFeature",
   UpdatedAllPackage = "UpdatedAllPackage",
   SendChangeLog = "SendChangeLog",
+  PackageUpdateErrored = "PackageUpdateErrored",
 }

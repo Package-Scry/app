@@ -197,6 +197,16 @@ interface SendChangeLog {
 }
 type SendChangeLogSend = Omit<SendChangeLog, "fn"> & SendChangeLogArgs
 
+interface PackageUpdateErroredArgs extends MetaData, CallbackStatus {
+  data: { name: string; version: string; error: string }
+}
+interface PackageUpdateErrored {
+  channel: ReceiveChannels.PackageUpdateErrored
+  fn: (args: PackageUpdateErroredArgs) => void
+}
+type PackageUpdateErroredSend = Omit<PackageUpdateErrored, "fn"> &
+  PackageUpdateErroredArgs
+
 export type RendererEvents =
   | AlertError
   | IsProFeature
@@ -208,6 +218,7 @@ export type RendererEvents =
   | TestAlert
   | UpdatedAllPackage
   | SendChangeLog
+  | PackageUpdateErrored
 export type RendererEventsSend =
   | AlertErrorSend
   | IsProFeatureSend
@@ -219,6 +230,7 @@ export type RendererEventsSend =
   | TestAlertSend
   | UpdatedAllPackageSend
   | SendChangeLogSend
+  | PackageUpdateErroredSend
 
 declare global {
   interface Window {

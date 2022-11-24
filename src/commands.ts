@@ -65,6 +65,7 @@ export const updatePackage = async ({
 }: Omit<PackageUpdate, "channel">) => {
   const { name, version } = data
   const { path, workspace } = meta
+
   exec(`cd "${path}" && npm i ${name}@${version}`, (error, stdout, stderr) => {
     if (error) {
       console.log(`error: ${error.message}`)
@@ -76,6 +77,18 @@ export const updatePackage = async ({
 
     const wasSuccessful = !!stdout
 
+    if (!wasSuccessful && !!error)
+      send({
+        channel: ReceiveChannels.PackageUpdateErrored,
+        data: {
+          name,
+          version,
+          error: error.message,
+        },
+        meta: { workspace },
+        wasSuccessful,
+      })
+
     send({
       channel: ReceiveChannels.PackageUpdated,
       data: {
@@ -86,7 +99,7 @@ export const updatePackage = async ({
       wasSuccessful,
     })
 
-    return { wasSuccessful, error: error?.message }
+    return { wasSuccessful, error: error?.message ?? error.toString() }
   })
 
   return { wasSuccessful: false }
