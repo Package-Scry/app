@@ -15,39 +15,53 @@ export const getChangeLogs = async ({
   data,
 }: Omit<GetChangeLog, "channel">) => {
   const { workspace } = meta
-
-  const response = await fetch(
-    "https://breaking-production.up.railway.app/changeLogs",
-    {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        "breaking-api-key": "aJzzRC2HTywKgcmxG7pG",
-      },
-    }
-  )
-  const { data: dataChangeLogs } = (await response.json()) as {
-    data: {
+  const chunk = (
+    arr: {
       name: string
-      changeLogs: ChangeLog[]
-    }[]
-  }
+      currentVersion: string
+    }[],
+    size: number
+  ) =>
+    Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+      arr.slice(i * size, i * size + size)
+    )
 
-  console.log("DATA")
-  console.log(JSON.stringify(dataChangeLogs, null, 2))
+  const { packages } = data
+  const chunkedPackages = chunk(packages, 100)
 
-  dataChangeLogs.forEach(({ name, changeLogs }) => {
-    send({
-      channel: ReceiveChannels.SendChangeLog,
-      meta: { workspace },
-      data: {
-        name,
-        changeLogs,
-      },
-      wasSuccessful: false,
+  await Promise.all(
+    chunk(packages, 100).map(async chunkedPackages => {
+      const response = await fetch(
+        "https://breaking-production.up.railway.app/changeLogs",
+        {
+          method: "POST",
+          body: JSON.stringify({ packages: chunkedPackages }),
+          headers: {
+            "Content-Type": "application/json",
+            "breaking-api-key": "aJzzRC2HTywKgcmxG7pG",
+          },
+        }
+      )
+      const { data: dataChangeLogs } = (await response.json()) as {
+        data: {
+          name: string
+          changeLogs: ChangeLog[]
+        }[]
+      }
+
+      dataChangeLogs.forEach(({ name, changeLogs }) => {
+        send({
+          channel: ReceiveChannels.SendChangeLog,
+          meta: { workspace },
+          data: {
+            name,
+            changeLogs,
+          },
+          wasSuccessful: false,
+        })
+      })
     })
-  })
+  )
 
   return { wasSuccessful: true }
 }
