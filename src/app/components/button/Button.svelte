@@ -34,7 +34,7 @@
     } px-10 mt-14 rounded-lg hover:bg-black-5`,
   }
 
-  $: finalStyle = `${style ? ` ${style}` : ""}${
+  $: finalStyle = `${style ? ` ${style} ` : ""}${
     type === "modal" || type === Types.Icon ? "" : styles.common
   } ${styles[type]}${isButtonDisabled ? "" : " cursor-pointer"}`
 </script>
