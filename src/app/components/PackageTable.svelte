@@ -10,6 +10,7 @@
     Status,
   } from "./stores/package"
   import { ReceiveChannels, SendChannels } from "../../channels"
+  import { dataForceInstallModal, openForceInstallModal } from "./stores/ui"
 
   enum COLUMN_KEYS {
     Name = "name",
@@ -100,6 +101,7 @@
       updatePackages(newPackages)
     },
   })
+
   window.api.receive({
     channel: ReceiveChannels.PackageUpdateErrored,
     fn: ({ data, meta }) => {
@@ -110,8 +112,8 @@
 
       const { name, version, error } = data
 
-      console.log("got errdd")
-      console.log(data)
+      openForceInstallModal()
+      dataForceInstallModal.set({ name, version, error })
     },
   })
 
