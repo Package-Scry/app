@@ -23,6 +23,7 @@ interface PackageUpdateArgs extends DefaultEventArgs {
   data: {
     name: string
     version: string
+    shouldForceInstall?: boolean
   }
 }
 export interface PackageUpdate extends PackageUpdateArgs {

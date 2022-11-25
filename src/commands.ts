@@ -63,44 +63,52 @@ export const updatePackage = async ({
   meta,
   data,
 }: Omit<PackageUpdate, "channel">) => {
-  const { name, version } = data
+  const { name, version, shouldForceInstall } = data
   const { path, workspace } = meta
 
-  exec(`cd "${path}" && npm i ${name}@${version}`, (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`)
-    }
+  exec(
+    `cd "${path}" && npm i ${name}@${version} ${
+      shouldForceInstall ? "-f" : ""
+    }`,
+    (error, stdout, stderr) => {
+      if (error) {
+        console.log(`error: ${error.message}`)
+      }
 
-    if (stderr) {
-      console.log(`stderr: ${stderr}`)
-    }
+      if (stderr) {
+        console.log(`stderr: ${stderr}`)
+      }
 
-    const wasSuccessful = !!stdout
+      const wasSuccessful = !!stdout
 
-    if (!wasSuccessful && !!error)
+      if (!wasSuccessful && !!error)
+        send({
+          channel: ReceiveChannels.PackageUpdateErrored,
+          data: {
+            name,
+            version,
+            error: error.message,
+          },
+          meta: { workspace },
+          wasSuccessful,
+        })
+
       send({
-        channel: ReceiveChannels.PackageUpdateErrored,
+        channel: ReceiveChannels.PackageUpdated,
         data: {
           name,
           version,
-          error: error.message,
         },
         meta: { workspace },
         wasSuccessful,
       })
 
-    send({
-      channel: ReceiveChannels.PackageUpdated,
-      data: {
-        name,
-        version,
-      },
-      meta: { workspace },
-      wasSuccessful,
-    })
-
-    return { wasSuccessful, error: error?.message ?? error.toString() }
-  })
+      return {
+        wasSuccessful,
+        error: error ? error?.message ?? error?.toString() : null,
+      }
+    }
+  )
 
   return { wasSuccessful: false }
 }
