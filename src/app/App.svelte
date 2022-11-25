@@ -11,6 +11,7 @@
   import HeaderButton from "./components/HeaderButton.svelte"
   import { SendChannels } from "../channels"
   import ChangeLogModal from "./components/ChangeLogModal.svelte"
+  import ForceInstallModal from "./components/ForceInstallModal.svelte"
 
   const onClick = () =>
     window.api.send({ channel: SendChannels.Feedback, meta: {} })
@@ -36,6 +37,7 @@
   <ProFeatureModal />
   <UpgradeModal />
   <ChangeLogModal />
+  <ForceInstallModal />
 {/if}
 
 <div
