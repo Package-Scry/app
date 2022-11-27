@@ -143,10 +143,11 @@ export const updateAllPackagesTo = async ({
   meta,
   data,
 }: Omit<UpdateAllPackages, "channel">) => {
-  const { type } = data
+  const { type, shouldForceInstall } = data
   const { workspace, path } = meta
   try {
     const data = readFileSync(`${path}/package.json`, { encoding: "utf8" })
+    const resetPackageJson = () => writeFileSync(`${path}/package.json`, data)
     const parsedData: PackageJSON = JSON.parse(data)
     const { dependencies, devDependencies } = parsedData
     const { packages: outdatedPackages } = await checkPackages(path)
@@ -180,13 +181,25 @@ export const updateAllPackagesTo = async ({
       JSON.stringify(newPackageJSON, null, 2)
     )
 
-    const { wasSuccessful } = await runCommand(`cd "${path}" && npm i --json`)
+    const { wasSuccessful, error } = await runCommand(
+      `cd "${path}" && npm i ${shouldForceInstall ? "-f " : ""}--json`
+    )
 
-    send({
-      channel: ReceiveChannels.UpdatedAllPackage,
-      meta: { workspace },
-      wasSuccessful,
-    })
+    if (!wasSuccessful && error) {
+      resetPackageJson()
+
+      send({
+        channel: ReceiveChannels.UpdatedAllPackage,
+        meta: { workspace },
+        data: { error: error.error.detail, type },
+        wasSuccessful,
+      })
+    } else
+      send({
+        channel: ReceiveChannels.UpdatedAllPackage,
+        meta: { workspace },
+        wasSuccessful,
+      })
 
     return { wasSuccessful }
   } catch (error) {

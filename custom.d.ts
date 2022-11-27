@@ -42,6 +42,7 @@ export interface OpenWorkspaceFolder extends OpenWorkspaceFolderArgs {
 interface UpdateAllPackagesArgs extends DefaultEventArgs {
   data: {
     type: "wanted" | "latest"
+    shouldForceInstall?: boolean
   }
 }
 export interface UpdateAllPackages extends UpdateAllPackagesArgs {
@@ -181,7 +182,9 @@ interface TestAlert {
 }
 type TestAlertSend = Omit<TestAlert, "fn"> & TestAlertArgs
 
-interface UpdatedAllPackageArgs extends MetaData, CallbackStatus {}
+interface UpdatedAllPackageArgs extends MetaData, CallbackStatus {
+  data?: { error: string; type?: "wanted" | "latest" }
+}
 interface UpdatedAllPackage {
   channel: ReceiveChannels.UpdatedAllPackage
   fn: (args: UpdatedAllPackageArgs) => void

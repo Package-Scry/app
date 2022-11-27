@@ -20,6 +20,7 @@ export const closeForceInstallModal = (): void =>
   isForceInstallModalOpen.set(false)
 export const dataForceInstallModal = writable<{
   error: string
-  name: string
-  version: string
+  name?: string
+  version?: string
+  type?: "wanted" | "latest"
 }>()

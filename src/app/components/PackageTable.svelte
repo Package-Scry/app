@@ -23,24 +23,28 @@
 
   window.api.receive({
     channel: ReceiveChannels.UpdatedAllPackage,
-    fn: ({ meta, wasSuccessful }) => {
+    fn: ({ data, meta, wasSuccessful }) => {
+      const { error, type } = data ?? {}
       const { workspace } = meta
       const activeTab = localStorage.getItem("activeTab")
 
       if (workspace === activeTab) {
-        if (wasSuccessful) {
-          const path = localStorage.getItem(`dirPath-${workspace}`)
-
-          // TODO: add refresh event instead?
-
-          window.api.send({
-            channel: SendChannels.OpenWorkspaceFolder,
-            meta: {
-              path,
-            },
-            data: { workspaceCount: 0 },
-          })
+        if (error) {
+          openForceInstallModal()
+          dataForceInstallModal.set({ type, error })
         }
+
+        const path = localStorage.getItem(`dirPath-${workspace}`)
+
+        // TODO: add refresh event instead?
+
+        window.api.send({
+          channel: SendChannels.OpenWorkspaceFolder,
+          meta: {
+            path,
+          },
+          data: { workspaceCount: 0 },
+        })
       }
     },
   })

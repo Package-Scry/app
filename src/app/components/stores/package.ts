@@ -108,7 +108,10 @@ export const updatePackage = (data: PackageData): void => {
   )
 }
 
-export const requestUpdateAllPackage = (type: "wanted" | "latest"): void => {
+export const requestUpdateAllPackage = (
+  type: "wanted" | "latest",
+  shouldForceInstall?: boolean
+): void => {
   const activeTab = localStorage.getItem("activeTab")
   const path = localStorage.getItem(`dirPath-${activeTab}`)
 
@@ -127,6 +130,7 @@ export const requestUpdateAllPackage = (type: "wanted" | "latest"): void => {
     channel: SendChannels.UpdateAllPackages,
     data: {
       type,
+      shouldForceInstall,
     },
     meta: {
       path,

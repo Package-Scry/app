@@ -7,21 +7,28 @@
     closeForceInstallModal,
     isForceInstallModalOpen,
   } from "./stores/ui"
-  import { requestUpdatePackage } from "./stores/package"
+  import {
+    requestUpdatePackage,
+    requestUpdateAllPackage,
+  } from "./stores/package"
   import Button from "./button/Button.svelte"
 
   $: error = $dataForceInstallModal?.error
   $: name = $dataForceInstallModal?.name
   $: version = $dataForceInstallModal?.version
+  $: type = $dataForceInstallModal?.type
+  $: headerText = type ? "Installation error" : `${name} error`
 
   const forceInstall = () => {
     closeForceInstallModal()
-    requestUpdatePackage(name, version, true)
+    type
+      ? requestUpdateAllPackage(type, true)
+      : requestUpdatePackage(name, version, true)
   }
 </script>
 
 <Modal
-  headerText={`${name} error`}
+  {headerText}
   buttonText="Close"
   onClick={() => closeForceInstallModal()}
   onCancel={() => closeForceInstallModal()}
