@@ -11,7 +11,9 @@ export const validateToken = async (args: Omit<ValidateToken, "channel">) => {
   setSocket(token)
 
   const openLogin = () => {
-    shell.openExternal(`https://package-scry.herokuapp.com/auth/${socket.id}`)
+    shell.openExternal(
+      `https://0auth-production.up.railway.app/auth/${socket.id}`
+    )
   }
 
   socket.on("connect", () => {
