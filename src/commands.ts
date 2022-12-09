@@ -16,6 +16,21 @@ interface Packages {
   latest: string
 }
 
+export const initEnvironmentVariables = async () => {
+  const { response, error } = await runCommand("zsh -ic export")
+
+  if (!response) return
+
+  const envVariablePairs = response.split("/n")
+
+  envVariablePairs.forEach(envVariablePair => {
+    if (envVariablePair.includes("="))
+      process.env[envVariablePair.split("=")[0]] = envVariablePair
+        .split("=")[0]
+        .replace("\n", "")
+  })
+}
+
 export const checkPackages = async (
   filePath: string,
   project?: string

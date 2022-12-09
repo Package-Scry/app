@@ -22,11 +22,9 @@
 {#if $isLoggedIn}
   <Workspaces />
   <div
-    class="grid grid-cols-2 items-center grid-rows-table gap-y-4 gap-x-4 my-4 mx-14"
-  >
+    class="grid grid-cols-2 items-center grid-rows-table gap-y-4 gap-x-4 my-4 mx-14">
     <Header
-      style="w-full h-full bg-turquoise-1 col-span-full justify-center px-2 flex items-center"
-    >
+      style="w-full h-full bg-turquoise-1 col-span-full justify-center px-2 flex items-center">
       Actions
     </Header>
     <HeaderButton />
@@ -41,16 +39,13 @@
 {/if}
 
 <div
-  class="flex flex-row-reverse bg-gray-4 fixed w-full h-13 bottom-0 shadow-inner-2"
->
+  class="flex flex-row-reverse bg-gray-4 fixed w-full h-13 bottom-0 shadow-inner-2">
   <span
     class="bg-black-1 w-auto mx-5 py-1 px-8 rounded font-serif text-white text-xl self-center"
-    >1.0.0</span
-  >
+    >1.0.0</span>
   <span
     class="cursor-pointer bg-black-1 w-auto mx-2 py-1 px-6 rounded font-serif text-white text-lg self-center hover:bg-black-5"
-    on:click={onClick}
-  >
+    on:click={onClick}>
     Feedback
   </span>
   {#if !$hasPro}

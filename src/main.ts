@@ -3,10 +3,9 @@ import { autoUpdater } from "electron-updater"
 import * as path from "path"
 import fixPath from "fix-path"
 import { createWindow, win } from "./window"
-// import { send } from "./send"
 import { socket } from "./socket"
 import { initRoutes } from "./routes"
-// import { ReceiveChannels } from "./channels"
+import { initEnvironmentVariables } from "./commands"
 
 const env = process.env.NODE_ENV || "development"
 
@@ -74,6 +73,8 @@ if (!gotTheLock) {
         alert(`Update available v${version}`)
       })
     })
+
+    initEnvironmentVariables()
 
     app.on("activate", function () {
       // On macOS it's common to re-create a window in the app when the
