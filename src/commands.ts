@@ -1,12 +1,12 @@
 import { exec } from "child_process"
 import { getErrorFromCli, Error } from "./utils"
-import { readFileSync } from "fs"
+import { readFileSync, existsSync } from "fs"
 import util from "util"
 import { writeFileSync } from "original-fs"
 import type { PackageUpdate, UpdateAllPackages } from "../custom"
 import { send } from "./send"
 import type { PackageJSON } from "."
-import { ReceiveChannels } from "./channels"
+import { ReceiveChannels, SendChannels } from "./channels"
 
 const pExec = util.promisify(exec)
 
@@ -15,6 +15,8 @@ interface Packages {
   wanted: string
   latest: string
 }
+
+export const hasYarn = (path: string) => existsSync(`${path}/yarn.lock`)
 
 export const initEnvironmentVariables = async () => {
   const { response, error } = await runCommand("zsh -ic export")
@@ -37,6 +39,7 @@ export const checkPackages = async (
 ): Promise<{
   packages: Packages[]
 }> => {
+  const commandOutdated = hasYarn(filePath) ? `yarn outdated` : `npm outdated`
   const parsePackages = (text: string): Packages[] => {
     const packages = text
       .split("\n")
@@ -58,7 +61,9 @@ export const checkPackages = async (
   }
 
   try {
-    const { stdout, stderr } = await pExec(`cd "${filePath}" && npm outdated`)
+    const { stdout, stderr } = await pExec(
+      `cd "${filePath}" && ${commandOutdated}`
+    )
 
     if (stderr) console.log(`stderr: ${stderr}`)
 
@@ -66,6 +71,11 @@ export const checkPackages = async (
   } catch (error) {
     const { stdout } = error
 
+    send({
+      channel: ReceiveChannels.AlertError,
+      meta: { workspace: "asd" },
+      data: { channel: SendChannels.OpenWorkspaceFolder, error: error.message },
+    })
     console.log(`error: ${error.message}`)
 
     // TODO: on mac `npm outdated` exits with `code 1` for some reason
@@ -80,9 +90,10 @@ export const updatePackage = async ({
 }: Omit<PackageUpdate, "channel">) => {
   const { name, version, shouldForceInstall } = data
   const { path, workspace } = meta
+  const commandInstall = hasYarn(path) ? `yarn add` : `npm i`
 
   exec(
-    `cd "${path}" && npm i ${name}@${version} ${
+    `cd "${path}" && ${commandInstall} ${name}@${version} ${
       shouldForceInstall ? "-f" : ""
     }`,
     (error, stdout, stderr) => {
@@ -160,6 +171,8 @@ export const updateAllPackagesTo = async ({
 }: Omit<UpdateAllPackages, "channel">) => {
   const { type, shouldForceInstall } = data
   const { workspace, path } = meta
+  const commandInstall = hasYarn(path) ? `yarn install` : `npm i`
+
   try {
     const data = readFileSync(`${path}/package.json`, { encoding: "utf8" })
     const resetPackageJson = () => writeFileSync(`${path}/package.json`, data)
@@ -197,7 +210,9 @@ export const updateAllPackagesTo = async ({
     )
 
     const { wasSuccessful, error } = await runCommand(
-      `cd "${path}" && npm i ${shouldForceInstall ? "-f " : ""}--json`
+      `cd "${path}" && ${commandInstall} ${
+        shouldForceInstall ? "-f " : ""
+      }--json`
     )
 
     if (!wasSuccessful && error) {
